@@ -4,6 +4,8 @@ namespace CardGame.Framework;
 
 public interface IPlayerCharacter
 {
+    
+    
     public PlayerClass Class { get; }
     
     public int HealthMax { get; }

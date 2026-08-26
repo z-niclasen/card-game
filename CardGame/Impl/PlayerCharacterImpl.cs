@@ -58,8 +58,7 @@ public class PlayerCharacterImpl : IPlayerCharacter
         if (energyGained <= 0)
             return;
         
-        int newEnergy = EnergyCurrent + energyGained;
-        EnergyCurrent = Math.Min(newEnergy, EnergyMax);
+        EnergyCurrent += energyGained;
     }
 
     public void ResetEnergy()
@@ -99,6 +98,6 @@ public class PlayerCharacterImpl : IPlayerCharacter
             return;
 
         int newMaxEnergy = EnergyMax - maxEnergyDecrease;
-        EnergyMax = Math.Max(maxEnergyDecrease, 1);
+        EnergyMax = Math.Max(newMaxEnergy, 1);
     }
 }
