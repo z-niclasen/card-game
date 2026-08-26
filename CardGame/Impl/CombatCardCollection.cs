@@ -19,7 +19,7 @@ public class CombatCardCollection
     private readonly List<ICard> _discardPile = [];
     private readonly List<ICard> _exhaustPile = [];
 
-    public CombatCardCollection(IEnumerable<ICard> deck)
+    public CombatCardCollection(Deck deck)
     {
         _drawPile.AddRange(deck);
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
@@ -27,7 +27,7 @@ public class CombatCardCollection
 
     public void DrawCard()
     {
-        if (_drawPile.Count == 0)
+        if (DrawPileCount == 0)
             AddDiscardToDrawAndShuffle();
         
         ICard drawnCard =  _drawPile[0];
@@ -53,7 +53,7 @@ public class CombatCardCollection
         if (index < 0)
             throw new ArgumentException("Index cannot be negative.");
 
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _hand.Count);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, HandCount);
         
         ICard discardedCard =  _hand[index];
         _hand.RemoveAt(index);
@@ -71,7 +71,7 @@ public class CombatCardCollection
         if (index < 0)
             throw new ArgumentException("Index cannot be negative.");
 
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _hand.Count);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, HandCount);
         
         ICard exhaustedCard = _hand[index];
         _hand.RemoveAt(index);

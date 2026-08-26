@@ -1,6 +1,6 @@
 namespace CardGame.Constants;
 
-public enum PlayerClass
+public enum CharacterName
 {
     Warrior, Wizard
 }

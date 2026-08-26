@@ -10,7 +10,7 @@ public interface ICard
     
     public string Description { get; }
     
-    public int Cost { get; }
+    public Dictionary<ResourceType, int> Cost { get; }
     
     public Rarity Rarity { get; }
 }

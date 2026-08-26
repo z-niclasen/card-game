@@ -10,10 +10,10 @@ public class CardImpl : ICard
     public IEffect Effect { get; }
 
     public string Description => Effect.Description;
-    public int Cost { get; }
+    public Dictionary<ResourceType, int> Cost { get; }
     public Rarity Rarity { get; }
 
-    public CardImpl(string name, IEffect effect, int cost, Rarity rarity)
+    public CardImpl(string name, IEffect effect, Dictionary<ResourceType, int> cost, Rarity rarity)
     {
         Name = name;
         Effect = effect;
