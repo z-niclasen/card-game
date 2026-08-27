@@ -1,9 +1,12 @@
+using CardGame.Constants;
 using CardGame.Framework;
 
 namespace CardGame.Impl.Resources;
 
 public class HealthResource : IResource
 {
+    public ResourceType ResourceType =>  ResourceType.Health;
+
     public int Amount { get; private set; }
     
     public int Max { get; private set;  }
@@ -47,6 +50,8 @@ public class HealthResource : IResource
         Max -= amountDecreased;
         Amount = Math.Min(Max, Amount);
     }
+
+    public void StartTurn() { }
 
     public void EndTurn() { }
 }

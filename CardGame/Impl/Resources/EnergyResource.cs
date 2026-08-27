@@ -1,12 +1,15 @@
+using CardGame.Constants;
 using CardGame.Framework;
 
 namespace CardGame.Impl.Resources;
 
 public class EnergyResource : IResource
 {
+    public ResourceType ResourceType =>  ResourceType.Energy;
+    
     public int Amount { get; private set; }
     
-    public int Baseline { get; }
+    public int Baseline { get; private set; }
 
     public EnergyResource(int baseline)
     {
@@ -17,10 +20,9 @@ public class EnergyResource : IResource
     public void IncreaseBy(int amountIncreased)
     {
         if (amountIncreased < 0) 
-            throw new ArgumentException($"Cannot gain negative amount of health.");
+            throw new ArgumentException($"Cannot increase energy by negative amount.");
 
-        int newAmount = Amount + amountIncreased;
-        Amount = Math.Min(Max, newAmount);
+        Amount += amountIncreased;
     }
 
     public void DecreaseBy(int amountDecreased)
@@ -34,8 +36,26 @@ public class EnergyResource : IResource
         Amount -= amountDecreased;
     }
 
-    public void EndTurn()
+    public void IncreaseBaseLineBy(int amountIncreased)
+    {
+        if (amountIncreased < 0) 
+            throw new ArgumentException($"Cannot increase energy baseline by negative amount.");
+
+        Baseline += amountIncreased;
+    }
+
+    public void DecreaseBaselineBy(int amountDecreased)
+    {
+        if (amountDecreased < 0) 
+            throw new ArgumentException($"Cannot decrease energy baseline by negative amount.");
+
+        Baseline -= amountDecreased;
+    }
+
+    public void StartTurn()
     {
         Amount = Baseline;
     }
+
+    public void EndTurn() { }
 }

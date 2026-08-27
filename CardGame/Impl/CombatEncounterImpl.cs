@@ -11,7 +11,7 @@ public class CombatEncounterImpl : ICombatEncounter
     
     public ICharacter InTurn { get; private set; }
     
-    private Dictionary<ICharacter, CombatCardCollection> CardsMap { get;  }
+    private Dictionary<ICharacter, CombatCardCollection> CardsMap { get; }
 
     public CombatEncounterImpl(ICharacter player, ICharacter opponent)
     {
