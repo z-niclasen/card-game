@@ -1,3 +1,5 @@
+using CardGame.Constants;
+
 namespace CardGame.Framework;
 
 public interface ICombatEncounter
@@ -8,7 +10,11 @@ public interface ICombatEncounter
     
     public ICharacter InTurn { get; }
 
-    public void PlayCardFromHandAtIndex(ICharacter player, int indexInHand);
+    public void PlayCardFromHandAtIndex(ICharacter source, int indexInHand, ICharacter target);
     
     public void EndTurn(ICharacter player);
+
+    public void IncreaseResourceForCharacter(ICharacter character, ResourceType type, int amountGained);
+    
+    public void DecreaseResourceForCharacter(ICharacter character, ResourceType type, int amountSpent);
 }

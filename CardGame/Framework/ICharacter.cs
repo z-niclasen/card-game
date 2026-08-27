@@ -12,11 +12,11 @@ public interface ICharacter
     public int HandDrawCount { get; }
     
     public int GetResourceAmount(ResourceType resourceType);
+
+    public void IncreaseResource(ResourceType resourceType, int amount);
     
-    public void SpendResource(ResourceType resourceType, int amount);
-    
-    public void GainResource(ResourceType resourceType, int amount);
-    
+    public void DecreaseResource(ResourceType resourceType, int amount);
+
     public void SpendResourcesForCard(ICard card);
     
     public bool CanPlayCard(ICard card);

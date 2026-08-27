@@ -23,7 +23,7 @@ public class CharacterImpl : ICharacter
         return resource.Amount;
     }
 
-    public void SpendResource(ResourceType resourceType, int amount)
+    public void DecreaseResource(ResourceType resourceType, int amount)
     {
         if (!Resources.TryGetValue(resourceType, out IResource? value))
             throw new DoesNotHaveResourceException($"Tried to spend {resourceType} for  {Name}, but it does not exist.");
@@ -34,7 +34,7 @@ public class CharacterImpl : ICharacter
         value.DecreaseBy(amount);
     }
 
-    public void GainResource(ResourceType resourceType, int amount)
+    public void IncreaseResource(ResourceType resourceType, int amount)
     {
         if (!HasResourceType(resourceType))
             throw new DoesNotHaveResourceException(
@@ -82,7 +82,7 @@ public class CharacterImpl : ICharacter
             throw new DoesNotHaveResourceException($"Tried to play card with insufficient resources.");
 
         foreach (var (resourceType, resourceCost) in card.Cost)
-            SpendResource(resourceType, resourceCost);
+            DecreaseResource(resourceType, resourceCost);
     }
 
     public void StartTurn()

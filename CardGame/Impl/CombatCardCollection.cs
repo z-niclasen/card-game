@@ -25,6 +25,16 @@ public class CombatCardCollection
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
     }
 
+    public ICard GetCardFromHandAtIndex(int index)
+    {
+        if (index < 0)
+            throw new ArgumentException("Index cannot be negative.");
+
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, HandCount);
+        
+        return _hand[index];
+    }
+
     public void DrawCard()
     {
         if (DrawPileCount == 0)
