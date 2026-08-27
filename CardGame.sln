@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame", "CardGame\CardGame.csproj", "{B6249883-10A0-4C21-A08D-ECF99FE8D512}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame.Test", "CardGame.Test\CardGame.Test.csproj", "{FA934D28-D0A2-43D5-8D81-8617BD42AE0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{B6249883-10A0-4C21-A08D-ECF99FE8D512}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6249883-10A0-4C21-A08D-ECF99FE8D512}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6249883-10A0-4C21-A08D-ECF99FE8D512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA934D28-D0A2-43D5-8D81-8617BD42AE0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA934D28-D0A2-43D5-8D81-8617BD42AE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA934D28-D0A2-43D5-8D81-8617BD42AE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA934D28-D0A2-43D5-8D81-8617BD42AE0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
