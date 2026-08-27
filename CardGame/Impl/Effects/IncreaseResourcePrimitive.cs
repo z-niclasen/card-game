@@ -1,5 +1,6 @@
 using CardGame.Constants;
 using CardGame.Framework;
+using CardGame.Framework.Characters;
 using CardGame.Framework.Effects;
 
 namespace CardGame.Impl.Effects;

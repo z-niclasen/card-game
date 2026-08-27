@@ -1,7 +1,7 @@
 using CardGame.Constants;
 using CardGame.Impl;
 
-namespace CardGame.Framework;
+namespace CardGame.Framework.Characters;
 
 public interface ICharacter
 {

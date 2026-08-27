@@ -1,6 +1,7 @@
 using CardGame.Constants;
 using CardGame.Exceptions;
 using CardGame.Framework;
+using CardGame.Framework.Characters;
 using CardGame.Framework.Effects;
 
 namespace CardGame.Impl;
@@ -26,6 +27,28 @@ public class CombatEncounterImpl : ICombatEncounter
             { Player, new CombatCardCollection(player.Deck) },
             { Opponent, new CombatCardCollection(opponent.Deck) }
         };
+        
+        DiscardHandAndDrawNewForCharacter(InTurn);
+    }
+
+    public int GetHandCountOfCharacter(ICharacter character)
+    {
+        return CardsMap[character].HandCount;
+    }
+
+    public int GetDrawPileCountOfCharacter(ICharacter character)
+    {
+        return CardsMap[character].DrawPileCount;
+    }
+
+    public int GetDiscardPileCountOfCharacter(ICharacter character)
+    {
+        return CardsMap[character].DiscardPileCount;
+    }
+
+    public int GetExhaustPileCountOfCharacter(ICharacter character)
+    {
+        return CardsMap[character].ExhaustPileCount;
     }
     
     public void PlayCardFromHandAtIndex(ICharacter source, int indexInHand, ICharacter target)
@@ -66,10 +89,7 @@ public class CombatEncounterImpl : ICombatEncounter
             throw new NotInTurnException($"Cannot end turn as {player} is not in turn. Current player in turn: {InTurn}.");
         
         InTurn = GetNextPlayer();
-
-        CombatCardCollection collection = CardsMap[InTurn];
-        collection.DiscardHand();
-        collection.DrawNCards(InTurn.HandDrawCount);
+        DiscardHandAndDrawNewForCharacter(InTurn);
     }
 
     public void IncreaseResourceForCharacter(ICharacter character, ResourceType type, int amountGained)
@@ -82,6 +102,13 @@ public class CombatEncounterImpl : ICombatEncounter
         character.DecreaseResource(type, amountSpent);
     }
 
+    private void DiscardHandAndDrawNewForCharacter(ICharacter character)
+    {
+        CombatCardCollection collection = CardsMap[character];
+        collection.DiscardHand();
+        collection.DrawNCards(character.HandDrawCount);
+    }
+    
     private ICharacter GetNextPlayer()
     {
         return Player == InTurn ? Opponent : Player;

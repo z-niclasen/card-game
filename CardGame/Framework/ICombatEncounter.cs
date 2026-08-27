@@ -1,4 +1,5 @@
 using CardGame.Constants;
+using CardGame.Framework.Characters;
 
 namespace CardGame.Framework;
 
@@ -9,6 +10,14 @@ public interface ICombatEncounter
     public ICharacter Opponent { get; }
     
     public ICharacter InTurn { get; }
+    
+    public int GetHandCountOfCharacter(ICharacter character);
+    
+    public int GetDrawPileCountOfCharacter(ICharacter character);
+    
+    public int GetDiscardPileCountOfCharacter(ICharacter character);
+    
+    public int GetExhaustPileCountOfCharacter(ICharacter character);
 
     public void PlayCardFromHandAtIndex(ICharacter source, int indexInHand, ICharacter target);
     

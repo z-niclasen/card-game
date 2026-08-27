@@ -1,4 +1,5 @@
 using CardGame.Framework;
+using CardGame.Framework.Characters;
 using CardGame.Framework.Effects;
 
 namespace CardGame.Impl.Effects;
@@ -14,6 +15,7 @@ public class EffectImpl : IEffect
         Description = description;
         PrimitiveGenerator = primitiveGenerator;
     }
+    
     
     public List<IEffectPrimitive> GetPrimitives(ICombatEncounter encounter, ICharacter target, ICharacter source)
     {

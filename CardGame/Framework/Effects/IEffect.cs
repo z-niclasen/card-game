@@ -1,3 +1,5 @@
+using CardGame.Framework.Characters;
+
 namespace CardGame.Framework.Effects;
 
 public interface IEffect

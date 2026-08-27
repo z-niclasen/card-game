@@ -1,19 +1,28 @@
 using CardGame.Constants;
 using CardGame.Exceptions;
 using CardGame.Framework;
+using CardGame.Framework.Characters;
 
 namespace CardGame.Impl;
 
 public class CharacterImpl : ICharacter
 {
     public ICharacterClass Class { get; }
-    public CharacterName Name { get; }
+    public CharacterName Name => Class.Name;
     
     public Deck Deck { get; }
 
-    public int HandDrawCount => 5; // TODO: Ask class.
+    public int HandDrawCount { get; }
     
-    private Dictionary<ResourceType, IResource> Resources { get; } = new();
+    private Dictionary<ResourceType, IResource> Resources { get; }
+    
+    public CharacterImpl(ICharacterClass characterClass)
+    {
+        Class = characterClass;
+        Deck = Class.StarterDeck;
+        HandDrawCount = Class.InitialHandDrawCount;
+        Resources = Class.InitialResources;
+    }
     
     public int GetResourceAmount(ResourceType resourceType)
     {
@@ -54,11 +63,6 @@ public class CharacterImpl : ICharacter
                 $"Tried to add resource type {resourceType} to character {Name}, but it already has that resource type.");
         
         Resources.Add(resourceType, resource);
-    }
-    
-    public CharacterImpl()
-    {
-        
     }
 
     public bool CanPlayCard(ICard card)
