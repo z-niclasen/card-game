@@ -62,6 +62,28 @@ public class CombatCardCollectionTest
     }
 
     [Test]
+    public void CollectionDrawsZeroCardsCorrectly()
+    {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_collection.DrawPileCount, Is.EqualTo(_initialDeck.Count));
+            Assert.That(_collection.HandCount, Is.EqualTo(0));
+            Assert.That(_collection.DiscardPileCount, Is.EqualTo(0));
+            Assert.That(_collection.ExhaustPileCount, Is.EqualTo(0));
+        }
+        
+        _collection.DrawNCards(0);
+        
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_collection.DrawPileCount, Is.EqualTo(_initialDeck.Count));
+            Assert.That(_collection.HandCount, Is.EqualTo(0));
+            Assert.That(_collection.DiscardPileCount, Is.EqualTo(0));
+            Assert.That(_collection.ExhaustPileCount, Is.EqualTo(0));
+        }
+    }
+
+    [Test]
     public void CollectionDiscardsCardsCorrectly()
     {
         const int drawCount = 5;
