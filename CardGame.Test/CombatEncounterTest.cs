@@ -2,8 +2,8 @@
 using CardGame.Framework;
 using CardGame.Framework.Characters;
 using CardGame.Impl;
-using CardGame.Impl.Characters.EnemyCharacters;
-using CardGame.Impl.Characters.PlayerCharacters;
+using CardGame.Library.Characters.EnemyCharacters;
+using CardGame.Library.Characters.PlayerCharacters;
 
 namespace CardGame.Test;
 
