@@ -2,7 +2,7 @@ using CardGame.Constants;
 using CardGame.Framework;
 using CardGame.Framework.Effects;
 
-namespace CardGame.Impl;
+namespace CardGame.Impl.Cards;
 
 public class CardImpl : ICard
 {

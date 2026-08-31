@@ -1,6 +1,7 @@
 using CardGame.Constants;
 using CardGame.Framework;
 using CardGame.Impl;
+using CardGame.Impl.Cards;
 using CardGame.Impl.Effects;
 
 namespace CardGame.Library;
@@ -9,19 +10,18 @@ public class CardUtils
 {
     public static ICard NewCard(string name, EffectImpl effect, int energyCost, Rarity rarity = Rarity.Common)
     {
-        return new CardImpl(
-            name,
-            effect,
-            new Dictionary<ResourceType, int> { { ResourceType.Energy, energyCost } },
-            rarity
-        );
+        return new CardBuilder()
+            .Name(name)
+            .Effect(effect)
+            .Cost(ResourceType.Energy, energyCost)
+            .Build();
     }
     
     public static EffectImpl DamageEffect(int amount)
     {
         return new EffectBuilder()
-                .AddDescription($"Deal {amount} damage")
-                .AddDecreaseResourcePrimitive(ResourceType.Health, amount)
+                .Description($"Deal {amount} damage")
+                .DecreaseResource(ResourceType.Health, amount)
                 .Build();
     }
 

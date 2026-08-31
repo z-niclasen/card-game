@@ -18,32 +18,38 @@ public class EffectBuilder
         
     }
 
-    public EffectBuilder AddDecreaseResourcePrimitive(ResourceType resourceType, int amount)
+    public EffectBuilder DecreaseResource(ResourceType resourceType, int amount)
     {
         _effects.Add(new DecreaseResourcePrimitive(resourceType, amount));
         
         return this;
     }
 
-    public EffectBuilder AddIncreaseResourcePrimitive(ResourceType resourceType, int amount)
+    public EffectBuilder IncreaseResource(ResourceType resourceType, int amount)
     {
         _effects.Add(new IncreaseResourcePrimitive(resourceType, amount));
         return this;
     }
 
-    public EffectBuilder AddNonePrimitive()
+    public EffectBuilder NoneEffect()
     {
         _effects.Add(new NonePrimitive());
         return this;
     }
 
-    public EffectBuilder AddCustomEffect(Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>> generator)
+    public EffectBuilder PrimitiveEffect(IEffectPrimitive effect)
+    {
+        _effects.Add(effect);
+        return this;
+    }
+
+    public EffectBuilder CustomEffect(Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>> generator)
     {
         _generators.Add(generator);
         return this;
     }
 
-    public EffectBuilder AddDescription(string description)
+    public EffectBuilder Description(string description)
     {
         _description = description;
         return this;
