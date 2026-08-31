@@ -8,44 +8,38 @@ namespace CardGame.Impl.Effects;
 
 public class EffectBuilder
 {
-
-    private readonly List<IEffectPrimitive> _effects = [];
+    private readonly List<PrimitiveOrAdvanced> _effects = [];
     private string _description = "";
     private readonly List<Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>>> _generators = [];
-    
-    public EffectBuilder()
-    {
-        
-    }
 
     public EffectBuilder DecreaseResource(ResourceType resourceType, int amount)
     {
-        _effects.Add(new DecreaseResourcePrimitive(resourceType, amount));
+        _effects.Add(new PrimitiveOrAdvanced(new DecreaseResourcePrimitive(resourceType, amount)));
         
         return this;
     }
 
     public EffectBuilder IncreaseResource(ResourceType resourceType, int amount)
     {
-        _effects.Add(new IncreaseResourcePrimitive(resourceType, amount));
+        _effects.Add(new PrimitiveOrAdvanced(new IncreaseResourcePrimitive(resourceType, amount)));
         return this;
     }
 
     public EffectBuilder NoneEffect()
     {
-        _effects.Add(new NonePrimitive());
+        _effects.Add(new PrimitiveOrAdvanced(new NonePrimitive()));
         return this;
     }
 
     public EffectBuilder PrimitiveEffect(IEffectPrimitive effect)
     {
-        _effects.Add(effect);
+        _effects.Add(new PrimitiveOrAdvanced(effect));
         return this;
     }
 
     public EffectBuilder CustomEffect(Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>> generator)
     {
-        _generators.Add(generator);
+        _effects.Add(new PrimitiveOrAdvanced(generator));
         return this;
     }
 
@@ -57,7 +51,7 @@ public class EffectBuilder
     
     public EffectImpl Build()
     {
-        if  (_effects.Count == 0 && _generators.Count == 0)
+        if  (_effects.Count == 0)
             throw new InvalidOperationException("Cannot build with empty builder. Add primitives, custom, or both");
         if (_description == "")
             throw new InvalidOperationException("Cannot build with no description");
@@ -67,16 +61,45 @@ public class EffectBuilder
         List<IEffectPrimitive> PrimitiveGenerator(ICombatEncounter encounter, ICharacter target, ICharacter source)
         {
             List<IEffectPrimitive> result = [];
-            if (_generators.Count != 0)
+
+            foreach (PrimitiveOrAdvanced effect in _effects)
             {
-                foreach (var generator in _generators)
+                switch (effect.Case)
                 {
-                    result.AddRange(generator(encounter, target, source));
+                    case PrimitiveOrAdvanced.CaseEnum.Primitive: result.Add(effect.Primitive!); break;
+                    case PrimitiveOrAdvanced.CaseEnum.Advanced: result.AddRange(effect.Generator!(encounter, target, source)); break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
-
-            result.AddRange(_effects);
+            
             return result;
         }
+    }
+    
+    private class PrimitiveOrAdvanced
+    {
+        public IEffectPrimitive? Primitive { get; }
+        public Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>>? Generator { get; }
+        public CaseEnum Case { get; }
+
+        public enum CaseEnum
+        {
+            Primitive, Advanced
+        }
+
+        public PrimitiveOrAdvanced(IEffectPrimitive primitive)
+        {
+            Primitive = primitive;
+            Case = CaseEnum.Primitive;
+        }
+
+        public PrimitiveOrAdvanced(Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>> generator)
+        {
+            Generator = generator;
+            Case = CaseEnum.Advanced;
+        }
+        
+        
     }
 }
