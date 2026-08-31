@@ -5,17 +5,17 @@ using CardGame.Framework.Effects;
 namespace CardGame.Impl.Effects;
 
 public class EffectImpl(
-    string description,
-    Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>> primitiveGenerator)
+    List<IEffectPrimitive> primitives)
     : IEffect
 {
-    public string Description { get; } = description;
+    public List<IEffectPrimitive> Primitives { get; } = primitives;
 
-    private Func<ICombatEncounter, ICharacter, ICharacter, List<IEffectPrimitive>> PrimitiveGenerator { get; } = primitiveGenerator;
-
-
-    public List<IEffectPrimitive> GetPrimitives(ICombatEncounter encounter, ICharacter target, ICharacter source)
+    public void Apply(CombatTargetingContext ctx)
     {
-        return PrimitiveGenerator(encounter, target, source);
+        foreach (var primitive in Primitives)
+        {
+            primitive.Apply(ctx);
+        }
     }
+
 }
