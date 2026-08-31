@@ -5,7 +5,7 @@ namespace CardGame.Impl.Resources;
 
 public class ArmorResource : IResource
 {
-    public ResourceType ResourceType =>  ResourceType.Armor;
+    public ResourceType ResourceType => ResourceType.Armor;
     
     public int Amount { get; private set; }
 
@@ -34,4 +34,14 @@ public class ArmorResource : IResource
     public void StartTurn() { }
 
     public void EndTurn() { }
+    
+    public void StartEncounter()
+    {
+        Amount = 0;
+    }
+
+    public void EndEncounter()
+    {
+        Amount = 0;
+    }
 }

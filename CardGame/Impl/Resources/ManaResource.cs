@@ -5,7 +5,9 @@ namespace CardGame.Impl.Resources;
 
 public class ManaResource : IResource
 {
-    public ResourceType ResourceType =>  ResourceType.Mana;
+    public ResourceType ResourceType => ResourceType.Mana;
+
+    public int ManaGainOnEncounterEnd => 2;
     
     public int Amount { get; private set; }
 
@@ -34,4 +36,11 @@ public class ManaResource : IResource
     public void StartTurn() { }
 
     public void EndTurn() { }
+
+    public void StartEncounter() { }
+
+    public void EndEncounter()
+    {
+        IncreaseBy(ManaGainOnEncounterEnd);
+    }
 }

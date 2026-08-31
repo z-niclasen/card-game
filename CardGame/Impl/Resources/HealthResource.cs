@@ -5,7 +5,7 @@ namespace CardGame.Impl.Resources;
 
 public class HealthResource : IResource
 {
-    public ResourceType ResourceType =>  ResourceType.Health;
+    public ResourceType ResourceType => ResourceType.Health;
 
     public int Amount { get; private set; }
     
@@ -54,4 +54,8 @@ public class HealthResource : IResource
     public void StartTurn() { }
 
     public void EndTurn() { }
+    
+    public void StartEncounter() { }
+
+    public void EndEncounter() { }
 }

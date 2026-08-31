@@ -15,4 +15,8 @@ public interface IResource
     public void StartTurn();
 
     public void EndTurn();
+
+    public void StartEncounter();
+
+    public void EndEncounter();
 }

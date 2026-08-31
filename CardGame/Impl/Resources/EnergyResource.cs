@@ -5,7 +5,7 @@ namespace CardGame.Impl.Resources;
 
 public class EnergyResource : IResource
 {
-    public ResourceType ResourceType =>  ResourceType.Energy;
+    public ResourceType ResourceType => ResourceType.Energy;
     
     public int Amount { get; private set; }
     
@@ -34,7 +34,7 @@ public class EnergyResource : IResource
         Amount = Math.Max(0, newAmount);
     }
 
-    public void IncreaseBaseLineBy(int amountIncreased)
+    public void IncreaseBaselineBy(int amountIncreased)
     {
         if (amountIncreased < 0) 
             throw new ArgumentException($"Cannot increase energy baseline by negative amount.");
@@ -56,4 +56,14 @@ public class EnergyResource : IResource
     }
 
     public void EndTurn() { }
+    
+    public void StartEncounter()
+    {
+        Amount = Baseline;
+    }
+
+    public void EndEncounter()
+    {
+        Amount = Baseline;
+    }
 }
