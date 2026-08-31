@@ -57,6 +57,8 @@ public class CardBuilder
     {
         if (_name == "")
             throw new InvalidOperationException("Cannot build card without name");
+        if (_name == "")
+            throw new InvalidOperationException("Cannot build card without description");
         if (_effect == null)
             throw new InvalidOperationException("Cannot build card without effect. Use NoneEffect for no effect");
         if (_cost.Count == 0)

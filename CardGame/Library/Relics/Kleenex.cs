@@ -9,7 +9,7 @@ public class Kleenex : IEffectAdjustor
 {
     public IEffect Adjust(IEffect effect, CombatTargetingContext ctx)
     {
-        if (ctx.Target.Name != CharacterName.GreenSlime)
+        if (!ctx.Target.Tags.Contains(Tag.Slime))
             return effect;
 
         foreach (var primitive in effect.Primitives)

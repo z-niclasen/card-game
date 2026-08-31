@@ -14,6 +14,7 @@ public static class CardUtils
             .Name(name)
             .Effect(effect)
             .Cost(ResourceType.Energy, energyCost)
+            .Rarity(rarity)
             .Build();
     }
     
