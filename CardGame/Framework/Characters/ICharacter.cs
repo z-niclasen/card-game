@@ -7,13 +7,17 @@ public interface ICharacter
 {
     public CharacterName Name { get; }
     
+    public int Health { get; }
+    
+    public int Energy { get; }
+    
     public Deck Deck { get; }
     
     public int HandDrawCount { get; }
     
     public int GetResourceAmount(ResourceType resourceType);
-
-    public int GetHealth();
+    
+    public bool HasResourceType(ResourceType resourceType);
 
     public void IncreaseResource(ResourceType resourceType, int amount);
     

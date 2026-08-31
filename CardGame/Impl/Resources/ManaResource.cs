@@ -26,11 +26,9 @@ public class ManaResource : IResource
     {
         if (amountDecreased < 0) 
             throw new ArgumentException($"Cannot decrease mana by negative amount.");
-        
-        if (amountDecreased > Amount) 
-            throw new ArgumentException($"Cannot decrease mana by more than amount.");
-        
-        Amount -= amountDecreased;
+
+        int newAmount = Amount - amountDecreased;
+        Amount = Math.Max(0, newAmount);
     }
 
     public void StartTurn() { }

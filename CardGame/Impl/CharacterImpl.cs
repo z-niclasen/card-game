@@ -2,6 +2,7 @@ using CardGame.Constants;
 using CardGame.Exceptions;
 using CardGame.Framework;
 using CardGame.Framework.Characters;
+using CardGame.Impl.Resources;
 
 namespace CardGame.Impl;
 
@@ -9,6 +10,10 @@ public class CharacterImpl : ICharacter
 {
     public ICharacterClass Class { get; }
     public CharacterName Name => Class.Name;
+    
+    public int Health => GetResourceAmount(ResourceType.Health);
+    
+    public int Energy => GetResourceAmount(ResourceType.Energy);
     
     public Deck Deck { get; }
 
@@ -32,9 +37,9 @@ public class CharacterImpl : ICharacter
         return resource.Amount;
     }
 
-    public int GetHealth()
+    bool ICharacter.HasResourceType(ResourceType resourceType)
     {
-        return GetResourceAmount(ResourceType.Health);
+        return Resources.ContainsKey(resourceType);
     }
 
     public void DecreaseResource(ResourceType resourceType, int amount)
@@ -50,14 +55,30 @@ public class CharacterImpl : ICharacter
 
     public void IncreaseResource(ResourceType resourceType, int amount)
     {
-        if (!HasResourceType(resourceType))
-            throw new DoesNotHaveResourceException(
-                $"Tried to gain {resourceType} resource on character {Name}, but that resource does not exist on the character.");
-        
         if (amount < 0)
             throw new ArgumentException($"Cannot gain negative amount of resource. ResourceType: {resourceType}.");
-        
-        Resources[resourceType].IncreaseBy(amount);
+
+        if (Resources.TryGetValue(resourceType, out IResource? resource))
+        {
+            resource.IncreaseBy(amount);
+            return;
+        }
+
+        switch (resourceType)
+        {
+            case ResourceType.Armor:
+                Resources.Add(resourceType, new ArmorResource(amount));
+                break;
+            case ResourceType.Mana:
+                Resources.Add(resourceType, new ManaResource(amount));
+                break;
+            case ResourceType.Health:
+            case ResourceType.Energy:
+                throw new InvalidOperationException(
+                    $"Tried to add resource type {resourceType} to character {Name}, but that character should already have said resource type.");
+            default:
+                throw new ArgumentOutOfRangeException(nameof(resourceType), resourceType, null);
+        }
     }
 
     public void AddResourceType(IResource resource)

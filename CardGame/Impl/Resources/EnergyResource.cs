@@ -30,10 +30,8 @@ public class EnergyResource : IResource
         if (amountDecreased < 0) 
             throw new ArgumentException($"Cannot decrease energy by negative amount.");
         
-        if (amountDecreased > Amount) 
-            throw new ArgumentException($"Cannot decrease energy by more than amount.");
-        
-        Amount -= amountDecreased;
+        int newAmount = Amount - amountDecreased;
+        Amount = Math.Max(0, newAmount);
     }
 
     public void IncreaseBaseLineBy(int amountIncreased)
