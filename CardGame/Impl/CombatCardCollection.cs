@@ -37,6 +37,9 @@ public class CombatCardCollection
 
     public void DrawCard()
     {
+        if (DrawPileCount == 0 && DiscardPileCount == 0)
+            return;
+        
         if (DrawPileCount == 0)
             AddDiscardToDrawAndShuffle();
         

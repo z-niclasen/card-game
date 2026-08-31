@@ -9,26 +9,26 @@ namespace CardGame.Test;
 
 public class CombatEncounterTest
 {
-    private ICharacter steve;
-    private ICharacter slime;
-    private ICombatEncounter encounter;
+    private ICharacter _steve;
+    private ICharacter _slime;
+    private ICombatEncounter _encounter;
     
     [SetUp]
     public void Setup()
     {
         ICharacterClass steveClass = new SteveClass();
-        steve = new CharacterImpl(steveClass);
+        _steve = new CharacterImpl(steveClass);
         
         ICharacterClass greenSlimeClass = new GreenSlimeClass();
-        slime = new CharacterImpl(greenSlimeClass);
+        _slime = new CharacterImpl(greenSlimeClass);
 
-        encounter = new CombatEncounterImpl(steve, slime);
+        _encounter = new CombatEncounterImpl(_steve, _slime);
     }
 
     [Test]
     public void CharactersAndEncounterHaveInitialValues()
     {
-        Assert.That(steve.GetResourceAmount(ResourceType.Health), Is.EqualTo(50));
+        Assert.That(_steve.GetResourceAmount(ResourceType.Health), Is.EqualTo(50));
     }
 
     [Test]
@@ -36,48 +36,48 @@ public class CombatEncounterTest
     {
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(encounter.GetHandCountOfCharacter(steve), Is.EqualTo(steve.HandDrawCount));
-            Assert.That(encounter.GetHandCountOfCharacter(slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetHandCountOfCharacter(_steve), Is.EqualTo(_steve.HandDrawCount));
+            Assert.That(_encounter.GetHandCountOfCharacter(_slime), Is.EqualTo(0));
 
-            Assert.That(encounter.GetDiscardPileCountOfCharacter(steve), Is.EqualTo(0));
-            Assert.That(encounter.GetDiscardPileCountOfCharacter(slime), Is.EqualTo(0));
-            Assert.That(encounter.GetExhaustPileCountOfCharacter(steve), Is.EqualTo(0));
-            Assert.That(encounter.GetExhaustPileCountOfCharacter(slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetDiscardPileCountOfCharacter(_steve), Is.EqualTo(0));
+            Assert.That(_encounter.GetDiscardPileCountOfCharacter(_slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetExhaustPileCountOfCharacter(_steve), Is.EqualTo(0));
+            Assert.That(_encounter.GetExhaustPileCountOfCharacter(_slime), Is.EqualTo(0));
 
-            Assert.That(encounter.GetDrawPileCountOfCharacter(steve), Is.EqualTo(steve.Deck.Count - steve.HandDrawCount));
-            Assert.That(encounter.GetDrawPileCountOfCharacter(slime), Is.EqualTo(slime.Deck.Count));
+            Assert.That(_encounter.GetDrawPileCountOfCharacter(_steve), Is.EqualTo(_steve.Deck.Count - _steve.HandDrawCount));
+            Assert.That(_encounter.GetDrawPileCountOfCharacter(_slime), Is.EqualTo(_slime.Deck.Count));
         }
         
-        encounter.EndTurn(steve);
+        _encounter.EndTurn(_steve);
         
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(encounter.GetHandCountOfCharacter(steve), Is.EqualTo(steve.HandDrawCount));
-            Assert.That(encounter.GetHandCountOfCharacter(slime), Is.EqualTo(slime.HandDrawCount));
+            Assert.That(_encounter.GetHandCountOfCharacter(_steve), Is.EqualTo(_steve.HandDrawCount));
+            Assert.That(_encounter.GetHandCountOfCharacter(_slime), Is.EqualTo(_slime.HandDrawCount));
 
-            Assert.That(encounter.GetDiscardPileCountOfCharacter(steve), Is.EqualTo(0));
-            Assert.That(encounter.GetDiscardPileCountOfCharacter(slime), Is.EqualTo(0));
-            Assert.That(encounter.GetExhaustPileCountOfCharacter(steve), Is.EqualTo(0));
-            Assert.That(encounter.GetExhaustPileCountOfCharacter(slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetDiscardPileCountOfCharacter(_steve), Is.EqualTo(0));
+            Assert.That(_encounter.GetDiscardPileCountOfCharacter(_slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetExhaustPileCountOfCharacter(_steve), Is.EqualTo(0));
+            Assert.That(_encounter.GetExhaustPileCountOfCharacter(_slime), Is.EqualTo(0));
 
-            Assert.That(encounter.GetDrawPileCountOfCharacter(steve), Is.EqualTo(steve.Deck.Count - steve.HandDrawCount));
-            Assert.That(encounter.GetDrawPileCountOfCharacter(slime), Is.EqualTo(slime.Deck.Count - slime.HandDrawCount));
+            Assert.That(_encounter.GetDrawPileCountOfCharacter(_steve), Is.EqualTo(_steve.Deck.Count - _steve.HandDrawCount));
+            Assert.That(_encounter.GetDrawPileCountOfCharacter(_slime), Is.EqualTo(_slime.Deck.Count - _slime.HandDrawCount));
         }
         
-        encounter.EndTurn(slime);
+        _encounter.EndTurn(_slime);
         
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(encounter.GetHandCountOfCharacter(steve), Is.EqualTo(steve.HandDrawCount));
-            Assert.That(encounter.GetHandCountOfCharacter(slime), Is.EqualTo(slime.HandDrawCount));
+            Assert.That(_encounter.GetHandCountOfCharacter(_steve), Is.EqualTo(_steve.HandDrawCount));
+            Assert.That(_encounter.GetHandCountOfCharacter(_slime), Is.EqualTo(_slime.HandDrawCount));
 
-            Assert.That(encounter.GetDiscardPileCountOfCharacter(steve), Is.EqualTo(steve.HandDrawCount));
-            Assert.That(encounter.GetDiscardPileCountOfCharacter(slime), Is.EqualTo(0));
-            Assert.That(encounter.GetExhaustPileCountOfCharacter(steve), Is.EqualTo(0));
-            Assert.That(encounter.GetExhaustPileCountOfCharacter(slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetDiscardPileCountOfCharacter(_steve), Is.EqualTo(_steve.HandDrawCount));
+            Assert.That(_encounter.GetDiscardPileCountOfCharacter(_slime), Is.EqualTo(0));
+            Assert.That(_encounter.GetExhaustPileCountOfCharacter(_steve), Is.EqualTo(0));
+            Assert.That(_encounter.GetExhaustPileCountOfCharacter(_slime), Is.EqualTo(0));
 
-            Assert.That(encounter.GetDrawPileCountOfCharacter(steve), Is.EqualTo(steve.Deck.Count - 2 * steve.HandDrawCount));
-            Assert.That(encounter.GetDrawPileCountOfCharacter(slime), Is.EqualTo(slime.Deck.Count - slime.HandDrawCount));
+            Assert.That(_encounter.GetDrawPileCountOfCharacter(_steve), Is.EqualTo(_steve.Deck.Count - 2 * _steve.HandDrawCount));
+            Assert.That(_encounter.GetDrawPileCountOfCharacter(_slime), Is.EqualTo(_slime.Deck.Count - _slime.HandDrawCount));
         }
     }
 }
