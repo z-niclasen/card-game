@@ -6,7 +6,7 @@ using CardGame.Impl.Effects;
 
 namespace CardGame.Library;
 
-public class CardUtils
+public static class CardUtils
 {
     public static ICard NewCard(string name, EffectImpl effect, int energyCost, Rarity rarity = Rarity.Common)
     {
@@ -20,14 +20,12 @@ public class CardUtils
     public static EffectImpl DamageEffect(int amount)
     {
         return new EffectBuilder()
-                .Description($"Deal {amount} damage")
                 .DecreaseResource(ResourceType.Health, amount)
                 .Build();
     }
 
     public static EffectImpl NoEffect()
     {
-        return new EffectImpl("Does nothing.", 
-            (_, _, target) => [new NonePrimitive()]);
+        return new EffectImpl([new NonePrimitive()]);
     }
 }

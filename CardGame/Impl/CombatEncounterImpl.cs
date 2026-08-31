@@ -68,19 +68,20 @@ public class CombatEncounterImpl : ICombatEncounter
         if (!source.CanPlayCard(card))
             throw new NotInTurnException($"Character {source} does not have resources to play card.");
 
-        List<IEffectPrimitive> primitives = card.Effect.GetPrimitives(this, target, source);
-        List<IEffectPrimitive> modifiedPrimitives = AdjustPrimitives(primitives, source, target);
+        CombatTargetingContext ctx = new CombatTargetingContext(this, target, source);
 
-        foreach (IEffectPrimitive primitive in modifiedPrimitives)
-            primitive.Apply(this, target, source);
+        IEffect effect = card.Effect;
+        IEffect adjustedEffect = AdjustEffect(effect, ctx);
+        
+        adjustedEffect.Apply(ctx);
         
         cards.DiscardCardAtIndex(indexInHand);
         // TODO: Exhaust
     }
 
-    private List<IEffectPrimitive> AdjustPrimitives(List<IEffectPrimitive> primitives, ICharacter source, ICharacter target)
+    private IEffect AdjustEffect(IEffect effect, CombatTargetingContext ctx)
     {
-        return primitives;
+        return effect;
     }
 
     public void EndTurn(ICharacter player)

@@ -14,8 +14,8 @@ public class DecreaseResourcePrimitive(ResourceType resourceType, int value) : I
     public int Value { get; set; } = value;
 
 
-    public void Apply(ICombatEncounter encounter, ICharacter target, ICharacter source)
+    public void Apply(CombatTargetingContext ctx)
     {
-        encounter.DecreaseResourceForCharacter(target, ResourceType, Value);
+        ctx.Encounter.DecreaseResourceForCharacter(ctx.Target, ResourceType, Value);
     }
 }

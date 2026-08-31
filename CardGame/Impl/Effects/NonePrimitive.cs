@@ -15,5 +15,5 @@ public class NonePrimitive : IEffectPrimitive
         set => throw new InvalidOperationException("None effect has no value.");
     }
     
-    public void Apply(ICombatEncounter encounter, ICharacter target, ICharacter source) { }
+    public void Apply(CombatTargetingContext ctx) { }
 }

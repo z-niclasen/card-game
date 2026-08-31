@@ -13,8 +13,8 @@ public class IncreaseResourcePrimitive(ResourceType resourceType, int value) : I
 
     public int Value { get; set; } = value;
 
-    public void Apply(ICombatEncounter encounter, ICharacter target, ICharacter source)
+    public void Apply(CombatTargetingContext ctx)
     {
-        encounter.IncreaseResourceForCharacter(target, ResourceType, Value);
+        ctx.Encounter.IncreaseResourceForCharacter(ctx.Target, ResourceType, Value);
     }
 }

@@ -7,6 +7,8 @@ namespace CardGame.Impl.Cards;
 public class CardBuilder
 {
     private string _name = "";
+    
+    private string _description = "";
 
     private IEffect _effect = null!;
 
@@ -27,6 +29,11 @@ public class CardBuilder
         return this;
     }
 
+    public CardBuilder Description(string description)
+    {
+        _description = description;
+        return this;
+    }
     public CardBuilder Cost(ResourceType type, int cost)
     {
         
@@ -55,7 +62,7 @@ public class CardBuilder
         if (_cost.Count == 0)
             throw new InvalidOperationException("Cannot build card without cost. Use energy cost of 0 for free card");
         
-        return new CardImpl(_name, _effect, _cost, _rarity);
+        return new CardImpl(_name, _description, _effect, _cost, _rarity);
 
     }
 }
