@@ -97,11 +97,4 @@ public class CombatCardCollection
         _discardPile.Clear();
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
     }
-
-    private void ClearAllPiles()
-    {
-        _drawPile.Clear();
-        _hand.Clear();
-        _discardPile.Clear();
-    }
 }
