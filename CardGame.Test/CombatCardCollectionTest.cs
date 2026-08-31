@@ -197,7 +197,7 @@ public class CombatCardCollectionTest
         
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(_collection.DrawPileCount, Is.EqualTo(initialDrawPileCount - 2));
+            Assert.That(_collection.DrawPileCount, Is.EqualTo(initialDrawPileCount - 3));
             Assert.That(_collection.HandCount, Is.EqualTo(1));
             Assert.That(_collection.DiscardPileCount, Is.EqualTo(0));
             Assert.That(_collection.ExhaustPileCount, Is.EqualTo(2));
@@ -245,9 +245,17 @@ public class CombatCardCollectionTest
             Assert.That(_collection.HandCount, Is.EqualTo(5));
             Assert.That(_collection.ExhaustPileCount, Is.EqualTo(initialDrawPileCount - 5));
         }
-        
-        for (int i = 0; i < _collection.HandCount; i++)
+
+        while (_collection.HandCount > 0)
             _collection.ExhaustCardFromHandAtIndex(0);
+        
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_collection.DrawPileCount, Is.EqualTo(0));
+            Assert.That(_collection.DiscardPileCount, Is.EqualTo(0));
+            Assert.That(_collection.HandCount, Is.EqualTo(0));
+            Assert.That(_collection.ExhaustPileCount, Is.EqualTo(initialDrawPileCount));
+        }
         
         _collection.DrawNCards(10);
         
