@@ -32,6 +32,11 @@ public class CharacterImpl : ICharacter
         return resource.Amount;
     }
 
+    public int GetHealth()
+    {
+        return GetResourceAmount(ResourceType.Health);
+    }
+
     public void DecreaseResource(ResourceType resourceType, int amount)
     {
         if (!Resources.TryGetValue(resourceType, out IResource? value))

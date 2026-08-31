@@ -1,10 +1,10 @@
 using CardGame.Constants;
 using CardGame.Framework;
 using CardGame.Framework.Characters;
+using CardGame.Impl;
 using CardGame.Impl.Resources;
-using CardGame.Library;
 
-namespace CardGame.Impl.Characters.EnemyCharacters;
+namespace CardGame.Library.Characters.EnemyCharacters;
 
 public class GreenSlimeClass : ICharacterClass
 {

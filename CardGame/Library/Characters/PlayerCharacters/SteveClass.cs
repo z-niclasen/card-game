@@ -1,10 +1,10 @@
 using CardGame.Constants;
 using CardGame.Framework;
 using CardGame.Framework.Characters;
+using CardGame.Impl;
 using CardGame.Impl.Resources;
-using CardGame.Library;
 
-namespace CardGame.Impl.Characters.PlayerCharacters;
+namespace CardGame.Library.Characters.PlayerCharacters;
 
 public class SteveClass : ICharacterClass
 {

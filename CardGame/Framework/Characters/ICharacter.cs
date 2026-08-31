@@ -13,6 +13,8 @@ public interface ICharacter
     
     public int GetResourceAmount(ResourceType resourceType);
 
+    public int GetHealth();
+
     public void IncreaseResource(ResourceType resourceType, int amount);
     
     public void DecreaseResource(ResourceType resourceType, int amount);
