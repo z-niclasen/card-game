@@ -1,1 +1,1 @@
-Temporary readme. Fun game :)
+This project is a demo deck-building card game, that is currently in very early stages. The project aims to showcase compositional design practices, and thus best practices of game development is not prioritized. 
