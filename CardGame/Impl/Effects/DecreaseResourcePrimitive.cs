@@ -5,25 +5,17 @@ using CardGame.Framework.Effects;
 
 namespace CardGame.Impl.Effects;
 
-public class DecreaseResourcePrimitive : IEffectPrimitive
+public class DecreaseResourcePrimitive(ResourceType resourceType, int value) : IEffectPrimitive
 {
     public EffectType Type => EffectType.DecreaseResource;
     
-    public ResourceType ResourceType { get; }
-    
-    public int Value { get; set; }
-    
-    private ICharacter Target { get; }
+    public ResourceType ResourceType { get; } = resourceType;
 
-    public DecreaseResourcePrimitive(ICharacter target, ResourceType resourceType, int value)
+    public int Value { get; set; } = value;
+
+
+    public void Apply(ICombatEncounter encounter, ICharacter target, ICharacter source)
     {
-        Target = target;
-        ResourceType = resourceType;
-        Value = value;
-    }
-    
-    public void Apply(ICombatEncounter encounter)
-    {
-        encounter.DecreaseResourceForCharacter(Target, ResourceType, Value);
+        encounter.DecreaseResourceForCharacter(target, ResourceType, Value);
     }
 }

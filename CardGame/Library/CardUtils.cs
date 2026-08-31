@@ -19,8 +19,10 @@ public class CardUtils
     
     public static EffectImpl DamageEffect(int amount)
     {
-        return new EffectImpl($"Deal {amount} damage.",
-            (_, _, target) => [new DecreaseResourcePrimitive(target, ResourceType.Health, amount)]);
+        return new EffectBuilder()
+                .AddDescription($"Deal {amount} damage")
+                .AddDecreaseResourcePrimitive(ResourceType.Health, amount)
+                .Build();
     }
 
     public static EffectImpl NoEffect()

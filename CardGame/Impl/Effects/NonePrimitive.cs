@@ -1,5 +1,6 @@
 using CardGame.Constants;
 using CardGame.Framework;
+using CardGame.Framework.Characters;
 using CardGame.Framework.Effects;
 
 namespace CardGame.Impl.Effects;
@@ -14,5 +15,5 @@ public class NonePrimitive : IEffectPrimitive
         set => throw new InvalidOperationException("None effect has no value.");
     }
     
-    public void Apply(ICombatEncounter encounter) { }
+    public void Apply(ICombatEncounter encounter, ICharacter target, ICharacter source) { }
 }

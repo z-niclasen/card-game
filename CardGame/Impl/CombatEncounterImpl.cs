@@ -70,9 +70,9 @@ public class CombatEncounterImpl : ICombatEncounter
 
         List<IEffectPrimitive> primitives = card.Effect.GetPrimitives(this, target, source);
         List<IEffectPrimitive> modifiedPrimitives = AdjustPrimitives(primitives, source, target);
-        
-        foreach (IEffectPrimitive primitive in primitives)
-            primitive.Apply(this);
+
+        foreach (IEffectPrimitive primitive in modifiedPrimitives)
+            primitive.Apply(this, target, source);
         
         cards.DiscardCardAtIndex(indexInHand);
         // TODO: Exhaust
