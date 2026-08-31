@@ -7,6 +7,10 @@ public interface ICharacter
 {
     public CharacterName Name { get; }
     
+    public ICharacterClass Class { get; } 
+    
+    public IList<Tag> Tags { get; }
+    
     public int Health { get; }
     
     public int Energy { get; }
@@ -14,6 +18,10 @@ public interface ICharacter
     public Deck Deck { get; }
     
     public int HandDrawCount { get; }
+    
+    public void AddTag(Tag tag);
+
+    public IResource GetResource(ResourceType resourceType);
     
     public int GetResourceAmount(ResourceType resourceType);
     

@@ -10,6 +10,8 @@ public class CharacterImpl : ICharacter
 {
     public ICharacterClass Class { get; }
     public CharacterName Name => Class.Name;
+
+    public IList<Tag> Tags { get; } 
     
     public int Health => GetResourceAmount(ResourceType.Health);
     
@@ -19,23 +21,35 @@ public class CharacterImpl : ICharacter
 
     public int HandDrawCount { get; }
     
+
     private Dictionary<ResourceType, IResource> Resources { get; }
     
-    public CharacterImpl(ICharacterClass characterClass)
+    public CharacterImpl(ICharacterClass characterClass, IList<Tag>? tags = null)
     {
         Class = characterClass;
         Deck = Class.StarterDeck;
         HandDrawCount = Class.InitialHandDrawCount;
         Resources = Class.InitialResources;
+        Tags = tags ?? [];
     }
-    
-    public int GetResourceAmount(ResourceType resourceType)
+
+    public void AddTag(Tag tag)
+    {
+        Tags.Add(tag);
+    }
+
+    public IResource GetResource(ResourceType resourceType)
     {
         if (!Resources.TryGetValue(resourceType, out var resource))
             throw new DoesNotHaveResourceException($"Tried to access {resourceType} for {Name}, but it does not exist.");
-        
-        return resource.Amount;
+        return resource;
     }
+    public int GetResourceAmount(ResourceType resourceType)
+    {
+        return GetResource(resourceType).Amount;
+    }
+
+
 
     bool ICharacter.HasResourceType(ResourceType resourceType)
     {

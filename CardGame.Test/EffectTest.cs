@@ -6,6 +6,7 @@ using CardGame.Impl;
 using CardGame.Impl.Effects;
 using CardGame.Library.Characters.EnemyCharacters;
 using CardGame.Library.Characters.PlayerCharacters;
+using CardGame.Library.Relics;
 
 namespace CardGame.Test;
 
@@ -26,7 +27,7 @@ public class EffectTest
         _slime = new CharacterImpl(greenSlimeClass);
 
         _encounter = new CombatEncounterImpl(_steve, _slime);
-        
+
         _ctx = new CombatTargetingContext(_encounter, _slime, _steve);
     }
 
@@ -163,4 +164,74 @@ public class EffectTest
         Assert.That(_slime.HasResourceType(resourceType), Is.True);
         Assert.That(_slime.GetResourceAmount(resourceType), Is.EqualTo(resourceIncrease));
     }
+
+    [Test]
+    public void AppliesMultipleEffects()
+    {
+
+        const int firstDamage = 2;
+        const int secondDamage = 3;
+        int startHealth = _slime.Health;
+
+        IEffect effect = new EffectBuilder()
+            .DecreaseResource(ResourceType.Health, firstDamage)
+            .DecreaseResource(ResourceType.Health, secondDamage)
+            .Build();
+        
+        effect.Apply(_ctx);
+        
+        Assert.That(_slime.Health, Is.EqualTo(startHealth - (firstDamage + secondDamage)));
+    }
+
+    [Test]
+    public void IncrementalGame()
+    {
+        
+        int startHealth = _slime.Health;
+        int startEnergy = _slime.Energy;
+
+        const int healthGain = 1;
+        const int energyGain = 1;
+
+        IEffect effect = new EffectBuilder()
+            .IncreaseResource(ResourceType.Health, healthGain)
+            .IncreaseResource(ResourceType.Energy, energyGain)
+            .Build();
+
+        IEffectAdjustor incrementalGame = new IncrementalGame();
+
+        effect = incrementalGame.Adjust(effect, _ctx);
+        
+        _slime.DecreaseResource(ResourceType.Health, 2);
+        
+        effect.Apply(_ctx);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_slime.Health, Is.EqualTo((startHealth - 2) + (healthGain + 1)));
+            Assert.That(_slime.Energy, Is.EqualTo(startEnergy + (energyGain + 1)));
+        }
+    }
+
+    [Test]
+    public void Kleenex()
+    {
+        int startHealth = _slime.Health;
+        int damage = 2;
+        
+        IEffect effect = new EffectBuilder()
+            .DecreaseResource(ResourceType.Health, damage)
+            .Build();
+
+        IEffectAdjustor kleenex = new Kleenex();
+        
+        effect = kleenex.Adjust(effect, _ctx);
+        
+        effect.Apply(_ctx);
+        
+        Assert.That(_slime.Health, Is.EqualTo(startHealth - (damage*2)));
+        
+    }
+    
+
 }

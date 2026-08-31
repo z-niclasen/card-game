@@ -2,5 +2,6 @@ namespace CardGame.Constants;
 
 public enum EffectType
 {
-    None, IncreaseResource, DecreaseResource
+    None, IncreaseResource, DecreaseResource,
+    Conditional
 }
