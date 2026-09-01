@@ -55,6 +55,9 @@ public class CombatEncounterImpl : ICombatEncounter
     
     public void PlayCardFromHandAtIndex(ICharacter source, int indexInHand, ICharacter target)
     {
+        if (IsFinished)
+            throw new CombatEncounterInactiveException("Tried to play card, but combat encounter is inactive.");
+        
         if (source != InTurn)
             throw new NotInTurnException($"Cannot play card as {source} is not in turn. Current player in turn: {InTurn}.");
         
@@ -105,7 +108,10 @@ public class CombatEncounterImpl : ICombatEncounter
         
         CheckGameFinished();
         
+        InTurn.EndTurn();
         InTurn = GetNextPlayer();
+        InTurn.StartTurn();
+        
         DiscardHandAndDrawNewForCharacter(InTurn);
     }
 
