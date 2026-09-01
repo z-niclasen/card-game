@@ -4,16 +4,16 @@ using CardGame.Framework.Characters;
 using CardGame.Framework.Effects;
 using CardGame.Impl;
 using CardGame.Impl.Effects;
-using CardGame.Library.Characters.EnemyCharacters;
 using CardGame.Library.Characters.PlayerCharacters;
 using CardGame.Library.Relics;
+using CardGame.Test.Library;
 
 namespace CardGame.Test;
 
 public class EffectTest
 {
     private ICharacter _steve;
-    private ICharacter _slime;
+    private IAiCharacter _slime;
     private ICombatEncounter _encounter;
     private CombatTargetingContext _ctx;
 
@@ -23,8 +23,8 @@ public class EffectTest
         ICharacterClass steveClass = new SteveClass();
         _steve = new CharacterImpl(steveClass);
 
-        ICharacterClass greenSlimeClass = new GreenSlimeClass();
-        _slime = new CharacterImpl(greenSlimeClass);
+        IAiCharacterClass greenSlimeClass = new TestingSlime(AiStrategy.DoNothing);
+        _slime = new AiCharacterImpl(greenSlimeClass);
 
         _encounter = new CombatEncounterImpl(_steve, _slime);
 

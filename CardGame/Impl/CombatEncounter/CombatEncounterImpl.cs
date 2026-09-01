@@ -10,7 +10,7 @@ public class CombatEncounterImpl : ICombatEncounter
 {
     public ICharacter Player { get; }
     
-    public ICharacter Opponent { get; }
+    public IAiCharacter Opponent { get; }
     
     public ICharacter InTurn { get; private set; }
 
@@ -18,7 +18,7 @@ public class CombatEncounterImpl : ICombatEncounter
     
     private Dictionary<ICharacter, CombatCardCollection> CardsMap { get; }
 
-    public CombatEncounterImpl(ICharacter player, ICharacter opponent)
+    public CombatEncounterImpl(ICharacter player, IAiCharacter opponent)
     {
         Player = player;
         Opponent = opponent;
@@ -113,6 +113,11 @@ public class CombatEncounterImpl : ICombatEncounter
         InTurn.StartTurn();
         
         DiscardHandAndDrawNewForCharacter(InTurn);
+
+        if (InTurn == Opponent)
+        {
+            Opponent.DoTurn(this);
+        }
     }
 
     public void IncreaseResourceForCharacter(ICharacter character, ResourceType type, int amountGained)

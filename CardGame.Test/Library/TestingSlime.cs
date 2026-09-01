@@ -3,10 +3,11 @@ using CardGame.Framework;
 using CardGame.Framework.Characters;
 using CardGame.Impl;
 using CardGame.Impl.Resources;
+using CardGame.Library;
 
-namespace CardGame.Library.Characters.EnemyCharacters;
+namespace CardGame.Test.Library;
 
-public class GreenSlimeClass : ICharacterClass
+public class TestingSlime(AiStrategy strategy) : IAiCharacterClass
 {
     public CharacterName Name => CharacterName.GreenSlime;
 
@@ -19,4 +20,5 @@ public class GreenSlimeClass : ICharacterClass
     public Deck StarterDeck => GreenSlimeCards.StarterDeck;
     
     public IEnumerable<IRelic> InitialRelics => Enumerable.Empty<IRelic>();
+    public AiStrategy Strategy { get; } = strategy;
 }

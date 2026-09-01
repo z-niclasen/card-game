@@ -7,7 +7,7 @@ public interface ICombatEncounter
 {
     public ICharacter Player { get; }
     
-    public ICharacter Opponent { get; }
+    public IAiCharacter Opponent { get; }
     
     public ICharacter InTurn { get; }
     
