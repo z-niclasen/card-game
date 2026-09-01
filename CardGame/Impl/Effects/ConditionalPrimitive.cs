@@ -26,10 +26,17 @@ public class ConditionalPrimitive(
         else
             ElseEffect?.Apply(ctx);
     }
-    
+
+    public IEffectPrimitive Copy()
+    {
+        return new ConditionalPrimitive(Condition.Copy(), IfEffect.Copy(), ElseEffect?.Copy());
+    }
+
     public interface ICondition
     {
         public bool Evaluate(CombatTargetingContext ctx);
+        
+        public ICondition Copy();
     }
     
     public class ConstantCondition(bool constant) : ICondition
@@ -37,6 +44,11 @@ public class ConditionalPrimitive(
         public bool Evaluate(CombatTargetingContext ctx)
         {
             return constant;
+        }
+
+        public ICondition Copy()
+        {
+            return new ConstantCondition(constant);
         }
     }
 
@@ -64,6 +76,11 @@ public class ConditionalPrimitive(
                 Comparator.GreaterThanOrEqual => resourceValue >= threshold,
                 _ => throw new ArgumentOutOfRangeException(nameof(comparator), comparator, null)
             };
+        }
+
+        public ICondition Copy()
+        {
+            return new NumericThresholdCondition(resourceType, threshold, comparator, conditionTarget);
         }
     }
     

@@ -10,4 +10,8 @@ public class NonePrimitive : IEffectPrimitive
     public EffectType Type => EffectType.None;
     
     public void Apply(CombatTargetingContext ctx) { }
+    public IEffectPrimitive Copy()
+    {
+        return new NonePrimitive();
+    }
 }

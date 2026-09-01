@@ -17,4 +17,9 @@ public class IncreaseResourcePrimitive(ResourceType resourceType, int value) : I
     {
         ctx.Encounter.IncreaseResourceForCharacter(ctx.Target, ResourceType, Value);
     }
+
+    public IEffectPrimitive Copy()
+    {
+        return new IncreaseResourcePrimitive(ResourceType, Value);
+    }
 }

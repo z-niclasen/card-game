@@ -18,4 +18,9 @@ public class DecreaseResourcePrimitive(ResourceType resourceType, int value) : I
     {
         ctx.Encounter.DecreaseResourceForCharacter(ctx.Target, ResourceType, Value);
     }
+
+    public IEffectPrimitive Copy()
+    {
+        return new DecreaseResourcePrimitive(ResourceType, Value);
+    }
 }

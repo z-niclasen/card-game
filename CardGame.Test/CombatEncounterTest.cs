@@ -24,6 +24,7 @@ public class CombatEncounterTest
 
         _encounter = new CombatEncounterImpl(_steve, _slime);
     }
+    
 
     [Test]
     public void CharactersAndEncounterHaveInitialValues()

@@ -2,6 +2,8 @@ using CardGame.Constants;
 using CardGame.Exceptions;
 using CardGame.Framework;
 using CardGame.Framework.Characters;
+using CardGame.Framework.Effects;
+using CardGame.Impl.Relics;
 using CardGame.Impl.Resources;
 
 namespace CardGame.Impl;
@@ -20,22 +22,40 @@ public class CharacterImpl : ICharacter
     public Deck Deck { get; }
 
     public int HandDrawCount { get; }
-    
+
+    public RelicCollection RelicCollection { get; } = new();
 
     private Dictionary<ResourceType, IResource> Resources { get; }
     
-    public CharacterImpl(ICharacterClass characterClass, IList<Tag>? tags = null)
+    public CharacterImpl(ICharacterClass characterClass) : this(characterClass, [], []) { }
+
+    public CharacterImpl(ICharacterClass characterClass, IEnumerable<Tag> tags) : this(characterClass, tags, []) { }
+
+    public CharacterImpl(ICharacterClass characterClass, IEnumerable<IRelic> startingRelics) : this(characterClass, [], startingRelics) { }
+
+    public CharacterImpl(ICharacterClass characterClass, IEnumerable<Tag> tags, IEnumerable<IRelic> startingRelics)
     {
         Class = characterClass;
         Deck = Class.StarterDeck;
         HandDrawCount = Class.InitialHandDrawCount;
         Resources = Class.InitialResources;
-        Tags = tags ?? [];
+        Tags = new List<Tag>(tags);
+        RelicCollection.AddRelics(startingRelics);
     }
 
     public void AddTag(Tag tag)
     {
         Tags.Add(tag);
+    }
+
+    public void AddRelic(IRelic relic)
+    {
+        RelicCollection.AddRelic(relic);
+    }
+
+    public void RemoveRelic(IRelic relic)
+    {
+        RelicCollection.RemoveRelic(relic);
     }
 
     public IResource GetResource(ResourceType resourceType)

@@ -1,5 +1,7 @@
 using CardGame.Constants;
+using CardGame.Framework.Effects;
 using CardGame.Impl;
+using CardGame.Impl.Relics;
 
 namespace CardGame.Framework.Characters;
 
@@ -19,7 +21,13 @@ public interface ICharacter
     
     public int HandDrawCount { get; }
     
+    public RelicCollection RelicCollection { get; }
+
     public void AddTag(Tag tag);
+    
+    public void AddRelic(IRelic relic);
+    
+    public void RemoveRelic(IRelic relic);
 
     public IResource GetResource(ResourceType resourceType);
     

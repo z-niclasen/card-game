@@ -9,4 +9,6 @@ public interface IEffectPrimitive
     public EffectType Type { get; }
     
     public void Apply(CombatTargetingContext ctx);
+
+    public IEffectPrimitive Copy();
 }

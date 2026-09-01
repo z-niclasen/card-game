@@ -18,4 +18,10 @@ public class EffectImpl(
         }
     }
 
+    public IEffect Copy()
+    {
+        List<IEffectPrimitive> primitivesCopy = Primitives.Select(primitive => primitive.Copy()).ToList();
+
+        return new EffectImpl(primitivesCopy);
+    }
 }

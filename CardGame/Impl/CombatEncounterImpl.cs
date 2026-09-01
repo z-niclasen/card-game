@@ -81,7 +81,18 @@ public class CombatEncounterImpl : ICombatEncounter
 
     private IEffect AdjustEffect(IEffect effect, CombatTargetingContext ctx)
     {
-        return effect;
+        IEnumerable<IEffectAdjustor> sourceAdjusters = ctx.Source.RelicCollection.Offensive;
+        IEnumerable<IEffectAdjustor> targetAdjusters = ctx.Target.RelicCollection.Defensive;
+
+        IEffect currentEffect = effect.Copy(); // TODO: Should effect not be copied, but only copied when getting it from catd?
+        
+        foreach (IEffectAdjustor adjuster in sourceAdjusters)
+            currentEffect = adjuster.Adjust(currentEffect, ctx);
+        
+        foreach (IEffectAdjustor adjuster in targetAdjusters)
+            currentEffect = adjuster.Adjust(currentEffect, ctx);
+
+        return currentEffect;
     }
 
     public void EndTurn(ICharacter player)
