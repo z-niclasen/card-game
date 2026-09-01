@@ -26,21 +26,15 @@ public class CharacterImpl : ICharacter
     public RelicCollection RelicCollection { get; } = new();
 
     private Dictionary<ResourceType, IResource> Resources { get; }
-    
-    public CharacterImpl(ICharacterClass characterClass) : this(characterClass, [], []) { }
 
-    public CharacterImpl(ICharacterClass characterClass, IEnumerable<Tag> tags) : this(characterClass, tags, []) { }
-
-    public CharacterImpl(ICharacterClass characterClass, IEnumerable<IRelic> startingRelics) : this(characterClass, [], startingRelics) { }
-
-    public CharacterImpl(ICharacterClass characterClass, IEnumerable<Tag> tags, IEnumerable<IRelic> startingRelics)
+    public CharacterImpl(ICharacterClass characterClass)
     {
         Class = characterClass;
         Deck = Class.StarterDeck;
         HandDrawCount = Class.InitialHandDrawCount;
         Resources = Class.InitialResources;
-        Tags = new List<Tag>(tags);
-        RelicCollection.AddRelics(startingRelics);
+        Tags = new List<Tag>(Class.InitialTags);
+        RelicCollection.AddRelics(Class.InitialRelics);
     }
 
     public void AddTag(Tag tag)

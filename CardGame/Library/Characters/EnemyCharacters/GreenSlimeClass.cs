@@ -12,7 +12,11 @@ public class GreenSlimeClass : ICharacterClass
 
     public Dictionary<ResourceType, IResource> InitialResources => ResourceUtils.StandardResources(10, 1);
 
+    public IEnumerable<Tag> InitialTags => [Tag.Slime];
+
     public int InitialHandDrawCount => 1;
 
     public Deck StarterDeck => GreenSlimeCards.StarterDeck;
+    
+    public IEnumerable<IRelic> InitialRelics => Enumerable.Empty<IRelic>();
 }

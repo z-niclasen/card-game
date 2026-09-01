@@ -19,10 +19,13 @@ public class CombatCardCollection
     private readonly List<ICard> _discardPile = [];
     private readonly List<ICard> _exhaustPile = [];
 
-    public CombatCardCollection(Deck deck)
+    private ShuffleStrategy _shuffleStrategy;
+
+    public CombatCardCollection(Deck deck, ShuffleStrategy shuffleStrategy)
     {
         _drawPile.AddRange(deck);
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
+        _shuffleStrategy = shuffleStrategy;
     }
 
     public ICard GetCardFromHandAtIndex(int index)
@@ -95,6 +98,15 @@ public class CombatCardCollection
     {
         _drawPile.AddRange(_discardPile);
         _discardPile.Clear();
+
+        if (_shuffleStrategy == ShuffleStrategy.NoShuffle)
+            return;
+        
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
+    }
+
+    public enum ShuffleStrategy
+    {
+        Shuffle, NoShuffle
     }
 }

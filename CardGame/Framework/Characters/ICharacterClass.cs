@@ -9,7 +9,10 @@ public interface ICharacterClass
     
     public Dictionary<ResourceType, IResource> InitialResources { get; }
     
+    public IEnumerable<Tag> InitialTags { get; }
+    
     public int InitialHandDrawCount { get; }
     
     public Deck StarterDeck { get; }
+    IEnumerable<IRelic> InitialRelics { get; }
 }

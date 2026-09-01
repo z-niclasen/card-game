@@ -11,6 +11,8 @@ public interface ICombatEncounter
     
     public ICharacter InTurn { get; }
     
+    public bool IsFinished { get; }
+    
     public int GetHandCountOfCharacter(ICharacter character);
     
     public int GetDrawPileCountOfCharacter(ICharacter character);

@@ -13,7 +13,7 @@ public class CombatCardCollectionTest
     public void Setup()
     {
         _initialDeck = SteveCards.StarterDeck;
-        _collection = new CombatCardCollection(_initialDeck);
+        _collection = new CombatCardCollection(_initialDeck, CombatCardCollection.ShuffleStrategy.NoShuffle);
     }
 
     [Test]

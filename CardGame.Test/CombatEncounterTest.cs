@@ -1,4 +1,5 @@
 ﻿using CardGame.Constants;
+using CardGame.Exceptions;
 using CardGame.Framework;
 using CardGame.Framework.Characters;
 using CardGame.Impl;
@@ -12,6 +13,9 @@ public class CombatEncounterTest
     private ICharacter _steve;
     private ICharacter _slime;
     private ICombatEncounter _encounter;
+
+    private CombatTargetingContext _steveTargetsSlime;
+    private CombatTargetingContext _slimeTargetsSteve;
     
     [SetUp]
     public void Setup()
@@ -23,8 +27,51 @@ public class CombatEncounterTest
         _slime = new CharacterImpl(greenSlimeClass);
 
         _encounter = new CombatEncounterImpl(_steve, _slime);
+
+        _steveTargetsSlime = new CombatTargetingContext(_encounter, _slime, _steve);
+        _slimeTargetsSteve = new CombatTargetingContext(_encounter, _steve, _slime);
     }
-    
+
+    [Test]
+    public void EnHest()
+    {
+        int steveStartingEnergy = _steve.Energy;
+        int slimeStartHealth = _slime.Health;
+        
+        _encounter.PlayCardFromHandAtIndex(_steve, 0, _slime);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_slime.Health, Is.EqualTo(slimeStartHealth - 2));
+            Assert.That(_steve.Energy, Is.EqualTo(steveStartingEnergy - 1));
+        }
+        
+        _encounter.PlayCardFromHandAtIndex(_steve, 0, _slime);
+        _encounter.PlayCardFromHandAtIndex(_steve, 0, _slime);
+        
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_slime.Health, Is.EqualTo(slimeStartHealth - 2 * 3));
+            Assert.That(_steve.Energy, Is.EqualTo(steveStartingEnergy - 1 * 3));
+        }
+        
+        Assert.Throws<NotEnoughResourcesException>(() => _encounter.PlayCardFromHandAtIndex(_steve, 0, _slime));
+        
+        Assert.That(_encounter.IsFinished, Is.Not.True);
+        _encounter.EndTurn(_steve);
+        Assert.That(_encounter.IsFinished, Is.Not.True);
+
+        int slimeEnergy = _slime.Energy;
+        int steveHealth = _steve.Health;
+        
+        _encounter.PlayCardFromHandAtIndex(_slime, 0, _steve);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_slime.Energy, Is.EqualTo(slimeEnergy - 1));
+            Assert.That(_steve.Health, Is.EqualTo(steveHealth - 6));
+        }
+    }
 
     [Test]
     public void CharactersAndEncounterHaveInitialValues()

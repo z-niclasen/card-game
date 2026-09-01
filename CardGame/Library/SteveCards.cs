@@ -7,10 +7,10 @@ namespace CardGame.Library;
 public static class SteveCards
 {
     public static Deck StarterDeck => new([
-        Sword, Sword, Sword, Sword, Sword, Sword, Sword, BigSword, BigSword, BigSword, Stumble, Stumble
+        Sword, Sword, Sword, Sword, Sword, Sword, Sword, Sword, Sword, Sword, Sword, Sword
     ]);
     
-    public static ICard Sword => CardUtils.NewCard("Sword", CardUtils.DamageEffect(6), 1);
+    public static ICard Sword => CardUtils.NewCard("Sword", CardUtils.DamageEffect(2), 1);
     
     public static ICard BigSword => CardUtils.NewCard("Big Sword", CardUtils.DamageEffect(13), 2, Rarity.Uncommon);
     

@@ -14,7 +14,7 @@ public class CardImpl(
 {
     public string Name { get; } = name;
 
-    public IEffect Effect { get; } = effect;
+    public IEffect Effect => effect.Copy();
 
     public string Description { get; } = description;
     public Dictionary<ResourceType, int> Cost { get; } = cost;

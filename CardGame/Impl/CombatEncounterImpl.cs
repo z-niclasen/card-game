@@ -13,6 +13,8 @@ public class CombatEncounterImpl : ICombatEncounter
     public ICharacter Opponent { get; }
     
     public ICharacter InTurn { get; private set; }
+
+    public bool IsFinished { get; private set; } = false;
     
     private Dictionary<ICharacter, CombatCardCollection> CardsMap { get; }
 
@@ -24,8 +26,8 @@ public class CombatEncounterImpl : ICombatEncounter
 
         CardsMap = new Dictionary<ICharacter, CombatCardCollection>
         {
-            { Player, new CombatCardCollection(player.Deck) },
-            { Opponent, new CombatCardCollection(opponent.Deck) }
+            { Player, new CombatCardCollection(player.Deck, CombatCardCollection.ShuffleStrategy.Shuffle) },
+            { Opponent, new CombatCardCollection(opponent.Deck, CombatCardCollection.ShuffleStrategy.NoShuffle) }
         };
         
         DiscardHandAndDrawNewForCharacter(InTurn);
@@ -66,7 +68,7 @@ public class CombatEncounterImpl : ICombatEncounter
         ICard card = cards.GetCardFromHandAtIndex(indexInHand);
         
         if (!source.CanPlayCard(card))
-            throw new NotInTurnException($"Character {source} does not have resources to play card.");
+            throw new NotEnoughResourcesException($"Character {source} does not have resources to play card.");
 
         CombatTargetingContext ctx = new CombatTargetingContext(this, target, source);
 
@@ -75,6 +77,7 @@ public class CombatEncounterImpl : ICombatEncounter
         
         adjustedEffect.Apply(ctx);
         
+        source.SpendResourcesForCard(card);
         cards.DiscardCardAtIndex(indexInHand);
         // TODO: Exhaust
     }
@@ -84,7 +87,7 @@ public class CombatEncounterImpl : ICombatEncounter
         IEnumerable<IEffectAdjustor> sourceAdjusters = ctx.Source.RelicCollection.Offensive;
         IEnumerable<IEffectAdjustor> targetAdjusters = ctx.Target.RelicCollection.Defensive;
 
-        IEffect currentEffect = effect.Copy(); // TODO: Should effect not be copied, but only copied when getting it from catd?
+        IEffect currentEffect = effect;
         
         foreach (IEffectAdjustor adjuster in sourceAdjusters)
             currentEffect = adjuster.Adjust(currentEffect, ctx);
@@ -99,6 +102,8 @@ public class CombatEncounterImpl : ICombatEncounter
     {
         if (player != InTurn)
             throw new NotInTurnException($"Cannot end turn as {player} is not in turn. Current player in turn: {InTurn}.");
+        
+        CheckGameFinished();
         
         InTurn = GetNextPlayer();
         DiscardHandAndDrawNewForCharacter(InTurn);
@@ -119,6 +124,12 @@ public class CombatEncounterImpl : ICombatEncounter
         CombatCardCollection collection = CardsMap[character];
         collection.DiscardHand();
         collection.DrawNCards(character.HandDrawCount);
+    }
+
+    private void CheckGameFinished()
+    {
+        if (Player.Health <= 0 || Opponent.Health <= 0)
+            IsFinished = true;
     }
     
     private ICharacter GetNextPlayer()
