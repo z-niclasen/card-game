@@ -8,8 +8,11 @@ namespace CardGameCore.Impl.CombatEncounter;
 
 public class CombatEncounterImpl : ICombatEncounter
 {
-    public event EndTurnHandler OnEndTurn;
-    
+    public event EndTurnDelegate? OnEndTurn;
+    public event PlayCardDelegate? OnPlayCard;
+    public event EncounterFinishedDelegate? OnEncounterFinished;
+    public event CharacterResourceChangeDelegate? OnCharacterResourceChange;
+
     public ICharacter Player { get; }
     
     public IAiCharacter Opponent { get; }
@@ -77,6 +80,8 @@ public class CombatEncounterImpl : ICombatEncounter
 
         CombatTargetingContext ctx = new CombatTargetingContext(this, target, source);
 
+        OnPlayCard?.Invoke(this, card, ctx);
+
         IEffect effect = card.Effect;
         IEffect adjustedEffect = AdjustEffect(effect, ctx);
         
@@ -127,11 +132,13 @@ public class CombatEncounterImpl : ICombatEncounter
     public void IncreaseResourceForCharacter(ICharacter character, ResourceType type, int amountGained)
     {
         character.IncreaseResource(type, amountGained);
+        OnCharacterResourceChange?.Invoke(this, character, type);
     }
 
     public void DecreaseResourceForCharacter(ICharacter character, ResourceType type, int amountSpent)
     {
         character.DecreaseResource(type, amountSpent);
+        OnCharacterResourceChange?.Invoke(this, character, type);
     }
 
     private void DiscardHandAndDrawNewForCharacter(ICharacter character)
@@ -143,8 +150,11 @@ public class CombatEncounterImpl : ICombatEncounter
 
     private void CheckGameFinished()
     {
-        if (Player.Health <= 0 || Opponent.Health <= 0)
-            IsFinished = true;
+        if (Player.Health > 0 && Opponent.Health > 0)
+            return;
+        
+        IsFinished = true;
+        OnEncounterFinished?.Invoke(this);
     }
     
     private ICharacter GetNextPlayer()

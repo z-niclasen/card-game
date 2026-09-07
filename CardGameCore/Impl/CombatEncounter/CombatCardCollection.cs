@@ -3,8 +3,24 @@ using CardGameCore.Utility;
 
 namespace CardGameCore.Impl.CombatEncounter;
 
+public delegate void DrawCardDelegate(CombatCardCollection collection, ICard card);
+public delegate void DiscardCardDelegate(CombatCardCollection collection, ICard card);
+public delegate void ExhaustCardDelegate(CombatCardCollection collection, ICard card);
+public delegate void ShuffleIntoDrawPileDelegate(CombatCardCollection collection);
+public delegate void DrawPileChangedDelegate(CombatCardCollection collection);
+public delegate void DiscardPileChangedDelegate(CombatCardCollection collection);
+public delegate void ExhaustPileChangedDelegate(CombatCardCollection collection);
+
 public class CombatCardCollection
 {
+    public event DrawCardDelegate? OnDrawCard;
+    public event DiscardCardDelegate? OnDiscardCard;
+    public event ExhaustCardDelegate? OnExhaustCard;
+    public event ShuffleIntoDrawPileDelegate? OnShuffleIntoDrawPile;
+    public event DrawPileChangedDelegate? OnDrawPileChanged;
+    public event DiscardPileChangedDelegate? OnDiscardPileChanged;
+    public event ExhaustPileChangedDelegate? OnExhaustPileChanged;
+    
     public int HandCount => _hand.Count;
     public int DrawPileCount => _drawPile.Count;
     public int DiscardPileCount => _discardPile.Count;
@@ -50,6 +66,8 @@ public class CombatCardCollection
         _drawPile.RemoveAt(0);
         
         _hand.Add(drawnCard);
+        
+        InvokeOnDrawCard(drawnCard);
     }
 
     public void DrawNCards(int numberOfCards)
@@ -74,12 +92,14 @@ public class CombatCardCollection
         ICard discardedCard =  _hand[index];
         _hand.RemoveAt(index);
         _discardPile.Add(discardedCard);
+
+        InvokeOnDiscardCard(discardedCard);
     }
 
     public void DiscardHand()
     {
-        _discardPile.AddRange(_hand);
-        _hand.Clear();
+        while (HandCount > 0)
+            DiscardCardAtIndex(0);
     }
 
     public void ExhaustCardFromHandAtIndex(int index)
@@ -92,6 +112,8 @@ public class CombatCardCollection
         ICard exhaustedCard = _hand[index];
         _hand.RemoveAt(index);
         _exhaustPile.Add(exhaustedCard);
+        
+        InvokeOnExhaustCard(exhaustedCard);
     }
 
     private void AddDiscardToDrawAndShuffle()
@@ -103,8 +125,35 @@ public class CombatCardCollection
             return;
         
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
+
+        InvokeOnShuffleIntoDrawPile();
     }
 
+    private void InvokeOnDrawCard(ICard drawnCard)
+    {
+        OnDrawCard?.Invoke(this, drawnCard);
+        OnDrawPileChanged?.Invoke(this);
+    }
+    
+    private void InvokeOnDiscardCard(ICard discardedCard)
+    {
+        OnDiscardCard?.Invoke(this, discardedCard);
+        OnDiscardPileChanged?.Invoke(this);
+    }
+
+    private void InvokeOnExhaustCard(ICard exhaustedCard)
+    {
+        OnExhaustCard?.Invoke(this, exhaustedCard);
+        OnExhaustPileChanged?.Invoke(this);
+    }
+
+    private void InvokeOnShuffleIntoDrawPile()
+    {
+        OnShuffleIntoDrawPile?.Invoke(this);
+        OnDrawPileChanged?.Invoke(this);
+        OnDiscardPileChanged?.Invoke(this);
+    }
+    
     public enum ShuffleStrategy
     {
         Shuffle, NoShuffle

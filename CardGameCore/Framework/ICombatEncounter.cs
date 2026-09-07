@@ -1,13 +1,21 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Impl.CombatEncounter;
 
 namespace CardGameCore.Framework;
 
-public delegate void EndTurnHandler(ICombatEncounter encounter);
+public delegate void EndTurnDelegate(ICombatEncounter encounter);
+public delegate void PlayCardDelegate(ICombatEncounter encounter, ICard playedCard, CombatTargetingContext ctx);
+public delegate void EncounterFinishedDelegate(ICombatEncounter encounter);
+public delegate void CharacterResourceChangeDelegate(ICombatEncounter encounter, ICharacter character, ResourceType type);
 
 public interface ICombatEncounter
 {
-    public event EndTurnHandler OnEndTurn;
+    public event EndTurnDelegate? OnEndTurn;
+    public event PlayCardDelegate? OnPlayCard;
+    public event EncounterFinishedDelegate? OnEncounterFinished;
+    
+    public event CharacterResourceChangeDelegate? OnCharacterResourceChange;
     
     public ICharacter Player { get; }
     

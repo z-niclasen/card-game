@@ -7,10 +7,12 @@ offsets = PackedFloat32Array(0, 0.012048192)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_jbhky"]
 gradient = SubResource("Gradient_kwle2")
+width = 128
+height = 192
 fill_from = Vector2(1, 0)
 fill_to = Vector2(0, 0)
 
-[node name="CardUI" type="Node2D" unique_id=1500116467 node_paths=PackedStringArray("NameLabel", "CostLabel", "DescriptionLabel", "RarityLabel")]
+[node name="CardUI" type="Node2D" unique_id=1500116467 node_paths=PackedStringArray("NameLabel", "CostLabel", "DescriptionLabel", "RarityLabel", "BackgroundSprite")]
 script = ExtResource("1_huidv")
 CardName = "Magnus "
 Cost = 4
@@ -19,9 +21,9 @@ NameLabel = NodePath("NameLabel")
 CostLabel = NodePath("CostLabel")
 DescriptionLabel = NodePath("DescriptionLabel")
 RarityLabel = NodePath("RarityLabel")
+BackgroundSprite = NodePath("BackgroundSprite")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1951558606]
-scale = Vector2(2, 3)
+[node name="BackgroundSprite" type="Sprite2D" parent="." unique_id=1951558606]
 texture = SubResource("GradientTexture2D_jbhky")
 
 [node name="NameLabel" type="Label" parent="." unique_id=2046008611]

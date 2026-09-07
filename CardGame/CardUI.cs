@@ -55,6 +55,10 @@ public partial class CardUI : Node2D
 	}
 	private Rarity _rarity;
 
+	public int Width => BackgroundSprite.Texture.GetWidth();
+	
+	public int Height => BackgroundSprite.Texture.GetHeight();
+
 	[Export]
 	private Label NameLabel { get; set; }
 	
@@ -66,6 +70,9 @@ public partial class CardUI : Node2D
 	
 	[Export]
 	private Label RarityLabel { get; set; }
+	
+	[Export]
+	private Sprite2D BackgroundSprite { get; set; }
 	
 	public ICard Card
 	{

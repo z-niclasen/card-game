@@ -1,4 +1,5 @@
 using CardGameCore.Framework;
+using CardGameCore.Impl.CombatEncounter;
 
 namespace CardGameCore.Test.CombatEncounter;
 
@@ -12,10 +13,22 @@ public class CombatEncounterSpy
     {
         _encounter = encounter;
 
-        _encounter.OnEndTurn += OnEndEncounterTurn;
+        _encounter.OnEndTurn += EncounterOnEndTurn;
+        _encounter.OnPlayCard += EncounterOnOnPlayCard;
+        _encounter.OnEncounterFinished += EncounterOnOnEncounterFinished;
     }
 
-    private void OnEndEncounterTurn(ICombatEncounter encounter)
+    private void EncounterOnOnEncounterFinished(ICombatEncounter encounter)
+    {
+        _messages.Add("OnEncounterFinished");
+    }
+
+    private void EncounterOnOnPlayCard(ICombatEncounter encounter, ICard playedCard, CombatTargetingContext ctx)
+    {
+        _messages.Add("OnPlayCard");
+    }
+
+    private void EncounterOnEndTurn(ICombatEncounter encounter)
     {
         _messages.Add("OnEndTurn");
     }

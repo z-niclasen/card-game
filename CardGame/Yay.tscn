@@ -2,9 +2,19 @@
 
 [ext_resource type="Script" uid="uid://cfpgnrg4fqdxv" path="res://Yay.cs" id="1_a0xcp"]
 [ext_resource type="PackedScene" uid="uid://byss7fge32s1p" path="res://CardUI.tscn" id="2_bixaw"]
+[ext_resource type="PackedScene" uid="uid://cs6s0yjfufkwm" path="res://CombatCardCollectionUI.tscn" id="3_sk2gm"]
 
-[node name="Node2D" type="Node2D" unique_id=1772827855]
+[node name="Node2D" type="Node2D" unique_id=1772827855 node_paths=PackedStringArray("CombatCardCollectionUI", "DrawCardButton")]
 script = ExtResource("1_a0xcp")
+CombatCardCollectionUI = NodePath("CombatCardCollectionUI")
+DrawCardButton = NodePath("Button")
 
 [node name="CardUI" parent="." unique_id=1500116467 instance=ExtResource("2_bixaw")]
 position = Vector2(89, 110)
+
+[node name="CombatCardCollectionUI" parent="." unique_id=944060468 instance=ExtResource("3_sk2gm")]
+CardUIScene = ExtResource("2_bixaw")
+
+[node name="Button" type="Button" parent="." unique_id=576630788]
+offset_right = 8.0
+offset_bottom = 8.0

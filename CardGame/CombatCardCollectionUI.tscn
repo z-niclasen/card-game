@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cs6s0yjfufkwm"]
+
+[ext_resource type="Script" uid="uid://bab3a175vkq3c" path="res://PlayerCombatCardCollectionUI.cs" id="1_1gcp8"]
+
+[node name="CombatCardCollectionUI" type="Node2D" unique_id=944060468]
+script = ExtResource("1_1gcp8")
