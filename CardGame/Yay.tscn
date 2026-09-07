@@ -18,3 +18,4 @@ CardUIScene = ExtResource("2_bixaw")
 [node name="Button" type="Button" parent="." unique_id=576630788]
 offset_right = 8.0
 offset_bottom = 8.0
+text = "Draw"
