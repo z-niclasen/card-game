@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://bsyry3e614k61"]
 
 [ext_resource type="Script" uid="uid://cfpgnrg4fqdxv" path="res://Yay.cs" id="1_a0xcp"]
+[ext_resource type="PackedScene" uid="uid://byss7fge32s1p" path="res://CardUI.tscn" id="2_bixaw"]
 
 [node name="Node2D" type="Node2D" unique_id=1772827855]
 script = ExtResource("1_a0xcp")
+
+[node name="Node2D" parent="." unique_id=1500116467 instance=ExtResource("2_bixaw")]
+position = Vector2(81, 113)
