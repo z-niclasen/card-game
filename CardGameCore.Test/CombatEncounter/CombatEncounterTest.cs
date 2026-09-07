@@ -5,6 +5,7 @@ using CardGameCore.Framework.Characters;
 using CardGameCore.Impl;
 using CardGameCore.Impl.CombatEncounter;
 using CardGameCore.Library.Characters.PlayerCharacters;
+using CardGameCore.Test.CombatEncounter;
 using CardGameCore.Test.Library;
 
 namespace CardGameCore.Test;
@@ -174,5 +175,16 @@ public class CombatEncounterTest
             Assert.That(_encounter.GetDrawPileCountOfCharacter(_steve), Is.EqualTo(_steve.Deck.Count - 2 * _steve.HandDrawCount));
             Assert.That(_encounter.GetDrawPileCountOfCharacter(_slime), Is.EqualTo(_slime.Deck.Count - _slime.HandDrawCount));
         }
+    }
+
+    [Test]
+    public void CombatEncounterNotifiesOnTurnEnd()
+    {
+        CombatEncounterSpy spy = new(_encounter);
+        
+        _encounter.EndTurn(_steve);
+        
+        Assert.That(spy._messages, Has.Count.EqualTo(1));
+        Assert.That(spy._messages[0], Is.EqualTo("OnEndTurn"));
     }
 }

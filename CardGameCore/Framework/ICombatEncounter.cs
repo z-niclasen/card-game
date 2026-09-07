@@ -3,8 +3,12 @@ using CardGameCore.Framework.Characters;
 
 namespace CardGameCore.Framework;
 
+public delegate void EndTurnHandler(ICombatEncounter encounter);
+
 public interface ICombatEncounter
 {
+    public event EndTurnHandler OnEndTurn;
+    
     public ICharacter Player { get; }
     
     public IAiCharacter Opponent { get; }

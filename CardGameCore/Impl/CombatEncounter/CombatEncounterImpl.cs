@@ -8,6 +8,8 @@ namespace CardGameCore.Impl.CombatEncounter;
 
 public class CombatEncounterImpl : ICombatEncounter
 {
+    public event EndTurnHandler OnEndTurn;
+    
     public ICharacter Player { get; }
     
     public IAiCharacter Opponent { get; }
@@ -113,6 +115,8 @@ public class CombatEncounterImpl : ICombatEncounter
         InTurn.StartTurn();
         
         DiscardHandAndDrawNewForCharacter(InTurn);
+
+        OnEndTurn?.Invoke(this);
 
         if (InTurn == Opponent)
         {

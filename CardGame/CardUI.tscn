@@ -12,7 +12,9 @@ fill_to = Vector2(0, 0)
 
 [node name="CardUI" type="Node2D" unique_id=1500116467 node_paths=PackedStringArray("NameLabel", "CostLabel", "DescriptionLabel", "RarityLabel")]
 script = ExtResource("1_huidv")
-CardName = "Hej"
+CardName = "Magnus "
+Cost = 4
+Description = "Er datalog"
 NameLabel = NodePath("NameLabel")
 CostLabel = NodePath("CostLabel")
 DescriptionLabel = NodePath("DescriptionLabel")
@@ -28,7 +30,7 @@ offset_top = -94.0
 offset_right = -11.0
 offset_bottom = -71.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Hej"
+text = "Magnus "
 
 [node name="CostLabel" type="Label" parent="." unique_id=1287517698]
 offset_left = 6.0
@@ -36,7 +38,7 @@ offset_top = -91.0
 offset_right = 56.0
 offset_bottom = -68.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "0"
+text = "4"
 horizontal_alignment = 2
 
 [node name="DescriptionLabel" type="Label" parent="." unique_id=408803432]
@@ -46,12 +48,14 @@ offset_top = 7.0
 offset_right = 60.0
 offset_bottom = 56.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Er datalog"
 autowrap_mode = 3
 
 [node name="RarityLabel" type="Label" parent="." unique_id=1303197893]
-offset_left = -40.0
-offset_top = 70.0
-offset_right = 44.0
-offset_bottom = 93.0
+offset_left = -113.0
+offset_top = 72.0
+offset_right = 115.0
+offset_bottom = 95.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Common"
+horizontal_alignment = 1
