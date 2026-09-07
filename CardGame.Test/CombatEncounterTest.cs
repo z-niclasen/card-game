@@ -3,34 +3,51 @@ using CardGame.Exceptions;
 using CardGame.Framework;
 using CardGame.Framework.Characters;
 using CardGame.Impl;
-using CardGame.Library.Characters.EnemyCharacters;
 using CardGame.Library.Characters.PlayerCharacters;
+using CardGame.Test.Library;
 
 namespace CardGame.Test;
 
 public class CombatEncounterTest
 {
     private ICharacter _steve;
-    private ICharacter _slime;
+    private IAiCharacter _slime;
+    private IAiCharacter _cleverSlime;
     private ICombatEncounter _encounter;
+    private CombatEncounterImpl _cleverEncounter;
 
-    private CombatTargetingContext _steveTargetsSlime;
-    private CombatTargetingContext _slimeTargetsSteve;
-    
+
     [SetUp]
     public void Setup()
     {
         ICharacterClass steveClass = new SteveClass();
         _steve = new CharacterImpl(steveClass);
         
-        ICharacterClass greenSlimeClass = new GreenSlimeClass();
-        _slime = new CharacterImpl(greenSlimeClass);
+        IAiCharacterClass greenSlimeClass = new TestingSlime(AiStrategy.DoNothing);
+        _slime = new AiCharacterImpl(greenSlimeClass);
+        
+        IAiCharacterClass cleverGreenSlimeClass = new TestingSlime(AiStrategy.PlayZero);
+        _cleverSlime = new AiCharacterImpl(cleverGreenSlimeClass);
 
         _encounter = new CombatEncounterImpl(_steve, _slime);
-
-        _steveTargetsSlime = new CombatTargetingContext(_encounter, _slime, _steve);
-        _slimeTargetsSteve = new CombatTargetingContext(_encounter, _steve, _slime);
+        _cleverEncounter = new CombatEncounterImpl(_steve, _cleverSlime);
     }
+
+    [Test]
+    public void CanPlayAiEncounter()
+    {
+        int steveStartHealth = _steve.Health;
+        int steveStartEnergy = _steve.Energy;
+        int slimeStartHealth = _cleverSlime.Health;
+        int slimeStartEnergy = _cleverSlime.Energy;
+        
+        _cleverEncounter.EndTurn(_steve);
+        
+        Assert.That(_steve.Health, Is.EqualTo(steveStartHealth-6));
+        Assert.That(_cleverSlime.Energy, Is.EqualTo(slimeStartEnergy - 1));
+        
+    }
+    
 
     [Test]
     public void CanPlayBasicEncounter()

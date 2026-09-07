@@ -24,8 +24,4 @@
       <ProjectReference Include="..\CardGame\CardGame.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Library\" />
-    </ItemGroup>
-
 </Project>
