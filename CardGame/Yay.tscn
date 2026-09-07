@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bsyry3e614k61"]
+
+[ext_resource type="Script" uid="uid://cfpgnrg4fqdxv" path="res://Yay.cs" id="1_a0xcp"]
+
+[node name="Node2D" type="Node2D" unique_id=1772827855]
+script = ExtResource("1_a0xcp")

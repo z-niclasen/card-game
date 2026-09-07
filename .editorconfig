@@ -1,2 +1,4 @@
-[*.cs]
-dotnet_diagnostic.CA1859.severity = none
+root = true
+
+[*]
+charset = utf-8
