@@ -19,9 +19,9 @@ public partial class CardUI : Node2D
 	}
 	private ICard _card;
 	
-	public int Width => _backgroundSprite.Texture.GetWidth();
+	public int Width => (int)_topContainer.CustomMinimumSize.X;
 	
-	public int Height => _backgroundSprite.Texture.GetHeight();
+	public int Height => (int)_topContainer.CustomMinimumSize.Y;
 	
 	[Export]
 	private string CardName
@@ -79,7 +79,7 @@ public partial class CardUI : Node2D
 
 	private Label _rarityLabel;
 
-	private Sprite2D _backgroundSprite;
+	private PanelContainer _topContainer;
 
 	public override void _Ready()
 	{
@@ -87,7 +87,7 @@ public partial class CardUI : Node2D
 		_costLabel = GetNode<Label>("%CostLabel");
 		_descriptionLabel = GetNode<Label>("%DescriptionLabel");
 		_rarityLabel = GetNode<Label>("%RarityLabel");
-		_backgroundSprite = GetNode<Sprite2D>("%BackgroundSprite");
+		_topContainer = GetNode<PanelContainer>("%TopContainer");
 		
 		SetLabelsToCardValues();
 		UpdateLabels();

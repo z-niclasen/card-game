@@ -1,17 +1,11 @@
+using CardGameCore.Exceptions;
 using CardGameCore.Framework;
+using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Utility;
 
 namespace CardGameCore.Impl.CombatEncounter;
 
-public delegate void DrawCardDelegate(CombatCardCollection collection, ICard card);
-public delegate void DiscardCardDelegate(CombatCardCollection collection, ICard card);
-public delegate void ExhaustCardDelegate(CombatCardCollection collection, ICard card);
-public delegate void ShuffleIntoDrawPileDelegate(CombatCardCollection collection);
-public delegate void DrawPileChangedDelegate(CombatCardCollection collection);
-public delegate void DiscardPileChangedDelegate(CombatCardCollection collection);
-public delegate void ExhaustPileChangedDelegate(CombatCardCollection collection);
-
-public class CombatCardCollection
+public class CombatCardCollectionImpl : ICombatCardCollectionMutable
 {
     public event DrawCardDelegate? OnDrawCard;
     public event DiscardCardDelegate? OnDiscardCard;
@@ -37,7 +31,7 @@ public class CombatCardCollection
 
     private ShuffleStrategy _shuffleStrategy;
 
-    public CombatCardCollection(Deck deck, ShuffleStrategy shuffleStrategy)
+    public CombatCardCollectionImpl(Deck deck, ShuffleStrategy shuffleStrategy)
     {
         _drawPile.AddRange(deck);
         _drawPile = _drawPile.Shuffle(Run.Random).ToList();
@@ -52,6 +46,11 @@ public class CombatCardCollection
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, HandCount);
         
         return _hand[index];
+    }
+
+    public bool IsCardInHand(ICard card)
+    {
+        return _hand.Contains(card);
     }
 
     public void DrawCard()
@@ -82,38 +81,35 @@ public class CombatCardCollection
             DrawCard();
     }
 
-    public void DiscardCardAtIndex(int index)
+    public void DiscardCardFromHand(ICard cardToDiscard)
     {
-        if (index < 0)
-            throw new ArgumentException("Index cannot be negative.");
-
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, HandCount);
+        if (!_hand.Contains(cardToDiscard))
+            throw new CardNotInHandException($"Tried to discard card {cardToDiscard}, but it is not in hand.");
         
-        ICard discardedCard =  _hand[index];
-        _hand.RemoveAt(index);
-        _discardPile.Add(discardedCard);
+        _hand.Remove(cardToDiscard);
+        _discardPile.Add(cardToDiscard);
 
-        InvokeOnDiscardCard(discardedCard);
+        InvokeOnDiscardCard(cardToDiscard);
     }
 
     public void DiscardHand()
     {
         while (HandCount > 0)
-            DiscardCardAtIndex(0);
+        {
+            ICard firstCardInHand = GetCardFromHandAtIndex(0);
+            DiscardCardFromHand(firstCardInHand);
+        }
     }
 
-    public void ExhaustCardFromHandAtIndex(int index)
+    public void ExhaustCardFromHand(ICard cardToExhaust)
     {
-        if (index < 0)
-            throw new ArgumentException("Index cannot be negative.");
-
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, HandCount);
+        if (!_hand.Contains(cardToExhaust))
+            throw new CardNotInHandException($"Tried to exhaust card {cardToExhaust}, but it is not in hand.");
         
-        ICard exhaustedCard = _hand[index];
-        _hand.RemoveAt(index);
-        _exhaustPile.Add(exhaustedCard);
+        _hand.Remove(cardToExhaust);
+        _exhaustPile.Add(cardToExhaust);
         
-        InvokeOnExhaustCard(exhaustedCard);
+        InvokeOnExhaustCard(cardToExhaust);
     }
 
     private void AddDiscardToDrawAndShuffle()

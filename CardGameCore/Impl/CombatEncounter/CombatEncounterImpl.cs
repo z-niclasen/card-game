@@ -2,6 +2,7 @@ using CardGameCore.Constants;
 using CardGameCore.Exceptions;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Framework.Effects;
 
 namespace CardGameCore.Impl.CombatEncounter;
@@ -21,7 +22,7 @@ public class CombatEncounterImpl : ICombatEncounter
 
     public bool IsFinished { get; private set; } = false;
     
-    private Dictionary<ICharacter, CombatCardCollection> CardsMap { get; }
+    private Dictionary<ICharacter, ICombatCardCollectionMutable> CardsMap { get; }
 
     public CombatEncounterImpl(ICharacter player, IAiCharacter opponent)
     {
@@ -29,10 +30,10 @@ public class CombatEncounterImpl : ICombatEncounter
         Opponent = opponent;
         InTurn = Player;
 
-        CardsMap = new Dictionary<ICharacter, CombatCardCollection>
+        CardsMap = new Dictionary<ICharacter, ICombatCardCollectionMutable>
         {
-            { Player, new CombatCardCollection(player.Deck, CombatCardCollection.ShuffleStrategy.Shuffle) },
-            { Opponent, new CombatCardCollection(opponent.Deck, CombatCardCollection.ShuffleStrategy.NoShuffle) }
+            { Player, new CombatCardCollectionImpl(player.Deck, CombatCardCollectionImpl.ShuffleStrategy.Shuffle) },
+            { Opponent, new CombatCardCollectionImpl(opponent.Deck, CombatCardCollectionImpl.ShuffleStrategy.NoShuffle) }
         };
         
         DiscardHandAndDrawNewForCharacter(InTurn);
@@ -57,8 +58,19 @@ public class CombatEncounterImpl : ICombatEncounter
     {
         return CardsMap[character].ExhaustPileCount;
     }
+
+    public ICard GetCardFromHandAtIndex(ICharacter character, int index)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(index, 0);
+        
+        ICombatCardCollection cards = CardsMap[character];
+        
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, cards.HandCount);
+
+        return cards.GetCardFromHandAtIndex(index);
+    }
     
-    public void PlayCardFromHandAtIndex(ICharacter source, int indexInHand, ICharacter target)
+    public void PlayCardFromHand(ICharacter source, ICard cardToPlay, ICharacter target)
     {
         if (IsFinished)
             throw new CombatEncounterInactiveException("Tried to play card, but combat encounter is inactive.");
@@ -66,29 +78,26 @@ public class CombatEncounterImpl : ICombatEncounter
         if (source != InTurn)
             throw new NotInTurnException($"Cannot play card as {source} is not in turn. Current player in turn: {InTurn}.");
         
-        if (indexInHand < 0)
-            throw new ArgumentException("IndexInHand cannot be negative.");
-        
-        CombatCardCollection cards = CardsMap[source];
+        ICombatCardCollectionMutable cards = CardsMap[source];
 
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(indexInHand, cards.HandCount);
+        if (!cards.IsCardInHand(cardToPlay))
+            throw new CardNotInHandException(
+                $"Player {source} tried to play card {cardToPlay}, but the card is not in the player's hand.");
         
-        ICard card = cards.GetCardFromHandAtIndex(indexInHand);
-        
-        if (!source.CanPlayCard(card))
+        if (!source.CanPlayCard(cardToPlay))
             throw new NotEnoughResourcesException($"Character {source} does not have resources to play card.");
 
         CombatTargetingContext ctx = new CombatTargetingContext(this, target, source);
 
-        OnPlayCard?.Invoke(this, card, ctx);
+        OnPlayCard?.Invoke(this, cardToPlay, ctx);
 
-        IEffect effect = card.Effect;
+        IEffect effect = cardToPlay.Effect;
         IEffect adjustedEffect = AdjustEffect(effect, ctx);
         
         adjustedEffect.Apply(ctx);
         
-        source.SpendResourcesForCard(card);
-        cards.DiscardCardAtIndex(indexInHand);
+        source.SpendResourcesForCard(cardToPlay);
+        cards.DiscardCardFromHand(cardToPlay);
         // TODO: Exhaust
     }
 
@@ -143,9 +152,9 @@ public class CombatEncounterImpl : ICombatEncounter
 
     private void DiscardHandAndDrawNewForCharacter(ICharacter character)
     {
-        CombatCardCollection collection = CardsMap[character];
-        collection.DiscardHand();
-        collection.DrawNCards(character.HandDrawCount);
+        ICombatCardCollectionMutable collectionImpl = CardsMap[character];
+        collectionImpl.DiscardHand();
+        collectionImpl.DrawNCards(character.HandDrawCount);
     }
 
     private void CheckGameFinished()

@@ -1,4 +1,5 @@
 using CardGameCore.Framework;
+using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Impl.CombatEncounter;
 
 namespace CardGameCore.Test.CombatEncounter;

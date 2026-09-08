@@ -2,15 +2,20 @@
 
 [ext_resource type="Script" uid="uid://2no2vmsg2sfk" path="res://CardUI.cs" id="1_huidv"]
 
-[sub_resource type="Gradient" id="Gradient_kwle2"]
-offsets = PackedFloat32Array(0, 0.012048192)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_huidv"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_jbhky"]
-gradient = SubResource("Gradient_kwle2")
-width = 128
-height = 192
-fill_from = Vector2(1, 0)
-fill_to = Vector2(0, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yf8w3"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="Gradient" id="Gradient_huidv"]
+colors = PackedColorArray(0, 1, 1, 1, 0, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_t8gnf"]
+gradient = SubResource("Gradient_huidv")
 
 [node name="CardUI" type="Node2D" unique_id=1500116467]
 script = ExtResource("1_huidv")
@@ -18,46 +23,83 @@ CardName = "Magnus"
 Cost = 4
 Description = "Er datalog"
 
-[node name="BackgroundSprite" type="Sprite2D" parent="." unique_id=1951558606]
+[node name="TopContainer" type="PanelContainer" parent="." unique_id=1825734981]
 unique_name_in_owner = true
-texture = SubResource("GradientTexture2D_jbhky")
+custom_minimum_size = Vector2(150, 300)
+custom_maximum_size = Vector2(150, 300)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.5
+offset_top = -99.0
+offset_right = 60.5
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_huidv")
 
-[node name="NameLabel" type="Label" parent="." unique_id=2046008611]
+[node name="Panel" type="Panel" parent="TopContainer" unique_id=1267228265]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yf8w3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer" unique_id=213348638]
+custom_minimum_size = Vector2(-1, -1)
+layout_mode = 2
+
+[node name="MarginContainerTop" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=501588847]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/MarginContainerTop" unique_id=971672109]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=2046008611]
 unique_name_in_owner = true
-offset_left = -61.0
-offset_top = -94.0
-offset_right = -11.0
-offset_bottom = -71.0
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Magnus "
 
-[node name="CostLabel" type="Label" parent="." unique_id=1287517698]
+[node name="CostLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=1287517698]
 unique_name_in_owner = true
-offset_left = 6.0
-offset_top = -91.0
-offset_right = 56.0
-offset_bottom = -68.0
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "4"
 horizontal_alignment = 2
 
-[node name="DescriptionLabel" type="Label" parent="." unique_id=408803432]
+[node name="TextureRect" type="TextureRect" parent="TopContainer/VBoxContainer" unique_id=864383981]
+custom_minimum_size = Vector2(150, 100)
+custom_maximum_size = Vector2(150, 100)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_t8gnf")
+
+[node name="MarginContainerDescription" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=525721124]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="DescriptionLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerDescription" unique_id=408803432]
 unique_name_in_owner = true
 custom_maximum_size = Vector2(120, -1)
-offset_left = -60.0
-offset_top = 7.0
-offset_right = 60.0
-offset_bottom = 56.0
+layout_mode = 2
+size_flags_vertical = 6
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Er datalog"
+text = "Hej med dig jeg skriver nu, og jeg bliver faktisk ved."
+horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="RarityLabel" type="Label" parent="." unique_id=1303197893]
+[node name="MarginContainerRarity" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=245751752]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="RarityLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerRarity" unique_id=1303197893]
 unique_name_in_owner = true
-offset_left = -113.0
-offset_top = 72.0
-offset_right = 115.0
-offset_bottom = 95.0
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Common"
 horizontal_alignment = 1

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CardGameCore.Framework;
+using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Impl.CombatEncounter;
 using Godot;
 
@@ -8,7 +9,7 @@ namespace CardGame;
 
 public partial class PlayerCombatCardCollectionUI : Node2D
 {
-	public CombatCardCollection Collection
+	public ICombatCardCollection CollectionImpl
 	{
 		get => _collection;
 		set
@@ -19,29 +20,33 @@ public partial class PlayerCombatCardCollectionUI : Node2D
 		}
 	}
 	
-	private CombatCardCollection _collection;
-	
-	[Export]
-	private PackedScene CardUIScene { get; set; }
+	private ICombatCardCollection _collection;
 
-	private List<CardUI> _hand = [];
+	private PackedScene _cardUIScene;
 
-	private void CollectionOnOnDrawCard(CombatCardCollection collection, ICard card)
+	private readonly List<CardUI> _hand = [];
+
+	public override void _Ready()
+	{
+		_cardUIScene = ResourceLoader.Load<PackedScene>("uid://byss7fge32s1p");
+	}
+
+	private void CollectionOnOnDrawCard(ICombatCardCollection collectionMutable, ICard card)
 	{
 		InstantiateCard(card);
 	}
 
-	private void CollectionOnOnDiscardCard(CombatCardCollection collection, ICard card)
+	private void CollectionOnOnDiscardCard(ICombatCardCollection collectionMutable, ICard card)
 	{
 		throw new NotImplementedException();
 	}
 
 	private void InstantiateCard(ICard card)
 	{
-		CardUI cardUI = CardUIScene.Instantiate<CardUI>();
-
-		cardUI.Card = card;
+		CardUI cardUI = _cardUIScene.Instantiate<CardUI>();
 		AddChild(cardUI);
+		
+		cardUI.Card = card;
 		_hand.Add(cardUI);
 		
 		DisplayHand();

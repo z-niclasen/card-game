@@ -12,22 +12,22 @@ public partial class Yay : Node2D
 	[Export]
 	private Button DrawCardButton { get; set; }
 
-	private CombatCardCollection _collection;
+	private CombatCardCollectionImpl _collectionImpl;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_collection =
-			new CombatCardCollection(SteveCards.StarterDeck, CombatCardCollection.ShuffleStrategy.Shuffle);
+		_collectionImpl =
+			new CombatCardCollectionImpl(SteveCards.StarterDeck, CombatCardCollectionImpl.ShuffleStrategy.Shuffle);
 		
-		CombatCardCollectionUI.Collection = _collection;
+		CombatCardCollectionUI.CollectionImpl = _collectionImpl;
 		
 		DrawCardButton.Pressed += DrawCardButtonOnPressed;
 	}
 
 	private void DrawCardButtonOnPressed()
 	{
-		_collection.DrawCard();
+		_collectionImpl.DrawCard();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

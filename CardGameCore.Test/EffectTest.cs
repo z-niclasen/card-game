@@ -1,6 +1,7 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Framework.Effects;
 using CardGameCore.Impl;
 using CardGameCore.Impl.CombatEncounter;

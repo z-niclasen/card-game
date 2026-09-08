@@ -2,7 +2,7 @@ using CardGameCore.Constants;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Impl.CombatEncounter;
 
-namespace CardGameCore.Framework;
+namespace CardGameCore.Framework.CombatEncounter;
 
 public delegate void EndTurnDelegate(ICombatEncounter encounter);
 public delegate void PlayCardDelegate(ICombatEncounter encounter, ICard playedCard, CombatTargetingContext ctx);
@@ -33,7 +33,9 @@ public interface ICombatEncounter
     
     public int GetExhaustPileCountOfCharacter(ICharacter character);
 
-    public void PlayCardFromHandAtIndex(ICharacter source, int indexInHand, ICharacter target);
+    public ICard GetCardFromHandAtIndex(ICharacter character, int index);
+
+    public void PlayCardFromHand(ICharacter source, ICard cardToPlay, ICharacter target);
     
     public void EndTurn(ICharacter player);
 

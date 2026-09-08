@@ -1,6 +1,7 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Impl.Relics;
 
 namespace CardGameCore.Impl.CombatEncounter;
@@ -95,8 +96,11 @@ public class AiCharacterImpl(IAiCharacterClass aiCharacterClass) : IAiCharacter
             case AiStrategy.DoNothing:
                 break;
             case AiStrategy.PlayZero:
-                encounter.PlayCardFromHandAtIndex(this, 0, encounter.Player);
+                ICard cardToPlay = encounter.GetCardFromHandAtIndex(this, 0);
+                encounter.PlayCardFromHand(this, cardToPlay, encounter.Player);
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 }

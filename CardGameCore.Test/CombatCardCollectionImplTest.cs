@@ -5,16 +5,16 @@ using CardGameCore.Library;
 
 namespace CardGameCore.Test;
 
-public class CombatCardCollectionTest
+public class CombatCardCollectionImplTest
 {
     private Deck _initialDeck;
-    private CombatCardCollection _collection;
+    private CombatCardCollectionImpl _collection;
 
     [SetUp]
     public void Setup()
     {
         _initialDeck = SteveCards.StarterDeck;
-        _collection = new CombatCardCollection(_initialDeck, CombatCardCollection.ShuffleStrategy.NoShuffle);
+        _collection = new CombatCardCollectionImpl(_initialDeck, CombatCardCollectionImpl.ShuffleStrategy.NoShuffle);
     }
 
     [Test]
@@ -99,7 +99,7 @@ public class CombatCardCollectionTest
         }
 
         ICard discardedCard = _collection.GetCardFromHandAtIndex(0);
-        _collection.DiscardCardAtIndex(0);
+        _collection.DiscardCardFromHand(discardedCard);
         
         using (Assert.EnterMultipleScope())
         {
@@ -164,7 +164,7 @@ public class CombatCardCollectionTest
         _collection.DrawNCards(drawCount);
         
         ICard exhaustedCard = _collection.GetCardFromHandAtIndex(0);
-        _collection.ExhaustCardFromHandAtIndex(0);
+        _collection.ExhaustCardFromHand(exhaustedCard);
 
         using (Assert.EnterMultipleScope())
         {
@@ -185,10 +185,10 @@ public class CombatCardCollectionTest
         _collection.DrawNCards(initialDrawPileCount);
         
         ICard exhaustedCard1 = _collection.GetCardFromHandAtIndex(0);
-        _collection.ExhaustCardFromHandAtIndex(0);
+        _collection.ExhaustCardFromHand(exhaustedCard1);
         
         ICard exhaustedCard2 = _collection.GetCardFromHandAtIndex(0);
-        _collection.ExhaustCardFromHandAtIndex(0);
+        _collection.ExhaustCardFromHand(exhaustedCard2);
         
         using (Assert.EnterMultipleScope())
         {
@@ -237,9 +237,13 @@ public class CombatCardCollectionTest
     {
         int  initialDrawPileCount = _collection.DrawPileCount;
         _collection.DrawNCards(initialDrawPileCount);
-        
+
         for (int i = 0; i < initialDrawPileCount - 5; i++)
-            _collection.ExhaustCardFromHandAtIndex(0);
+        {
+            ICard card = _collection.GetCardFromHandAtIndex(0);
+            _collection.ExhaustCardFromHand(card);
+        }
+            
 
         using (Assert.EnterMultipleScope())
         {
@@ -270,7 +274,10 @@ public class CombatCardCollectionTest
         }
 
         while (_collection.HandCount > 0)
-            _collection.ExhaustCardFromHandAtIndex(0);
+        {
+            ICard card = _collection.GetCardFromHandAtIndex(0);
+            _collection.ExhaustCardFromHand(card);
+        }
         
         using (Assert.EnterMultipleScope())
         {

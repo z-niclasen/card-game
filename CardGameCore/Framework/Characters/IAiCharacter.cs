@@ -1,3 +1,5 @@
+using CardGameCore.Framework.CombatEncounter;
+
 namespace CardGameCore.Framework.Characters;
 
 public interface IAiCharacter :  ICharacter
