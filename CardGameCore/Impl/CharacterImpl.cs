@@ -9,7 +9,11 @@ namespace CardGameCore.Impl;
 
 public class CharacterImpl : ICharacter
 {
+    public event DecreaseResourceDelegate? OnDecreaseResource;
+    public event IncreaseResourceDelegate? OnIncreaseResource;
+    
     public ICharacterClass Class { get; }
+
     public CharacterName Name => Class.Name;
 
     public IList<Tag> Tags { get; } 
@@ -78,6 +82,7 @@ public class CharacterImpl : ICharacter
             throw new ArgumentException($"Cannot spend negative amount of resource. ResourceType: {resourceType}.");
         
         value.DecreaseBy(amount);
+        OnDecreaseResource?.Invoke(this, resourceType, amount);
     }
 
     public void IncreaseResource(ResourceType resourceType, int amount)
@@ -106,6 +111,7 @@ public class CharacterImpl : ICharacter
             default:
                 throw new ArgumentOutOfRangeException(nameof(resourceType), resourceType, null);
         }
+        OnIncreaseResource?.Invoke(this, resourceType,  amount);
     }
 
     public void AddResourceType(IResource resource)

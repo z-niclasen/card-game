@@ -2,3 +2,8 @@ root = true
 
 [*]
 charset = utf-8
+
+
+[*.cs]
+# CS9266: The '{0}' accessor of property '{1}' should use 'field' because the other accessor is using it.
+dotnet_diagnostic.CS9266.severity = none
