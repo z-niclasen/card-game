@@ -15,7 +15,6 @@ DrawCardButton = NodePath("Button")
 position = Vector2(89, 110)
 
 [node name="CombatCardCollectionUI" parent="." unique_id=944060468 instance=ExtResource("3_sk2gm")]
-CardUIScene = ExtResource("2_bixaw")
 
 [node name="Button" type="Button" parent="." unique_id=576630788]
 offset_right = 8.0
