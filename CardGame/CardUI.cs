@@ -7,6 +7,22 @@ namespace CardGame;
 [Tool]
 public partial class CardUI : Node2D
 {
+	public ICard Card
+	{
+		get => _card;
+		set
+		{
+			_card = value;
+			SetLabelsToCardValues();
+			UpdateLabels();
+		} 
+	}
+	private ICard _card;
+	
+	public int Width => _backgroundSprite.Texture.GetWidth();
+	
+	public int Height => _backgroundSprite.Texture.GetHeight();
+	
 	[Export]
 	private string CardName
 	{
@@ -55,45 +71,33 @@ public partial class CardUI : Node2D
 	}
 	private Rarity _rarity;
 
-	public int Width => BackgroundSprite.Texture.GetWidth();
-	
-	public int Height => BackgroundSprite.Texture.GetHeight();
+	private Label _nameLabel;
 
-	[Export]
-	private Label NameLabel { get; set; }
-	
-	[Export]
-	private Label CostLabel { get; set; }
-	
-	[Export]
-	private Label DescriptionLabel { get; set; }
-	
-	[Export]
-	private Label RarityLabel { get; set; }
-	
-	[Export]
-	private Sprite2D BackgroundSprite { get; set; }
-	
-	public ICard Card
-	{
-		get => _card;
-		set
-		{
-			_card = value;
-			SetLabelsToCardValues();
-			UpdateLabels();
-		} 
-	}
-	private ICard _card;
+	private Label _costLabel;
+
+	private Label _descriptionLabel;
+
+	private Label _rarityLabel;
+
+	private Sprite2D _backgroundSprite;
 
 	public override void _Ready()
 	{
-		//NameLabel.Text = SteveCards.BigSword.Name;
-		GD.Print("Jørgen");
+		_nameLabel = GetNode<Label>("%NameLabel");
+		_costLabel = GetNode<Label>("%CostLabel");
+		_descriptionLabel = GetNode<Label>("%DescriptionLabel");
+		_rarityLabel = GetNode<Label>("%RarityLabel");
+		_backgroundSprite = GetNode<Sprite2D>("%BackgroundSprite");
+		
+		SetLabelsToCardValues();
+		UpdateLabels();
 	}
 
 	private void SetLabelsToCardValues()
 	{
+		if (Card == null)
+			return;
+		
 		CardName = Card.Name;
 		Cost = Card.Cost[ResourceType.Energy];
 		Description = Card.Description;
@@ -102,9 +106,9 @@ public partial class CardUI : Node2D
 
 	private void UpdateLabels()
 	{
-		NameLabel?.Text = CardName;
-		CostLabel?.Text = Cost.ToString();
-		DescriptionLabel?.Text = Description;
-		RarityLabel?.Text = Rarity.ToString();
+		_nameLabel?.Text = CardName;
+		_costLabel?.Text = Cost.ToString();
+		_descriptionLabel?.Text = Description;
+		_rarityLabel?.Text = Rarity.ToString();
 	}
 }
