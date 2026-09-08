@@ -6,11 +6,26 @@ using CardGameCore.Impl.Relics;
 namespace CardGameCore.Impl.CombatEncounter;
 
 public class AiCharacterImpl(IAiCharacterClass aiCharacterClass) : IAiCharacter
+
+
 {
     
     private readonly ICharacter _characterImplementation = new CharacterImpl(aiCharacterClass);
     
     private readonly AiStrategy _aiStrategy = aiCharacterClass.Strategy;
+
+
+    public event DecreaseResourceDelegate? OnDecreaseResource
+    {
+        add => _characterImplementation.OnDecreaseResource += value;
+        remove => _characterImplementation.OnDecreaseResource -= value;
+    }
+
+    public event IncreaseResourceDelegate? OnIncreaseResource
+    {
+        add => _characterImplementation.OnIncreaseResource += value;
+        remove => _characterImplementation.OnIncreaseResource -= value;
+    }
 
     public CharacterName Name => _characterImplementation.Name;
 

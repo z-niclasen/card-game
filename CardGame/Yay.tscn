@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://bsyry3e614k61"]
 
 [ext_resource type="Script" uid="uid://cfpgnrg4fqdxv" path="res://Yay.cs" id="1_a0xcp"]
+[ext_resource type="PackedScene" uid="uid://ditfvolsyobgy" path="res://CharacterUI.tscn" id="2_85alr"]
 [ext_resource type="PackedScene" uid="uid://byss7fge32s1p" path="res://CardUI.tscn" id="2_bixaw"]
 [ext_resource type="PackedScene" uid="uid://cs6s0yjfufkwm" path="res://CombatCardCollectionUI.tscn" id="3_sk2gm"]
 
-[node name="Node2D" type="Node2D" unique_id=1772827855 node_paths=PackedStringArray("CombatCardCollectionUI", "DrawCardButton")]
+[node name="Node2D" type="Node2D" unique_id=1772827855 node_paths=PackedStringArray("CombatCardCollectionUI", "CharacterUI", "DrawCardButton")]
 script = ExtResource("1_a0xcp")
 CombatCardCollectionUI = NodePath("CombatCardCollectionUI")
+CharacterUI = NodePath("CharacterUI")
 DrawCardButton = NodePath("Button")
 
 [node name="CardUI" parent="." unique_id=1500116467 instance=ExtResource("2_bixaw")]
@@ -19,3 +21,5 @@ CardUIScene = ExtResource("2_bixaw")
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Draw"
+
+[node name="CharacterUI" parent="." unique_id=382274291 instance=ExtResource("2_85alr")]

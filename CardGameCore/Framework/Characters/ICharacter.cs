@@ -4,8 +4,15 @@ using CardGameCore.Impl.Relics;
 
 namespace CardGameCore.Framework.Characters;
 
+public delegate void DecreaseResourceDelegate(ICharacter character, ResourceType type, int amount);
+public delegate void IncreaseResourceDelegate(ICharacter character, ResourceType type, int amount);
+
 public interface ICharacter
 {
+    public event DecreaseResourceDelegate OnDecreaseResource;
+
+    public event IncreaseResourceDelegate OnIncreaseResource;
+    
     public CharacterName Name { get; }
     
     public ICharacterClass Class { get; } 

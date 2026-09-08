@@ -1,13 +1,22 @@
 using Godot;
 using System;
 using CardGame;
+using CardGameCore.Constants;
+using CardGameCore.Framework.Characters;
+using CardGameCore.Impl;
 using CardGameCore.Impl.CombatEncounter;
 using CardGameCore.Library;
+using CardGameCore.Library.Characters.PlayerCharacters;
 
 public partial class Yay : Node2D
 {
 	[Export]
 	private PlayerCombatCardCollectionUI CombatCardCollectionUI { get; set; }
+	
+	[Export]
+	private CharacterUI CharacterUI { get; set; }
+	
+	private ICharacter _steve = new CharacterImpl(new SteveClass());
 	
 	[Export]
 	private Button DrawCardButton { get; set; }
@@ -19,10 +28,21 @@ public partial class Yay : Node2D
 	{
 		_collection =
 			new CombatCardCollection(SteveCards.StarterDeck, CombatCardCollection.ShuffleStrategy.Shuffle);
+
+		CharacterUI.Character = _steve;
+		CharacterUI.Visible = true;
+
+		CharacterUI.Position = CharacterUI.Position with { X = CharacterUI.Position.X + 100, Y = CharacterUI.Position.Y + 100 }; 
 		
 		CombatCardCollectionUI.Collection = _collection;
 		
 		DrawCardButton.Pressed += DrawCardButtonOnPressed;
+		DrawCardButton.Pressed += DealDamage;
+	}
+
+	private void DealDamage()
+	{
+		_steve.DecreaseResource(ResourceType.Health, 5);
 	}
 
 	private void DrawCardButtonOnPressed()

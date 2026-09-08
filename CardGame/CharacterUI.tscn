@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://ditfvolsyobgy"]
+
+[ext_resource type="Script" uid="uid://5v6pmd6bnw5p" path="res://CharacterUi.cs" id="1_rrc0o"]
+
+[sub_resource type="Gradient" id="Gradient_tvioh"]
+offsets = PackedFloat32Array(0, 0.030201342)
+colors = PackedColorArray(0.45646393, 0.456464, 0.456464, 1, 0.45646393, 0.456464, 0.456464, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_depl2"]
+gradient = SubResource("Gradient_tvioh")
+
+[sub_resource type="Gradient" id="Gradient_ym8xo"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ll6rw"]
+gradient = SubResource("Gradient_ym8xo")
+
+[sub_resource type="LabelSettings" id="LabelSettings_ll6rw"]
+font_size = 6
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ll6rw"]
+size = Vector2(96, 128)
+
+[node name="Character" type="Node2D" unique_id=348766923]
+script = ExtResource("1_rrc0o")
+
+[node name="HealthBar" type="TextureProgressBar" parent="." unique_id=1424955488]
+unique_name_in_owner = true
+offset_left = -50.0
+offset_top = 66.0
+offset_right = 50.0
+offset_bottom = 76.0
+value = 40.0
+rounded = true
+allow_lesser = true
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture2D_depl2")
+texture_progress = SubResource("GradientTexture2D_ll6rw")
+
+[node name="HealthAmountLabel" type="Label" parent="HealthBar" unique_id=1445515844]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 10.0
+text = "70/100"
+label_settings = SubResource("LabelSettings_ll6rw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=259713336]
+texture = SubResource("PlaceholderTexture2D_ll6rw")
+region_rect = Rect2(100, 100, 100, 100)
