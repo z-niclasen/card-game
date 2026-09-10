@@ -56,12 +56,14 @@ public partial class PlayerCombatCardCollectionUI : Control
 		InitializeInEditorDemo();
 	}
 	
-	private void InitializeCombatEncounter()
+	private async void InitializeCombatEncounter()
 	{
 		foreach (ICard card in Collection.Hand)
 		{
 			InstantiateCard(card);
 		}
+		
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		
 		DisplayHand();
 		CollectionOnOnDrawPileChanged(Collection);
@@ -81,6 +83,7 @@ public partial class PlayerCombatCardCollectionUI : Control
 	private void CollectionOnOnDiscardCard(ICombatCardCollection collectionMutable, ICard card)
 	{
 		DisposeCard(card);
+		DisplayHand();
 	}
 	
 	private void CollectionOnOnDrawPileChanged(ICombatCardCollection collection)

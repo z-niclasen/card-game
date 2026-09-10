@@ -1,3 +1,4 @@
+using System;
 using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
@@ -55,7 +56,14 @@ public partial class CombatEncounterUI : Node2D
 
 	private void EndTurnButtonOnPressed()
 	{
-		_encounter.EndTurn(_encounter.InTurn);
+		try
+		{
+			_encounter.EndTurn(_encounter.InTurn);
+		}
+		catch (Exception e)
+		{
+			// ignored
+		} 
 	}
 
 	private void PlayCardButtonOnPressed()
@@ -64,7 +72,15 @@ public partial class CombatEncounterUI : Node2D
 			return;
 
 		ICard card = _encounter.GetCardFromHandAtIndex(_steve, 0);
-		_encounter.PlayCardFromHand(_steve, card, _slime);
+
+		try
+		{
+			_encounter.PlayCardFromHand(_steve, card, _slime);
+		}
+		catch (Exception e)
+		{
+			// ignored
+		}
 	}
 
 	private void AddObservers()
