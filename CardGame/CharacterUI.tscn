@@ -27,7 +27,6 @@ shadow_size = 0
 script = ExtResource("1_rrc0o")
 
 [node name="Container" type="VBoxContainer" parent="." unique_id=307079397]
-unique_name_in_owner = true
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
