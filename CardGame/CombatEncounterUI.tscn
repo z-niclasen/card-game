@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bq1gssncw76xv"]
+
+[ext_resource type="PackedScene" uid="uid://cs6s0yjfufkwm" path="res://CombatCardCollectionUI.tscn" id="1_814j4"]
+[ext_resource type="PackedScene" uid="uid://ditfvolsyobgy" path="res://CharacterUI.tscn" id="2_f8iax"]
+
+[node name="CombatEncounterUI" type="Node2D" unique_id=1413067149]
+
+[node name="PlayerCardCollection" parent="." unique_id=944060468 instance=ExtResource("1_814j4")]
+
+[node name="PlayerCharacter" parent="." unique_id=348766923 instance=ExtResource("2_f8iax")]
+position = Vector2(288, 432)
+
+[node name="EnemyCharacter" parent="." unique_id=2089899033 instance=ExtResource("2_f8iax")]
+position = Vector2(1632, 432)
