@@ -1,8 +1,51 @@
 [gd_scene format=3 uid="uid://cs6s0yjfufkwm"]
 
 [ext_resource type="Script" uid="uid://bab3a175vkq3c" path="res://PlayerCombatCardCollectionUI.cs" id="1_1gcp8"]
-[ext_resource type="PackedScene" uid="uid://byss7fge32s1p" path="res://CardUI.tscn" id="2_24njh"]
 
-[node name="CombatCardCollectionUI" type="Node2D" unique_id=944060468]
+[node name="CombatCardCollectionUI" type="Control" unique_id=1188041361]
+custom_minimum_size = Vector2(100, 240)
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -240.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("1_1gcp8")
-CardUIScene = ExtResource("2_24njh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=565302049]
+custom_minimum_size = Vector2(-1, -1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DiscardPileButton" type="Button" parent="HBoxContainer" unique_id=1930914846]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+text = "2"
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=141019545]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_right = 60
+
+[node name="HandContainer" type="Control" parent="HBoxContainer/MarginContainer" unique_id=1946986477]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DrawPileButton" type="Button" parent="HBoxContainer" unique_id=42291684]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+text = "3"
