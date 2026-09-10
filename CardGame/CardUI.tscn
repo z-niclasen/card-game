@@ -10,6 +10,9 @@ corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.22745098)
+shadow_size = 6
+shadow_offset = Vector2(2, 2)
 
 [sub_resource type="Gradient" id="Gradient_huidv"]
 colors = PackedColorArray(0, 1, 1, 1, 0, 1, 1, 1)
@@ -25,17 +28,17 @@ Description = "Er datalog"
 
 [node name="TopContainer" type="PanelContainer" parent="." unique_id=1825734981]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 300)
-custom_maximum_size = Vector2(150, 300)
+custom_minimum_size = Vector2(150, 240)
+custom_maximum_size = Vector2(150, 240)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -35.5
-offset_top = -99.0
-offset_right = 60.5
-offset_bottom = 73.0
+offset_left = -75.0
+offset_top = -120.0
+offset_right = 75.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_huidv")
@@ -60,7 +63,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Magnus "
+text = "Magnus"
 
 [node name="CostLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=1287517698]
 unique_name_in_owner = true
@@ -88,7 +91,7 @@ custom_maximum_size = Vector2(120, -1)
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Hej med dig jeg skriver nu, og jeg bliver faktisk ved."
+text = "Er datalog"
 horizontal_alignment = 1
 autowrap_mode = 3
 

@@ -14,11 +14,11 @@ DrawCardButton = NodePath("Button")
 [node name="CardUI" parent="." unique_id=1500116467 instance=ExtResource("2_bixaw")]
 position = Vector2(89, 110)
 
-[node name="CombatCardCollectionUI" parent="." unique_id=944060468 instance=ExtResource("3_sk2gm")]
-
 [node name="Button" type="Button" parent="." unique_id=576630788]
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Draw"
 
 [node name="CharacterUI" parent="." unique_id=382274291 instance=ExtResource("2_85alr")]
+
+[node name="CombatCardCollectionUI" parent="." unique_id=944060468 instance=ExtResource("3_sk2gm")]
