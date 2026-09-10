@@ -58,6 +58,11 @@ public partial class PlayerCombatCardCollectionUI : Control
 	
 	private void InitializeCombatEncounter()
 	{
+		foreach (ICard card in Collection.Hand)
+		{
+			InstantiateCard(card);
+		}
+		
 		DisplayHand();
 		CollectionOnOnDrawPileChanged(Collection);
 		CollectionOnOnDiscardPileChanged(Collection);

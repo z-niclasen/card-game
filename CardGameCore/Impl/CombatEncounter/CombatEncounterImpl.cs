@@ -39,6 +39,11 @@ public class CombatEncounterImpl : ICombatEncounter
         DiscardHandAndDrawNewForCharacter(InTurn);
     }
 
+    public ICombatCardCollection GetCombatCardCollectionOfCharacter(ICharacter character)
+    {
+        return CardsMap[character];
+    }
+
     public int GetHandCountOfCharacter(ICharacter character)
     {
         return CardsMap[character].HandCount;

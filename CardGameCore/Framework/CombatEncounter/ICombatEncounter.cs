@@ -25,6 +25,8 @@ public interface ICombatEncounter
     
     public bool IsFinished { get; }
     
+    public ICombatCardCollection GetCombatCardCollectionOfCharacter(ICharacter character);
+    
     public int GetHandCountOfCharacter(ICharacter character);
     
     public int GetDrawPileCountOfCharacter(ICharacter character);

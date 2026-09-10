@@ -1,14 +1,47 @@
 [gd_scene format=3 uid="uid://bq1gssncw76xv"]
 
 [ext_resource type="PackedScene" uid="uid://cs6s0yjfufkwm" path="res://CombatCardCollectionUI.tscn" id="1_814j4"]
+[ext_resource type="Script" uid="uid://7d2qp3n4e0yf" path="res://CombatEncounterUI.cs" id="1_f8iax"]
 [ext_resource type="PackedScene" uid="uid://ditfvolsyobgy" path="res://CharacterUI.tscn" id="2_f8iax"]
 
 [node name="CombatEncounterUI" type="Node2D" unique_id=1413067149]
-
-[node name="PlayerCardCollection" parent="." unique_id=944060468 instance=ExtResource("1_814j4")]
+script = ExtResource("1_f8iax")
 
 [node name="PlayerCharacter" parent="." unique_id=348766923 instance=ExtResource("2_f8iax")]
+unique_name_in_owner = true
 position = Vector2(288, 432)
 
 [node name="EnemyCharacter" parent="." unique_id=2089899033 instance=ExtResource("2_f8iax")]
+unique_name_in_owner = true
 position = Vector2(1632, 432)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=249201686]
+
+[node name="PlayerCardCollection" parent="CanvasLayer" unique_id=944060468 instance=ExtResource("1_814j4")]
+unique_name_in_owner = true
+offset_top = 0.0
+
+[node name="EndTurnButton" type="Button" parent="CanvasLayer" unique_id=1675625039]
+unique_name_in_owner = true
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -78.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "End Turn"
+
+[node name="PlayCard0Button" type="Button" parent="CanvasLayer" unique_id=1649307498]
+unique_name_in_owner = true
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.5
+offset_right = 78.0
+offset_bottom = 15.5
+grow_vertical = 2
+text = "Play Card 0"

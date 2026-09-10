@@ -18,28 +18,26 @@ public partial class CharacterUI : Node2D
 			AddObservers();
 
 			UpdateLabels();
+			SetTexture();
 		}
 	}
-
 
 
 	private ICharacter _character ;
 
 	private TextureProgressBar _healthBar;
+
 	private Label _healthLabel;
 
-	// Called when the node enters the scene tree for the first time.
+	private TextureRect _sprite;
+
 	public override void _Ready()
 	{
 		_healthBar = GetNode<TextureProgressBar>("%HealthBar");
 		_healthLabel = GetNode<Label>("%HealthBar/%HealthAmountLabel");
+		_sprite = GetNode<TextureRect>("%Sprite");
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-	
 	private void UpdateLabels()
 	{
 		int currentHealth =  _character.Health;
@@ -49,8 +47,11 @@ public partial class CharacterUI : Node2D
 		_healthBar.MaxValue = maxHealth;
 		_healthBar.Value = currentHealth;
 		_healthLabel.Text = labelText;
-		
-		
+	}
+
+	private void SetTexture()
+	{
+		_sprite.Texture = ResourceUtil.GetCharacterTexture(_character.Name);
 	}
 
 	private void AddObservers()

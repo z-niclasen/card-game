@@ -5,6 +5,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CardGameCore.Test\CardGameCore.Test.csproj" />
     <ProjectReference Include="..\CardGameCore\CardGameCore.csproj" />
   </ItemGroup>
 </Project>
