@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using CardGameCore.Framework;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Impl.CombatEncounter;
+using CardGameCore.Library;
 using Godot;
 
 namespace CardGame;
 
-public partial class PlayerCombatCardCollectionUI : Node2D
+[Tool]
+public partial class PlayerCombatCardCollectionUI : Control
 {
-	public ICombatCardCollection CollectionImpl
+	public ICombatCardCollection Collection
 	{
 		get => _collection;
 		set
 		{
-			RemoveObservers();
+			RemoveCombatEncounterObservers();
 			_collection = value;
-			AddObservers();
+			AddCombatEncounterObservers();
+			InitializeCombatEncounter();
 		}
 	}
+
 	private ICombatCardCollection _collection;
 
 	[Export]
@@ -43,6 +47,25 @@ public partial class PlayerCombatCardCollectionUI : Node2D
 		_discardPileButton = GetNode<Button>("%DiscardPileButton");
 		_drawPileButton = GetNode<Button>("%DrawPileButton");
 		_handContainer = GetNode<Control>("%HandContainer");
+		
+		Resized += OnResized;
+
+		if (!Engine.IsEditorHint())
+			return;
+		
+		InitializeInEditorDemo();
+	}
+	
+	private void InitializeCombatEncounter()
+	{
+		DisplayHand();
+		CollectionOnOnDrawPileChanged(Collection);
+		CollectionOnOnDiscardPileChanged(Collection);
+	}
+
+	private void OnResized()
+	{
+		DisplayHand();
 	}
 
 	private void CollectionOnOnDrawCard(ICombatCardCollection collectionMutable, ICard card)
@@ -54,11 +77,21 @@ public partial class PlayerCombatCardCollectionUI : Node2D
 	{
 		DisposeCard(card);
 	}
+	
+	private void CollectionOnOnDrawPileChanged(ICombatCardCollection collection)
+	{
+		_drawPileButton.Text = collection.DrawPileCount.ToString();
+	}
+
+	private void CollectionOnOnDiscardPileChanged(ICombatCardCollection collection)
+	{
+		_discardPileButton.Text = collection.DiscardPileCount.ToString();
+	}
 
 	private void InstantiateCard(ICard card)
 	{
 		CardUI cardUI = _cardUIScene.Instantiate<CardUI>();
-		AddChild(cardUI);
+		_handContainer.AddChild(cardUI);
 		
 		cardUI.Card = card;
 		_hand.Add(cardUI);
@@ -84,12 +117,9 @@ public partial class PlayerCombatCardCollectionUI : Node2D
 		if (handCount == 0)
 			return;
 		
-		//float viewportWidth = GetViewport().GetVisibleRect().Size.X;
-		//float viewportHeight = GetViewport().GetVisibleRect().Size.Y;
-		
 		float totalHandWidth = _handContainer.Size.X;
-		float handHorizontalMidPoint = _handContainer.Position.X + totalHandWidth / 2;
-		float handVerticalMidPoint = _handContainer.Position.Y + _handContainer.Size.Y / 2;
+		float handHorizontalMidPoint = totalHandWidth / 2;
+		float handVerticalMidPoint = _handContainer.Size.Y / 2;
 
 		int cardHeight = _hand[0].Height;
 		int cardWidth = _hand[0].Width;
@@ -115,15 +145,38 @@ public partial class PlayerCombatCardCollectionUI : Node2D
 		}
 	}
 
-	private void AddObservers()
+	private void AddCombatEncounterObservers()
 	{
 		_collection?.OnDrawCard += CollectionOnOnDrawCard;
 		_collection?.OnDiscardCard += CollectionOnOnDiscardCard;
+		_collection?.OnDiscardPileChanged += CollectionOnOnDiscardPileChanged;
+		_collection?.OnDrawPileChanged += CollectionOnOnDrawPileChanged;
 	}
 
-	private void RemoveObservers()
+	private void RemoveCombatEncounterObservers()
 	{
 		_collection?.OnDrawCard -= CollectionOnOnDrawCard;
 		_collection?.OnDiscardCard -= CollectionOnOnDiscardCard;
+		_collection?.OnDiscardPileChanged -= CollectionOnOnDiscardPileChanged;
+		_collection?.OnDrawPileChanged -= CollectionOnOnDrawPileChanged;
+	}
+
+	private async void InitializeInEditorDemo()
+	{
+		try
+		{
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		
+			InstantiateCard(SteveCards.Sword);
+			InstantiateCard(SteveCards.Sword);
+			InstantiateCard(SteveCards.Sword);
+			InstantiateCard(SteveCards.Sword);
+			InstantiateCard(SteveCards.Sword);
+			InstantiateCard(SteveCards.Sword);
+		}
+		catch (Exception e)
+		{
+			throw; // TODO handle exception
+		}
 	}
 }

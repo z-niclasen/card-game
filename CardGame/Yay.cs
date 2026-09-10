@@ -34,7 +34,7 @@ public partial class Yay : Node2D
 
 		CharacterUI.Position = CharacterUI.Position with { X = CharacterUI.Position.X + 100, Y = CharacterUI.Position.Y + 100 }; 
 		
-		CombatCardCollectionUI.CollectionImpl = _collection;
+		CombatCardCollectionUI.Collection = _collection;
 		
 		DrawCardButton.Pressed += DrawCardButtonOnPressed;
 		DrawCardButton.Pressed += DealDamage;

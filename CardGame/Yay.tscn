@@ -7,7 +7,7 @@
 
 [node name="Node2D" type="Node2D" unique_id=1772827855 node_paths=PackedStringArray("CombatCardCollectionUI", "CharacterUI", "DrawCardButton")]
 script = ExtResource("1_a0xcp")
-CombatCardCollectionUI = NodePath("CombatCardCollectionUI")
+CombatCardCollectionUI = NodePath("CanvasLayer/CombatCardCollectionUI")
 CharacterUI = NodePath("CharacterUI")
 DrawCardButton = NodePath("Button")
 
@@ -20,5 +20,13 @@ offset_bottom = 8.0
 text = "Draw"
 
 [node name="CharacterUI" parent="." unique_id=382274291 instance=ExtResource("2_85alr")]
+position = Vector2(1811, 84)
 
-[node name="CombatCardCollectionUI" parent="." unique_id=944060468 instance=ExtResource("3_sk2gm")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1519233484]
+
+[node name="CombatCardCollectionUI" parent="CanvasLayer" unique_id=944060468 instance=ExtResource("3_sk2gm")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -775.25
+offset_right = 775.25
