@@ -21,8 +21,12 @@ public partial class CombatEncounterUI : Node2D
 	private CharacterUI _slimeUI;
 	private PlayerCombatCardCollectionUI _combatCollectionUI;
 
+	private CardDisplay _cardDisplay;
+
 	private Button _endTurnButton;
 	private Button _playCardButton;
+
+	private ICard _selectedCard;
 	
 	public override void _Ready()
 	{
@@ -37,15 +41,61 @@ public partial class CombatEncounterUI : Node2D
 		_steveUI = GetNode<CharacterUI>("%PlayerCharacter");
 		_slimeUI = GetNode<CharacterUI>("%EnemyCharacter");
 		_combatCollectionUI = GetNode<PlayerCombatCardCollectionUI>("%PlayerCardCollection");
+
+		_steveUI.OnCharacterPressed += OnCharacterPressed;
+		_slimeUI.OnCharacterPressed += OnCharacterPressed;
 		
 		_steveUI.Character = _steve;
 		_slimeUI.Character = _slime;
+		
+		_cardDisplay = GetNode<CardDisplay>("%CardDisplay");
+		_cardDisplay.OnDisplayedCardPressed += DeselectCard;
+		
 		_combatCollectionUI.Collection = _encounter.GetCombatCardCollectionOfCharacter(_steve);
+		_combatCollectionUI.OnCardInHandSelected += SelectCardInHand;
 		
 		_endTurnButton = GetNode<Button>("%EndTurnButton");
 		_playCardButton = GetNode<Button>("%PlayCard0Button");
 		
 		AddObservers();
+	}
+
+	private void OnCharacterPressed(ICharacter character)
+	{
+		if (_selectedCard == null)
+			return;
+		
+		if (!_encounter.InTurn.Tags.Contains(Tag.PlayerCharacter))
+			return;
+
+		try
+		{
+			_encounter.PlayCardFromHand(_steve, _selectedCard, character);
+			_cardDisplay.HideCard();
+			_selectedCard = null;
+		}
+		catch (Exception e)
+		{
+			// Ignore
+		}
+	}
+
+	private void DeselectCard(ICard card)
+	{
+		_cardDisplay.HideCard();
+		
+		_combatCollectionUI.ShowCardInHand(_selectedCard);
+		_selectedCard = null;
+	}
+
+	private void SelectCardInHand(ICard card)
+	{
+		if (_selectedCard != null)
+			_combatCollectionUI.ShowCardInHand(_selectedCard);
+		
+		_selectedCard = card;
+		_cardDisplay.DisplayCard(_selectedCard);
+		_combatCollectionUI.HideCardInHand(_selectedCard);
 	}
 
 	public override void _ExitTree()

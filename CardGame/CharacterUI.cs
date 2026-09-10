@@ -5,12 +5,15 @@ using Godot;
 
 namespace CardGame;
 
+public delegate void CharacterPressedDelegate(ICharacter character);
+
 public partial class CharacterUI : Node2D
 {
+	public event CharacterPressedDelegate OnCharacterPressed;
 
 	public ICharacter Character
 	{
-		get;
+		get => _character;
 		set
 		{
 			RemoveObservers();
@@ -30,12 +33,18 @@ public partial class CharacterUI : Node2D
 	private Label _healthLabel;
 
 	private TextureRect _sprite;
+	
+	private bool _mouseOver = false;
 
 	public override void _Ready()
 	{
 		_healthBar = GetNode<TextureProgressBar>("%HealthBar");
 		_healthLabel = GetNode<Label>("%HealthBar/%HealthAmountLabel");
 		_sprite = GetNode<TextureRect>("%Sprite");
+		
+		_sprite.MouseEntered += SpriteOnMouseEntered;
+		_sprite.MouseExited += SpriteOnMouseExited;
+		_sprite.GuiInput +=  SpriteOnGuiInput;
 	}
 
 	private void UpdateLabels()
@@ -85,5 +94,27 @@ public partial class CharacterUI : Node2D
 		if (_character == null) return;
 		_character.OnIncreaseResource -= CharacterOnOnIncreaseResource;
 		_character.OnDecreaseResource -= CharacterOnOnDecreaseResource;
+	}
+	
+	private void SpriteOnMouseExited()
+	{
+		_mouseOver = false;
+	}
+
+	private void SpriteOnMouseEntered()
+	{
+		_mouseOver = true;
+	}
+
+	private void SpriteOnGuiInput(InputEvent @event)
+	{
+		if (@event is not InputEventMouseButton mouseEvent) 
+			return;
+
+		if (_mouseOver && mouseEvent.Pressed)
+		{
+			OnCharacterPressed?.Invoke(Character);
+			
+		}
 	}
 }

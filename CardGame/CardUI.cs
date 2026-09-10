@@ -4,9 +4,13 @@ using Godot;
 
 namespace CardGame;
 
+public delegate void CardSelectedDelegate(CardUI cardUI);
+
 [Tool]
 public partial class CardUI : Node2D
 {
+	public event  CardSelectedDelegate OnCardSelected;
+	
 	public ICard Card
 	{
 		get => _card;
@@ -70,6 +74,8 @@ public partial class CardUI : Node2D
 		}
 	}
 	private Rarity _rarity;
+	
+	private bool _mouseOver = false;
 
 	private Label _nameLabel;
 
@@ -91,6 +97,39 @@ public partial class CardUI : Node2D
 		
 		SetLabelsToCardValues();
 		UpdateLabels();
+		
+		_topContainer.GuiInput += TopContainerOnGuiInput;
+		_topContainer.MouseEntered += TopContainerOnMouseEntered;
+		_topContainer.MouseExited += TopContainerOnMouseExited;
+	}
+
+	private void TopContainerOnMouseExited()
+	{
+		_mouseOver = false;
+	}
+
+	private void TopContainerOnMouseEntered()
+	{
+		_mouseOver = true;
+	}
+
+	private void TopContainerOnGuiInput(InputEvent @event)
+	{
+		if (@event is not InputEventMouseButton mouseEvent) 
+			return;
+
+		if (_mouseOver && mouseEvent.Pressed)
+		{
+			OnCardSelected?.Invoke(this);
+		}
+	}
+
+	public override void _ExitTree()
+	{
+		_topContainer.GuiInput -= TopContainerOnGuiInput;
+		_topContainer.MouseEntered -= TopContainerOnMouseEntered;
+		_topContainer.MouseExited -= TopContainerOnMouseExited;
+		base._ExitTree();
 	}
 
 	private void SetLabelsToCardValues()

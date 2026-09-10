@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bhdp8tyip3sau"]
+
+[ext_resource type="PackedScene" uid="uid://byss7fge32s1p" path="res://CardUI.tscn" id="1_er5b5"]
+[ext_resource type="Script" uid="uid://dbjjeixi3nang" path="res://CardDisplay.cs" id="1_xk1gm"]
+
+[node name="CardDisplay" type="Control" unique_id=211053932]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_xk1gm")
+
+[node name="CardUI" parent="." unique_id=1500116467 instance=ExtResource("1_er5b5")]
+unique_name_in_owner = true

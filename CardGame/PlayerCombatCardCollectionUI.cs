@@ -8,9 +8,13 @@ using Godot;
 
 namespace CardGame;
 
+public delegate void CardInHandSelectedDelegate(ICard card);
+
 [Tool]
 public partial class PlayerCombatCardCollectionUI : Control
 {
+	public event CardInHandSelectedDelegate OnCardInHandSelected;
+	
 	public ICombatCardCollection Collection
 	{
 		get => _collection;
@@ -35,6 +39,10 @@ public partial class PlayerCombatCardCollectionUI : Control
 
 	private readonly List<CardUI> _hand = [];
 	private readonly Dictionary<ICard, CardUI> _cardMap = new();
+
+	private CardDisplay _cardDisplay;
+	
+	private CardUI? _selectedCard;
 	
 	private Button _discardPileButton;
 	private Button _drawPileButton;
@@ -104,6 +112,7 @@ public partial class PlayerCombatCardCollectionUI : Control
 		cardUI.Card = card;
 		_hand.Add(cardUI);
 		_cardMap.Add(card, cardUI);
+		cardUI.OnCardSelected += CardUIOnOnCardSelected;
 		
 		DisplayHand();
 	}
@@ -112,12 +121,28 @@ public partial class PlayerCombatCardCollectionUI : Control
 	{
 		CardUI cardUI =  _cardMap[card];
 		
-		cardUI.QueueFree();
-		
+		cardUI.OnCardSelected -= CardUIOnOnCardSelected;
 		_hand.Remove(cardUI);
 		_cardMap.Remove(card);
+		
+		cardUI.QueueFree();
 	}
-	
+
+	private void CardUIOnOnCardSelected(CardUI cardUI)
+	{
+		OnCardInHandSelected?.Invoke(cardUI.Card);
+	}
+
+	public void ShowCardInHand(ICard card)
+	{
+		_cardMap[card].Visible = true;
+	}
+
+	public void HideCardInHand(ICard card)
+	{
+		_cardMap[card].Visible = false;
+	}
+
 	private void DisplayHand()
 	{
 		int handCount = _hand.Count;
@@ -144,8 +169,7 @@ public partial class PlayerCombatCardCollectionUI : Control
 		for (int i = 0; i < handCount; i++)
 		{
 			CardUI card = _hand[i];
-			card.Visible = true;
-
+			
 			float newY = handVerticalMidPoint;
 			float newX = startX + i * actualCardWidth;
 
