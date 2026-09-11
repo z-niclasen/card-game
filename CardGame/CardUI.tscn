@@ -19,9 +19,6 @@ size = Vector2(150, 120)
 
 [node name="CardUI" type="Node2D" unique_id=1500116467]
 script = ExtResource("1_huidv")
-CardName = "Magnus"
-Cost = 4
-Description = "Er datalog"
 
 [node name="TopContainer" type="PanelContainer" parent="." unique_id=1825734981]
 unique_name_in_owner = true
@@ -60,7 +57,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Magnus"
+text = "NoName"
 
 [node name="CostLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=1287517698]
 unique_name_in_owner = true
@@ -71,6 +68,7 @@ text = "4"
 horizontal_alignment = 2
 
 [node name="TextureRect" type="TextureRect" parent="TopContainer/VBoxContainer" unique_id=864383981]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 texture = SubResource("PlaceholderTexture2D_fpnx5")

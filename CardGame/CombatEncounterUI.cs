@@ -59,6 +59,7 @@ public partial class CombatEncounterUI : Node2D
 		_playCardButton = GetNode<Button>("%PlayCard0Button");
 		
 		_relicDisplay = GetNode<RelicDisplay>("%RelicDisplay");
+		
 		_relicDisplay.RelicCollection = _steve.RelicCollection;
 		
 		AddObservers();

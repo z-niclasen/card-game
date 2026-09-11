@@ -1,3 +1,4 @@
+using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Impl;
 
@@ -9,5 +10,5 @@ public static class GreenSlimeCards
         SlimeSpit, SlimeSpit
     ]);
     
-    public static ICard SlimeSpit => CardUtils.NewCard("Slime Spit", CardUtils.DamageEffect(6), 1);
+    public static ICard SlimeSpit => CardUtils.NewCard(CardName.SlimeSpit, CardUtils.DamageEffect(6), 1);
 }

@@ -5,14 +5,14 @@ using CardGameCore.Framework.Effects;
 namespace CardGameCore.Impl.Cards;
 
 public class CardImpl(
-    string name,
+    CardName name,
     string description,
     IEffect effect,
     Dictionary<ResourceType, int> cost,
     Rarity rarity)
     : ICard
 {
-    public string Name { get; } = name;
+    public CardName Name { get; } = name;
 
     public IEffect Effect => effect.Copy();
 

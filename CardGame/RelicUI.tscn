@@ -6,6 +6,7 @@
 size = Vector2(64, 64)
 
 [node name="RelicUI" type="Control" unique_id=1126318250]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_fpnx5")

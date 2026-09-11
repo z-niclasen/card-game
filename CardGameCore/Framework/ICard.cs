@@ -5,7 +5,7 @@ namespace CardGameCore.Framework;
 
 public interface ICard
 {
-    public string Name { get; }
+    public CardName Name { get; }
     
     public IEffect Effect { get; }
     

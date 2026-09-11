@@ -28,7 +28,7 @@ public partial class CardUI : Node2D
 	public int Height => (int)_topContainer.CustomMinimumSize.Y;
 	
 	[Export]
-	private string CardName
+	private CardName CardName
 	{
 		get => _cardName;
 		set
@@ -37,7 +37,9 @@ public partial class CardUI : Node2D
 			UpdateLabels();
 		}
 	}
-	private string _cardName = "";
+	private CardName _cardName = CardName.NoName;
+
+	private TextureRect _textureRect;
 	
 	[Export]
 	private int Cost 
@@ -94,6 +96,7 @@ public partial class CardUI : Node2D
 		_descriptionLabel = GetNode<Label>("%DescriptionLabel");
 		_rarityLabel = GetNode<Label>("%RarityLabel");
 		_topContainer = GetNode<PanelContainer>("%TopContainer");
+		_textureRect = GetNode<TextureRect>("%TextureRect");
 		
 		SetLabelsToCardValues();
 		UpdateLabels();
@@ -145,9 +148,18 @@ public partial class CardUI : Node2D
 
 	private void UpdateLabels()
 	{
-		_nameLabel?.Text = CardName;
+		_nameLabel?.Text = CardName.ToString();
 		_costLabel?.Text = Cost.ToString();
 		_descriptionLabel?.Text = Description;
 		_rarityLabel?.Text = Rarity.ToString();
+
+		if (CardName == CardName.NoName) return;
+		
+		GD.Print($"Fetching texture for card {CardName}");
+		
+		Texture2D texture = ResourceUtil.GetCardTexture(CardName);
+		_textureRect.Texture = texture;
+
+
 	}
 }

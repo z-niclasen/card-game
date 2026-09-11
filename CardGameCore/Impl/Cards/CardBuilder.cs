@@ -6,7 +6,7 @@ namespace CardGameCore.Impl.Cards;
 
 public class CardBuilder
 {
-    private string _name = "";
+    private CardName _name = CardName.NoName;
     
     private string _description = "";
 
@@ -17,7 +17,7 @@ public class CardBuilder
     // Cards are common by default
     private Rarity _rarity = Constants.Rarity.Common;
 
-    public CardBuilder Name(string name)
+    public CardBuilder Name(CardName name)
     {
         _name = name;
         return this;
@@ -55,9 +55,9 @@ public class CardBuilder
 
     public ICard Build()
     {
-        if (_name == "")
+        if (_name == CardName.NoName)
             throw new InvalidOperationException("Cannot build card without name");
-        if (_name == "")
+        if (_description == "")
             throw new InvalidOperationException("Cannot build card without description");
         if (_effect == null)
             throw new InvalidOperationException("Cannot build card without effect. Use NoneEffect for no effect");

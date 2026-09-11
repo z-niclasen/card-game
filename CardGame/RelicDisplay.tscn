@@ -2,17 +2,24 @@
 
 [ext_resource type="Script" uid="uid://de1fl85y66n4r" path="res://RelicDisplay.cs" id="1_srmok"]
 
-[node name="RelicDisplay" type="Control" unique_id=1909325427]
+[node name="RelicDisplay" type="Control" unique_id=860277808]
+custom_minimum_size = Vector2(0, 64)
+propagate_maximum_size = true
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_srmok")
 
 [node name="Container" type="HBoxContainer" parent="." unique_id=767150153]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 0.5
 grow_horizontal = 2
-grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true

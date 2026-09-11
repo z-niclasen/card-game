@@ -7,10 +7,11 @@ namespace CardGameCore.Library;
 
 public static class CardUtils
 {
-    public static ICard NewCard(string name, EffectImpl effect, int energyCost, Rarity rarity = Rarity.Common)
+    public static ICard NewCard(CardName name, EffectImpl effect, int energyCost, Rarity rarity = Rarity.Common)
     {
         return new CardBuilder()
             .Name(name)
+            .Description("Placeholder Desscription")
             .Effect(effect)
             .Cost(ResourceType.Energy, energyCost)
             .Rarity(rarity)

@@ -10,3 +10,5 @@ script = ExtResource("1_xk1gm")
 
 [node name="CardUI" parent="." unique_id=1500116467 instance=ExtResource("1_er5b5")]
 unique_name_in_owner = true
+CardName = 3
+Description = "Test"

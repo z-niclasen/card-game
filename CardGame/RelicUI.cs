@@ -17,11 +17,12 @@ public partial class RelicUI : Control
 	}
 	private IRelic _relic;
 
-	private TextureRect _textureRect;
+	public TextureRect TextureRect;
 
 	public override void _Ready()
 	{
-		_textureRect = GetNode<TextureRect>("%TextureRect");
+		
+		TextureRect = GetNode<TextureRect>("%TextureRect");
 	}
 
 	public static RelicUI InstantiateScene()
@@ -34,6 +35,7 @@ public partial class RelicUI : Control
 		if (Relic == null)
 			return;
 		
-		_textureRect.Texture = ResourceUtil.GetRelicTexture(Relic.Name);
+		Texture2D texture = ResourceUtil.GetRelicTexture(Relic.Name);
+		TextureRect.Texture = texture;
 	}
 }

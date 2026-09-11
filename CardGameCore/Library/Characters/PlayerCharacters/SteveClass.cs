@@ -20,5 +20,5 @@ public class SteveClass : ICharacterClass
 
     public Deck StarterDeck => SteveCards.StarterDeck;
     
-    public IEnumerable<IRelic> InitialRelics => [new ChaliceRelic()];
+    public IEnumerable<IRelic> InitialRelics => [new ChaliceRelic(), ShieldRelic.Relic];
 }
