@@ -1,6 +1,7 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Effects;
+using CardGameCore.Framework.Relics;
 
 namespace CardGameCore.Impl.Relics;
 

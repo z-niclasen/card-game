@@ -1,6 +1,7 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.Relics;
 using CardGameCore.Impl;
 using CardGameCore.Impl.Resources;
 using CardGameCore.Library;

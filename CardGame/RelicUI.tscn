@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://h2mdovtfd7af"]
+
+[ext_resource type="Script" uid="uid://d1n2ytbap00p5" path="res://RelicUI.cs" id="1_fpnx5"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fpnx5"]
+size = Vector2(64, 64)
+
+[node name="RelicUI" type="Control" unique_id=1126318250]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_fpnx5")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=635397392]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_fpnx5")

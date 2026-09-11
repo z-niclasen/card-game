@@ -2,6 +2,7 @@ using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
+using CardGameCore.Framework.Relics;
 using CardGameCore.Impl.Relics;
 
 namespace CardGameCore.Impl.CombatEncounter;

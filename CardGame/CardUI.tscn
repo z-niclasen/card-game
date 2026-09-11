@@ -14,11 +14,8 @@ shadow_color = Color(0, 0, 0, 0.22745098)
 shadow_size = 6
 shadow_offset = Vector2(2, 2)
 
-[sub_resource type="Gradient" id="Gradient_huidv"]
-colors = PackedColorArray(0, 1, 1, 1, 0, 1, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_t8gnf"]
-gradient = SubResource("Gradient_huidv")
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fpnx5"]
+size = Vector2(150, 120)
 
 [node name="CardUI" type="Node2D" unique_id=1500116467]
 script = ExtResource("1_huidv")
@@ -74,10 +71,9 @@ text = "4"
 horizontal_alignment = 2
 
 [node name="TextureRect" type="TextureRect" parent="TopContainer/VBoxContainer" unique_id=864383981]
-custom_minimum_size = Vector2(150, 100)
-custom_maximum_size = Vector2(150, 100)
 layout_mode = 2
-texture = SubResource("GradientTexture2D_t8gnf")
+size_flags_horizontal = 0
+texture = SubResource("PlaceholderTexture2D_fpnx5")
 
 [node name="MarginContainerDescription" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=525721124]
 layout_mode = 2

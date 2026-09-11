@@ -1,10 +1,13 @@
-using CardGameCore.Framework;
 using CardGameCore.Framework.Effects;
+using CardGameCore.Framework.Relics;
 
 namespace CardGameCore.Impl.Relics;
 
-public class RelicCollection
+public class RelicCollection : IRelicCollectionMutable
 {
+    public event RelicAddedDelegate? OnRelicAdded;
+    public event RelicRemovedDelegate? OnRelicRemoved;
+    
     public IEnumerable<IRelic> Relics => _relics;
     private readonly List<IRelic> _relics = [];
 
@@ -20,6 +23,8 @@ public class RelicCollection
         
         _offensiveEffectAdjustors.AddRange(relic.Offensive);
         _defensiveEffectAdjustors.AddRange(relic.Defensive);
+        
+        InvokeRelicAdded(relic);
     }
     
     public void AddRelics(IEnumerable<IRelic> startingRelics)
@@ -40,5 +45,17 @@ public class RelicCollection
         
         foreach (IEffectAdjustor adjustorToRemove in relic.Defensive)
             _defensiveEffectAdjustors.Remove(adjustorToRemove);
+        
+        InvokeRelicRemoved(relic);
+    }
+
+    private void InvokeRelicAdded(IRelic relic)
+    {
+        OnRelicAdded?.Invoke(relic);
+    }
+
+    private void InvokeRelicRemoved(IRelic relic)
+    {
+        OnRelicRemoved?.Invoke(relic);
     }
 }

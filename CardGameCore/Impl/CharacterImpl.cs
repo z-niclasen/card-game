@@ -2,6 +2,7 @@ using CardGameCore.Constants;
 using CardGameCore.Exceptions;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.Relics;
 using CardGameCore.Impl.Relics;
 using CardGameCore.Impl.Resources;
 

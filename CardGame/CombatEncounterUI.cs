@@ -22,6 +22,7 @@ public partial class CombatEncounterUI : Node2D
 	private PlayerCombatCardCollectionUI _combatCollectionUI;
 
 	private CardDisplay _cardDisplay;
+	private RelicDisplay _relicDisplay;
 
 	private Button _endTurnButton;
 	private Button _playCardButton;
@@ -56,6 +57,9 @@ public partial class CombatEncounterUI : Node2D
 		
 		_endTurnButton = GetNode<Button>("%EndTurnButton");
 		_playCardButton = GetNode<Button>("%PlayCard0Button");
+		
+		_relicDisplay = GetNode<RelicDisplay>("%RelicDisplay");
+		_relicDisplay.RelicCollection = _steve.RelicCollection;
 		
 		AddObservers();
 	}

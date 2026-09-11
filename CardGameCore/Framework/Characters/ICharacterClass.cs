@@ -1,4 +1,5 @@
 using CardGameCore.Constants;
+using CardGameCore.Framework.Relics;
 using CardGameCore.Impl;
 
 namespace CardGameCore.Framework.Characters;

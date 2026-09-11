@@ -1,7 +1,7 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework.Effects;
 
-namespace CardGameCore.Framework;
+namespace CardGameCore.Framework.Relics;
 
 public interface IRelic
 {

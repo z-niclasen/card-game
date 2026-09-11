@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://7d2qp3n4e0yf" path="res://CombatEncounterUI.cs" id="1_f8iax"]
 [ext_resource type="PackedScene" uid="uid://ditfvolsyobgy" path="res://CharacterUI.tscn" id="2_f8iax"]
 [ext_resource type="PackedScene" uid="uid://bhdp8tyip3sau" path="res://CardDisplay.tscn" id="4_n71es"]
+[ext_resource type="PackedScene" uid="uid://c7nvvua1thq6f" path="res://RelicDisplay.tscn" id="5_5t03k"]
 
 [node name="CombatEncounterUI" type="Node2D" unique_id=1413067149]
 script = ExtResource("1_f8iax")
@@ -56,3 +57,6 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="RelicDisplay" parent="CanvasLayer" unique_id=1909325427 instance=ExtResource("5_5t03k")]
+unique_name_in_owner = true

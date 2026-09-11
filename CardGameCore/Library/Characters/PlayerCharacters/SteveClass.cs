@@ -1,8 +1,10 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.Relics;
 using CardGameCore.Impl;
 using CardGameCore.Impl.Resources;
+using CardGameCore.Library.Relics;
 
 namespace CardGameCore.Library.Characters.PlayerCharacters;
 
@@ -18,5 +20,5 @@ public class SteveClass : ICharacterClass
 
     public Deck StarterDeck => SteveCards.StarterDeck;
     
-    public IEnumerable<IRelic> InitialRelics => Enumerable.Empty<IRelic>();
+    public IEnumerable<IRelic> InitialRelics => [new ChaliceRelic()];
 }
