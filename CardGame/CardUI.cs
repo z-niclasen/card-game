@@ -155,11 +155,7 @@ public partial class CardUI : Node2D
 
 		if (CardName == CardName.NoName) return;
 		
-		GD.Print($"Fetching texture for card {CardName}");
-		
 		Texture2D texture = ResourceUtil.GetCardTexture(CardName);
-		_textureRect.Texture = texture;
-
-
+		_textureRect?.Texture = texture;
 	}
 }
