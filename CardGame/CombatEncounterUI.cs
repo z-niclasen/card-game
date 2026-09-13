@@ -33,7 +33,8 @@ public partial class CombatEncounterUI : Node2D
 	{
 		ICharacterClass steveClass = new SteveClass();
 		_steve = new CharacterImpl(steveClass);
-        
+		_steve.IncreaseResource(ResourceType.Armor, 1);
+		
 		IAiCharacterClass cleverGreenSlimeClass = new TestingSlime(AiStrategy.PlayZero);
 		_slime = new AiCharacterImpl(cleverGreenSlimeClass);
 
@@ -87,6 +88,9 @@ public partial class CombatEncounterUI : Node2D
 
 	private void DeselectCard(ICard card)
 	{
+		if (_selectedCard == null)
+			return;
+		
 		_cardDisplay.HideCard();
 		
 		_combatCollectionUI.ShowCardInHand(_selectedCard);
@@ -113,6 +117,7 @@ public partial class CombatEncounterUI : Node2D
 	{
 		try
 		{
+			DeselectCard(_selectedCard);
 			_encounter.EndTurn(_encounter.InTurn);
 		}
 		catch (Exception e)
