@@ -1,18 +1,15 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework.Relics;
+using CardGameCore.Framework.Resources;
 using CardGameCore.Impl;
 using CardGameCore.Impl.Relics;
 
 namespace CardGameCore.Framework.Characters;
-
-public delegate void DecreaseResourceDelegate(ICharacter character, ResourceType type, int amount);
-public delegate void IncreaseResourceDelegate(ICharacter character, ResourceType type, int amount);
+public delegate void ResourceChangedDelegate(ICharacter character, ResourceType type);
 
 public interface ICharacter
 {
-    public event DecreaseResourceDelegate OnDecreaseResource;
-
-    public event IncreaseResourceDelegate OnIncreaseResource;
+    public event ResourceChangedDelegate OnResourceChanged;
     
     public CharacterName Name { get; }
     

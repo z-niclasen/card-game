@@ -23,6 +23,25 @@ font_size = 15
 font_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
+[sub_resource type="Gradient" id="Gradient_rrc0o"]
+colors = PackedColorArray(0.7121294, 0.7121294, 0.71212935, 1, 0.42365062, 0.42365065, 0.42365062, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_t8gnf"]
+gradient = SubResource("Gradient_rrc0o")
+width = 128
+
+[sub_resource type="Gradient" id="Gradient_gvsxp"]
+colors = PackedColorArray(0.73721313, 0.4661371, 1.92523e-07, 1, 0.7372549, 0.46666667, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tw54k"]
+gradient = SubResource("Gradient_gvsxp")
+
+[sub_resource type="Gradient" id="Gradient_ih6tf"]
+colors = PackedColorArray(0, 0.56078434, 0.8784314, 1, 0, 0.56078434, 0.8784314, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qwivd"]
+gradient = SubResource("Gradient_ih6tf")
+
 [node name="Character" type="Node2D" unique_id=348766923]
 script = ExtResource("1_rrc0o")
 
@@ -39,7 +58,60 @@ unique_name_in_owner = true
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_ll6rw")
 
-[node name="HealthBar" type="TextureProgressBar" parent="Container" unique_id=1424955488]
+[node name="HBoxContainer" type="HBoxContainer" parent="Container" unique_id=1150560949]
+layout_mode = 2
+
+[node name="HealthBar" type="TextureProgressBar" parent="Container/HBoxContainer" unique_id=1424955488]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 20)
+propagate_maximum_size = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 40.0
+rounded = true
+allow_lesser = true
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture2D_depl2")
+texture_progress = SubResource("GradientTexture2D_ll6rw")
+
+[node name="HealthAmountLabel" type="Label" parent="Container/HBoxContainer/HealthBar" unique_id=1445515844]
+unique_name_in_owner = true
+propagate_maximum_size = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "70/100"
+label_settings = SubResource("LabelSettings_ll6rw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArmorSprite" type="TextureRect" parent="Container/HBoxContainer" unique_id=2108969169]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("GradientTexture2D_t8gnf")
+expand_mode = 3
+
+[node name="ArmorAmountLabel" type="Label" parent="Container/HBoxContainer/ArmorSprite" unique_id=1803987809]
+unique_name_in_owner = true
+propagate_maximum_size = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "30"
+label_settings = SubResource("LabelSettings_ll6rw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnergyBar" type="TextureProgressBar" parent="Container" unique_id=1188865789]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(144, 20)
 propagate_maximum_size = true
@@ -50,9 +122,37 @@ rounded = true
 allow_lesser = true
 nine_patch_stretch = true
 texture_under = SubResource("GradientTexture2D_depl2")
-texture_progress = SubResource("GradientTexture2D_ll6rw")
+texture_progress = SubResource("GradientTexture2D_tw54k")
 
-[node name="HealthAmountLabel" type="Label" parent="Container/HealthBar" unique_id=1445515844]
+[node name="EnergyAmountLabel" type="Label" parent="Container/EnergyBar" unique_id=1407157071]
+unique_name_in_owner = true
+propagate_maximum_size = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "70/100"
+label_settings = SubResource("LabelSettings_ll6rw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ManaBar" type="TextureProgressBar" parent="Container" unique_id=850858581]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 20)
+propagate_maximum_size = true
+clip_contents = true
+layout_mode = 2
+value = 40.0
+rounded = true
+allow_lesser = true
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture2D_depl2")
+texture_progress = SubResource("GradientTexture2D_qwivd")
+
+[node name="ManaAmountLabel" type="Label" parent="Container/ManaBar" unique_id=213323330]
 unique_name_in_owner = true
 propagate_maximum_size = true
 clip_contents = true

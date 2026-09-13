@@ -1,9 +1,10 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Resources;
 
 namespace CardGameCore.Impl.Resources;
 
-public class HealthResource : IResource
+public class HealthResource : IResourceMutable
 {
     public ResourceType ResourceType => ResourceType.Health;
 

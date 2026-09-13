@@ -1,9 +1,9 @@
 using CardGameCore.Constants;
-using CardGameCore.Framework;
+using CardGameCore.Framework.Resources;
 
 namespace CardGameCore.Impl.Resources;
 
-public class ManaResource : IResource
+public class ManaResource : IResourceMutable
 {
     public ResourceType ResourceType => ResourceType.Mana;
 

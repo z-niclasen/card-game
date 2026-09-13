@@ -1,9 +1,10 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Resources;
 
 namespace CardGameCore.Impl.Resources;
 
-public class ArmorResource : IResource
+public class ArmorResource : IResourceMutable
 {
     public ResourceType ResourceType => ResourceType.Armor;
     

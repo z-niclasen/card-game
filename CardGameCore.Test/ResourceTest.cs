@@ -1,5 +1,6 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Resources;
 using CardGameCore.Impl.Resources;
 
 namespace CardGameCore.Test;
@@ -18,7 +19,7 @@ public class ResourceTest
     private ManaResource _mana;
     private const int ManaInitial = 6;
 
-    private Dictionary<ResourceType, IResource> _resources;
+    private Dictionary<ResourceType, IResourceMutable> _resources;
 
     [SetUp]
     public void Setup()
@@ -28,7 +29,7 @@ public class ResourceTest
         _armor = new ArmorResource(ArmorInitial);
         _mana = new ManaResource(ManaInitial);
 
-        _resources = new Dictionary<ResourceType, IResource>
+        _resources = new Dictionary<ResourceType, IResourceMutable>
         {
             { ResourceType.Health, _health },
             { ResourceType.Energy, _energy },
@@ -55,7 +56,7 @@ public class ResourceTest
     [TestCase(ResourceType.Health)]
     public void DecreasesResourceWithoutMinimumCorrectly(ResourceType resourceType)
     {
-        IResource resource = _resources[resourceType];
+        IResourceMutable resource = _resources[resourceType];
         
         Assert.That(resource.Amount, Is.GreaterThan(0));
         
@@ -74,7 +75,7 @@ public class ResourceTest
     [TestCase(ResourceType.Mana)]
     public void DecreasesResourceWithMinimumCorrectly(ResourceType resourceType)
     {
-        IResource resource = _resources[resourceType];
+        IResourceMutable resource = _resources[resourceType];
         
         Assert.That(resource.Amount, Is.GreaterThan(0));
         
@@ -91,7 +92,7 @@ public class ResourceTest
     [TestCase(ResourceType.Health)]
     public void IncreasesResourceWithMaximumCorrectly(ResourceType resourceType)
     {
-        IResource resource = _resources[resourceType];
+        IResourceMutable resource = _resources[resourceType];
         int initialAmount = resource.Amount;
 
         int changeAmount = initialAmount / 2;
@@ -113,7 +114,7 @@ public class ResourceTest
     [TestCase(ResourceType.Mana)]
     public void IncreasesResourceWithoutMaximumCorrectly(ResourceType resourceType)
     {
-        IResource resource = _resources[resourceType];
+        IResourceMutable resource = _resources[resourceType];
         int initialAmount = resource.Amount;
 
         int changeAmount = initialAmount / 2;
@@ -219,7 +220,7 @@ public class ResourceTest
     [TestCase(ResourceType.Mana)]
     public void ResourcesUnchangedByTurnStartAndEndAreUnchanged(ResourceType resourceType)
     {
-        IResource resource = _resources[resourceType];
+        IResourceMutable resource = _resources[resourceType];
         int changeAmount = resource.Amount / 2;
         
         resource.DecreaseBy(changeAmount);
@@ -307,7 +308,7 @@ public class ResourceTest
     [TestCase(ResourceType.Mana)]
     public void CannotChangeResourceByNegativeAmount(ResourceType resourceType)
     {
-        IResource resource =  _resources[resourceType];
+        IResourceMutable resource =  _resources[resourceType];
         
         Assert.Throws<ArgumentException>(() => resource.IncreaseBy(-1));
         Assert.Throws<ArgumentException>(() => resource.DecreaseBy(-1));

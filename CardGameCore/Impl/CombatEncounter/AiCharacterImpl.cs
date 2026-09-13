@@ -3,30 +3,21 @@ using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Framework.Relics;
+using CardGameCore.Framework.Resources;
 using CardGameCore.Impl.Relics;
 
 namespace CardGameCore.Impl.CombatEncounter;
 
 public class AiCharacterImpl(IAiCharacterClass aiCharacterClass) : IAiCharacter
-
-
 {
-    
     private readonly ICharacter _characterImplementation = new CharacterImpl(aiCharacterClass);
     
     private readonly AiStrategy _aiStrategy = aiCharacterClass.Strategy;
 
-
-    public event DecreaseResourceDelegate? OnDecreaseResource
+    public event ResourceChangedDelegate? OnResourceChanged
     {
-        add => _characterImplementation.OnDecreaseResource += value;
-        remove => _characterImplementation.OnDecreaseResource -= value;
-    }
-
-    public event IncreaseResourceDelegate? OnIncreaseResource
-    {
-        add => _characterImplementation.OnIncreaseResource += value;
-        remove => _characterImplementation.OnIncreaseResource -= value;
+        add => _characterImplementation.OnResourceChanged += value;
+        remove => _characterImplementation.OnResourceChanged -= value;
     }
 
     public CharacterName Name => _characterImplementation.Name;

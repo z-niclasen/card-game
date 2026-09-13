@@ -1,13 +1,7 @@
-using CardGameCore.Constants;
+namespace CardGameCore.Framework.Resources;
 
-namespace CardGameCore.Framework;
-
-public interface IResource
+public interface IResourceMutable : IResource
 {
-    public ResourceType ResourceType { get; }
-    
-    public int Amount { get; }
-    
     public void IncreaseBy(int amountIncreased);
     
     public void DecreaseBy(int amountDecreased);

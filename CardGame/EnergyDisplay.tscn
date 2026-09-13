@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://bf1ppo2h7co14"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_48y6u"]
+script/source = "using CardGameCore.Constants;
+using CardGameCore.Framework.Characters;
+using Godot;
+
+namespace CardGame;
+
+public partial class EnergyDisplay : Control
+{
+	public ICharacter Character
+	{
+		get => _character;
+		set
+		{
+			RemoveObservers();
+			_character = value;
+			AddObservers();
+		} 
+	}
+	private ICharacter _character;
+
+	public ResourceType ResourceType { get; set; }
+	
+	private Label _label;
+	private TextureRect _textureRect;
+
+	public override void _Ready()
+	{
+		_label = GetNode<Label>(\"%Label\");
+		_textureRect = GetNode<TextureRect>(\"%TextureRect\");
+	}
+	
+	private void OnDecreaseResource(ICharacter character, ResourceType type, int amount)
+	{
+		
+	}
+
+	private void OnIncreaseResource(ICharacter character, ResourceType type, int amount)
+	{
+		
+	}
+	
+	
+
+	private void AddObservers()
+	{
+		Character?.OnIncreaseResource += OnIncreaseResource;
+		Character?.OnDecreaseResource += OnDecreaseResource;
+	}
+
+	private void RemoveObservers()
+	{
+		Character?.OnIncreaseResource -= OnIncreaseResource;
+		Character?.OnDecreaseResource -= OnDecreaseResource;
+	}
+}"
+
+[sub_resource type="Gradient" id="Gradient_48y6u"]
+colors = PackedColorArray(0, 0, 1, 1, 0, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jbhky"]
+gradient = SubResource("Gradient_48y6u")
+
+[node name="EnergyDisplay" type="Control" unique_id=469167260]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("CSharpScript_48y6u")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=587973956]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 1
+anchors_preset = -1
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("GradientTexture2D_jbhky")
+
+[node name="Label" type="Label" parent="TextureRect" unique_id=1919233952]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "3 / 3"
+horizontal_alignment = 1
+vertical_alignment = 1

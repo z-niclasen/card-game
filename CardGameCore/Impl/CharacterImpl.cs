@@ -3,6 +3,7 @@ using CardGameCore.Exceptions;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.Relics;
+using CardGameCore.Framework.Resources;
 using CardGameCore.Impl.Relics;
 using CardGameCore.Impl.Resources;
 
@@ -10,8 +11,7 @@ namespace CardGameCore.Impl;
 
 public class CharacterImpl : ICharacter
 {
-    public event DecreaseResourceDelegate? OnDecreaseResource;
-    public event IncreaseResourceDelegate? OnIncreaseResource;
+    public event ResourceChangedDelegate? OnResourceChanged;
     
     public ICharacterClass Class { get; }
 
@@ -29,14 +29,14 @@ public class CharacterImpl : ICharacter
 
     public RelicCollection RelicCollection { get; } = new();
 
-    private Dictionary<ResourceType, IResource> Resources { get; }
+    private Dictionary<ResourceType, IResourceMutable> Resources { get; }
 
     public CharacterImpl(ICharacterClass characterClass)
     {
         Class = characterClass;
         Deck = Class.StarterDeck;
         HandDrawCount = Class.InitialHandDrawCount;
-        Resources = Class.InitialResources;
+        Resources = Class.InitialResources; // TODO: Clone?
         Tags = new List<Tag>(Class.InitialTags);
         RelicCollection.AddRelics(Class.InitialRelics);
     }
@@ -62,13 +62,12 @@ public class CharacterImpl : ICharacter
             throw new DoesNotHaveResourceException($"Tried to access {resourceType} for {Name}, but it does not exist.");
         return resource;
     }
+    
     public int GetResourceAmount(ResourceType resourceType)
     {
         return GetResource(resourceType).Amount;
     }
-
-
-
+    
     bool ICharacter.HasResourceType(ResourceType resourceType)
     {
         return Resources.ContainsKey(resourceType);
@@ -76,14 +75,14 @@ public class CharacterImpl : ICharacter
 
     public void DecreaseResource(ResourceType resourceType, int amount)
     {
-        if (!Resources.TryGetValue(resourceType, out IResource? value))
+        if (!Resources.TryGetValue(resourceType, out IResourceMutable? value))
             throw new DoesNotHaveResourceException($"Tried to spend {resourceType} for  {Name}, but it does not exist.");
         
         if (amount < 0)
             throw new ArgumentException($"Cannot spend negative amount of resource. ResourceType: {resourceType}.");
         
         value.DecreaseBy(amount);
-        OnDecreaseResource?.Invoke(this, resourceType, amount);
+        OnResourceChanged?.Invoke(this, resourceType);
     }
 
     public void IncreaseResource(ResourceType resourceType, int amount)
@@ -91,9 +90,10 @@ public class CharacterImpl : ICharacter
         if (amount < 0)
             throw new ArgumentException($"Cannot gain negative amount of resource. ResourceType: {resourceType}.");
 
-        if (Resources.TryGetValue(resourceType, out IResource? resource))
+        if (Resources.TryGetValue(resourceType, out IResourceMutable? resource))
         {
             resource.IncreaseBy(amount);
+            OnResourceChanged?.Invoke(this, resourceType);
             return;
         }
 
@@ -112,17 +112,7 @@ public class CharacterImpl : ICharacter
             default:
                 throw new ArgumentOutOfRangeException(nameof(resourceType), resourceType, null);
         }
-        OnIncreaseResource?.Invoke(this, resourceType,  amount);
-    }
-
-    public void AddResourceType(IResource resource)
-    {
-        ResourceType resourceType = resource.ResourceType;
-        if (HasResourceType(resourceType))
-            throw new ArgumentException(
-                $"Tried to add resource type {resourceType} to character {Name}, but it already has that resource type.");
-        
-        Resources.Add(resourceType, resource);
+        OnResourceChanged?.Invoke(this, resourceType);
     }
 
     public bool CanPlayCard(ICard card)
@@ -151,14 +141,26 @@ public class CharacterImpl : ICharacter
 
     public void StartTurn()
     {
-        foreach (IResource resource in Resources.Values)
+        foreach (IResourceMutable resource in Resources.Values)
+        {
+            int previousAmount = resource.Amount;
             resource.StartTurn();
+            int newAmount = resource.Amount;
+            if (newAmount != previousAmount)
+                OnResourceChanged?.Invoke(this, resource.ResourceType);
+        }
     }
     
     public void EndTurn()
     {
-        foreach (IResource resource in Resources.Values)
+        foreach (IResourceMutable resource in Resources.Values)
+        {
+            int previousAmount = resource.Amount;
             resource.EndTurn();
+            int newAmount = resource.Amount;
+            if (newAmount != previousAmount)
+                OnResourceChanged?.Invoke(this, resource.ResourceType);
+        }
     }
 
     private bool HasResourceType(ResourceType resourceType)

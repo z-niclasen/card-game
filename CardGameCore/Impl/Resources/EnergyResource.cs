@@ -1,9 +1,10 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Resources;
 
 namespace CardGameCore.Impl.Resources;
 
-public class EnergyResource : IResource
+public class EnergyResource : IResourceMutable
 {
     public ResourceType ResourceType => ResourceType.Energy;
     
