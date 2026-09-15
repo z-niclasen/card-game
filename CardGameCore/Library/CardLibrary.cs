@@ -22,6 +22,22 @@ public static class CardLibrary
         return card;
     }
 
+    public static IEnumerable<CardName> GetCards(CharacterName characterName, Rarity rarity)
+    {
+        return NameToRarityToCardName[characterName][rarity];
+    }
+    
+    public static IEnumerable<CardName> GetCharacterCards(CharacterName characterName)
+    {
+        var rarityToCardName = NameToRarityToCardName[characterName];
+
+        List<CardName> result = [];
+        foreach (List<CardName> names in rarityToCardName.Values)
+            result.AddRange(names);
+
+        return result;
+    }
+
     private static void InitializeDict()
     {
         foreach (Type type in GetCardImplementations())
