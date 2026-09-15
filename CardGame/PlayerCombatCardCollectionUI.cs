@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Impl.CombatEncounter;
 using CardGameCore.Library;
@@ -199,12 +201,12 @@ public partial class PlayerCombatCardCollectionUI : Control
 		{
 			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		
-			InstantiateCard(SteveCards.Sword);
-			InstantiateCard(SteveCards.Sword);
-			InstantiateCard(SteveCards.Sword);
-			InstantiateCard(SteveCards.Sword);
-			InstantiateCard(SteveCards.Sword);
-			InstantiateCard(SteveCards.Sword);
+			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
 		}
 		catch (Exception e)
 		{

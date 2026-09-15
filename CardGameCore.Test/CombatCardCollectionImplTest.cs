@@ -1,7 +1,7 @@
-using CardGameCore.Framework;
+using CardGameCore.Framework.Cards;
 using CardGameCore.Impl;
 using CardGameCore.Impl.CombatEncounter;
-using CardGameCore.Library;
+using CardGameCore.Library.Characters.PlayerCharacters;
 
 namespace CardGameCore.Test;
 
@@ -13,7 +13,8 @@ public class CombatCardCollectionImplTest
     [SetUp]
     public void Setup()
     {
-        _initialDeck = SteveCards.StarterDeck;
+        SteveClass steveClass = new SteveClass();
+        _initialDeck = new Deck(steveClass.StarterDeck);
         _collection = new CombatCardCollectionImpl(_initialDeck, CombatCardCollectionImpl.ShuffleStrategy.NoShuffle);
     }
 

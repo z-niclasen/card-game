@@ -26,8 +26,9 @@ public partial class Yay : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		SteveClass steveClass = new();
 		_collection =
-			new CombatCardCollectionImpl(SteveCards.StarterDeck, CombatCardCollectionImpl.ShuffleStrategy.Shuffle);
+			new CombatCardCollectionImpl(new Deck(steveClass.StarterDeck), CombatCardCollectionImpl.ShuffleStrategy.Shuffle);
 
 		CharacterUI.Character = _steve;
 		CharacterUI.Visible = true;

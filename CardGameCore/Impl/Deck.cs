@@ -1,5 +1,8 @@
 using System.Collections;
+using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Cards;
+using CardGameCore.Library;
 
 namespace CardGameCore.Impl;
 
@@ -11,9 +14,13 @@ public class Deck : IEnumerable<ICard>
 
     public Deck() { }
 
-    public Deck(IEnumerable<ICard> cards)
+    public Deck(IEnumerable<CardName> cards)
     {
-        AddCards(cards);
+        foreach (CardName name in cards)
+        {
+            ICard cardToAdd = CardLibrary.InstantiateCardByName(name);
+            AddCard(cardToAdd);
+        }
     }
 
     public void AddCard(ICard card)

@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://by8c5gmyqrvql"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mel6f"]
+bg_color = Color(0.6681918, 0.4694078, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.26293245, 0.26293245, 0.26293245, 0.6)
+shadow_size = 16
+shadow_offset = Vector2(6, 6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_d4rn7"]
+font_size = 48
+
+[node name="EncounterWonPanel" type="Control" unique_id=1212891251]
+layout_mode = 3
+anchor_left = 0.4
+anchor_top = 0.2
+anchor_right = 0.6
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=1919233544]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mel6f")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2110283512]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2053472923]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=2060815610]
+layout_mode = 2
+text = "You Slayed"
+label_settings = SubResource("LabelSettings_d4rn7")
+horizontal_alignment = 1
+
+[node name="RewardsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=656979161]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ContinueButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=758786948]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Continue"

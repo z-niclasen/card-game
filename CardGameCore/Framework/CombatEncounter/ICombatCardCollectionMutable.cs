@@ -1,3 +1,5 @@
+using CardGameCore.Framework.Cards;
+
 namespace CardGameCore.Framework.CombatEncounter;
 
 public interface ICombatCardCollectionMutable : ICombatCardCollection

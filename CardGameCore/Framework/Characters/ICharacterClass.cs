@@ -15,6 +15,6 @@ public interface ICharacterClass
     
     public int InitialHandDrawCount { get; }
     
-    public Deck StarterDeck { get; }
+    public IEnumerable<CardName> StarterDeck { get; }
     IEnumerable<IRelic> InitialRelics { get; }
 }

@@ -1,5 +1,6 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Cards;
 using Godot;
 
 namespace CardGame;

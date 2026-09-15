@@ -1,6 +1,7 @@
 using CardGameCore.Constants;
 using CardGameCore.Exceptions;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.Relics;
 using CardGameCore.Framework.Resources;
@@ -34,7 +35,7 @@ public class CharacterImpl : ICharacter
     public CharacterImpl(ICharacterClass characterClass)
     {
         Class = characterClass;
-        Deck = Class.StarterDeck;
+        Deck = new Deck(characterClass.StarterDeck);
         HandDrawCount = Class.InitialHandDrawCount;
         Resources = Class.InitialResources; // TODO: Clone?
         Tags = new List<Tag>(Class.InitialTags);

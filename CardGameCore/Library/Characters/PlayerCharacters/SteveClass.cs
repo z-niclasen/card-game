@@ -19,7 +19,9 @@ public class SteveClass : ICharacterClass
 
     public int InitialHandDrawCount => 5;
 
-    public Deck StarterDeck => SteveCards.StarterDeck;
+    public IEnumerable<CardName> StarterDeck => [
+        CardName.Sword, CardName.Sword, CardName.Sword, CardName.Sword, CardName.Sword, CardName.Sword, CardName.Sword, 
+        CardName.Sword, CardName.Sword, CardName.Sword, CardName.Sword, CardName.Sword];
     
-    public IEnumerable<IRelic> InitialRelics => [new ChaliceRelic(), ShieldRelic.Relic];
+    public IEnumerable<IRelic> InitialRelics => [new ChaliceRelic(), new ShieldRelic()];
 }

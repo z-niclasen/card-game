@@ -1,6 +1,7 @@
 ﻿using CardGameCore.Constants;
 using CardGameCore.Exceptions;
 using CardGameCore.Framework;
+using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Impl;
@@ -18,8 +19,7 @@ public class CombatEncounterTest
     private IAiCharacter _cleverSlime;
     private ICombatEncounter _encounter;
     private CombatEncounterImpl _cleverEncounter;
-
-
+    
     [SetUp]
     public void Setup()
     {

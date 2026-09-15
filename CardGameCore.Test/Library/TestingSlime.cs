@@ -19,7 +19,7 @@ public class TestingSlime(AiStrategy strategy) : IAiCharacterClass
 
     public int InitialHandDrawCount => 1;
 
-    public Deck StarterDeck => GreenSlimeCards.StarterDeck;
+    public IEnumerable<CardName> StarterDeck => [CardName.SlimeSpit, CardName.SlimeSpit];
     
     public IEnumerable<IRelic> InitialRelics => Enumerable.Empty<IRelic>();
     public AiStrategy Strategy { get; } = strategy;
