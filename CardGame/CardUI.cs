@@ -107,6 +107,12 @@ public partial class CardUI : Node2D
 		_topContainer.MouseExited += TopContainerOnMouseExited;
 	}
 
+	public void Move(Vector2 newPosition)
+	{
+		Tween tween = CreateTween();
+		tween.TweenProperty(this, "position", newPosition, 0.1f);
+	}
+
 	private void TopContainerOnMouseExited()
 	{
 		_mouseOver = false;

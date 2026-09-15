@@ -175,7 +175,8 @@ public partial class PlayerCombatCardCollectionUI : Control
 			float newY = handVerticalMidPoint;
 			float newX = startX + i * actualCardWidth;
 
-			card.Position = Position with { X = newX, Y = newY };
+			//card.Position = Position with { X = newX, Y = newY };
+			card.Move(new Vector2(newX, newY));
 		}
 	}
 
