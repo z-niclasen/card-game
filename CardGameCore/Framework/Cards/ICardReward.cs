@@ -2,5 +2,5 @@ namespace CardGameCore.Framework.Cards;
 
 public interface ICardReward
 {
-    public IEnumerable<ICard> GenerateCards();
+    public IEnumerable<ICard> Rewards { get; }
 }

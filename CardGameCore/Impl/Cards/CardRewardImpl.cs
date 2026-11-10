@@ -1,35 +1,33 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework.Cards;
-using CardGameCore.Library;
 
 namespace CardGameCore.Impl.Cards;
 
 public class CardRewardImpl : ICardReward
 {
-    private readonly List<CardName> _pool;
+    private readonly RewardPool _rewardPool;
+    private const int CardCount = 3;
+    private readonly int _roomNumber;
+    private readonly int _characterLuck;
 
-    private readonly int _amountToGenerate;
-
-    public CardRewardImpl(int amountToGenerate, List<CardName> pool)
+    public IEnumerable<ICard> Rewards { get; }
+    
+    public CardRewardImpl(RewardPool rewardPool, int roomNumber, int characterLuck)
     {
-        _amountToGenerate = amountToGenerate;
-        _pool = pool;
+        _rewardPool = rewardPool;
+        _roomNumber = roomNumber;
+        _characterLuck = characterLuck;
+
+        Rewards = RollCards();
     }
     
-    public IEnumerable<ICard> GenerateCards()
+    private IEnumerable<ICard> RollCards()
     {
-        List<ICard> rewards = [];
-        
-        int poolSize = _pool.Count;
-        Random rng = Run.Random;
-
-        for (int i = 0; i < _amountToGenerate; i++)
+        for (int i = 0; i < CardCount; i++)
         {
-            int index = rng.Next(poolSize);
-            CardName generatedCardName = _pool[index];
-            rewards.Add(Library.Library.InstantiateCardByName(generatedCardName));
+            Rarity cardRarity = Run.RarityDistribution.GetRarity(_roomNumber, _characterLuck);
+            CardName cardName = _rewardPool.GetCard(cardRarity);
+            yield return Library.Library.InstantiateCardByName(cardName);
         }
-
-        return  rewards;
     }
 }
