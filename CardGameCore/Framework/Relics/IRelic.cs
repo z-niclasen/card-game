@@ -11,6 +11,8 @@ public interface IRelic
     
     public Rarity Rarity { get; }
     
+    public CharacterName Faction { get; }
+    
     public IEnumerable<IEffectAdjustor> Offensive { get; }
     
     public IEnumerable<IEffectAdjustor> Defensive { get; }

@@ -82,6 +82,7 @@ public static class CardLibrary
     {
         var type = typeof(ICard);
         
+        // All classes that implements ICard
         IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
             .Where(p => type.IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false });

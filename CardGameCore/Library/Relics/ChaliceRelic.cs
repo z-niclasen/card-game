@@ -9,6 +9,9 @@ public class ChaliceRelic : IRelic
     public RelicName Name => RelicName.Chalice;
     public string Description => "Gør ting.";
     public Rarity Rarity => Rarity.SuperDuperRareWowAwooga;
+
+    public CharacterName Faction => CharacterName.Neutral;
+    
     public IEnumerable<IEffectAdjustor> Offensive { get; } = [new IncrementalGame()];
     public IEnumerable<IEffectAdjustor> Defensive { get; } = [];
 }

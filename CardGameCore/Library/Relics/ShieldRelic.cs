@@ -13,6 +13,8 @@ public class ShieldRelic : IRelic
     
     public Rarity Rarity => Rarity.Rare;
 
+    public CharacterName Faction => CharacterName.Neutral;
+
     public IEnumerable<IEffectAdjustor> Offensive => [new Kleenex()];
 
     public IEnumerable<IEffectAdjustor> Defensive => [];
