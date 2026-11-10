@@ -29,7 +29,7 @@ public class RewardPool
     public RewardPool(CharacterName characterName)
     {
         foreach (var (rarity, cardNames) in _cardPool)
-            cardNames.AddRange(CardLibrary.GetCards(characterName, rarity));
+            cardNames.AddRange(Library.Library.GetCards(characterName, rarity));
     }
 
     public CardName GetCard(Rarity rarity)

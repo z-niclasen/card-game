@@ -202,12 +202,12 @@ public partial class PlayerCombatCardCollectionUI : Control
 		{
 			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		
-			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
-			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
-			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
-			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
-			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
-			InstantiateCard(CardLibrary.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(Library.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(Library.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(Library.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(Library.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(Library.InstantiateCardByName(CardName.Sword));
+			InstantiateCard(Library.InstantiateCardByName(CardName.Sword));
 		}
 		catch (Exception e)
 		{

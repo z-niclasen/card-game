@@ -27,7 +27,7 @@ public class CardRewardImpl : ICardReward
         {
             int index = rng.Next(poolSize);
             CardName generatedCardName = _pool[index];
-            rewards.Add(CardLibrary.InstantiateCardByName(generatedCardName));
+            rewards.Add(Library.Library.InstantiateCardByName(generatedCardName));
         }
 
         return  rewards;

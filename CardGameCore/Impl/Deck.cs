@@ -18,7 +18,7 @@ public class Deck : IEnumerable<ICard>
     {
         foreach (CardName name in cards)
         {
-            ICard cardToAdd = CardLibrary.InstantiateCardByName(name);
+            ICard cardToAdd = Library.Library.InstantiateCardByName(name);
             AddCard(cardToAdd);
         }
     }
