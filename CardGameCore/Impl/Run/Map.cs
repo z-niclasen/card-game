@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using CardGameCore.Exceptions;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
@@ -32,7 +33,7 @@ public class Map
     private MapNode GenerateMap()
     {
         MapNode root =  new MapNode(EncounterType.Combat, [], 0);
-      
+        
         
         return root;
     }
@@ -66,7 +67,7 @@ public class MapNode
     public EncounterType Type { get; }
     public IEncounter Encounter { get;  set; }
     
-    public IEnumerable<MapNode> Children { get; }
+    public IEnumerable<MapNode> Children { get; set; }
     
     public int Level { get; set; }
 
