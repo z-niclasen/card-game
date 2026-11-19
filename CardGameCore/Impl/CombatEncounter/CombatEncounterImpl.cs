@@ -5,10 +5,11 @@ using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Framework.Effects;
+using CardGameCore.Framework.Run;
 
 namespace CardGameCore.Impl.CombatEncounter;
 
-public class CombatEncounterImpl : ICombatEncounter
+public class CombatEncounterImpl : ICombatEncounter, IEncounter
 {
     public event EndTurnDelegate? OnEndTurn;
     public event PlayCardDelegate? OnPlayCard;
@@ -176,4 +177,6 @@ public class CombatEncounterImpl : ICombatEncounter
     {
         return Player == InTurn ? Opponent : Player;
     }
+
+    public event OnRewardsSelected? OnRewardsSelected;
 }
