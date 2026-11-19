@@ -1,4 +1,5 @@
 using CardGameCore.Impl;
+using CardGameCore.Impl.Runs;
 
 namespace CardGameCore;
 
@@ -7,34 +8,55 @@ public class Map
     private const int LayerCount = 16;
     private const int LayerMaxWidth = 5;
 
-    private int[][] _map;
-    private Dictionary<MapPosition, HashSet<MapEdge>> _edges;
+    private Random _rng;
     
-    public Map()
+    private int[][] _map;
+    private Dictionary<MapPosition, List<MapEdge>> _edges;
+    
+    public Map(Random rng)
     {
+        _rng = rng;
         _map = GenerateMap();
         _edges = GenerateEdges(_map);
     }
 
-    public IEnumerable<MapPosition> GetMap()
+    public IEnumerable<MapPosition> GetMapLayer(int layer)
+    {
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(layer, LayerCount);
+        ArgumentOutOfRangeException.ThrowIfNegative(layer);
+        
+        foreach (int layerIndex in _map[layer])
+            yield return new MapPosition(layer, layerIndex);
+    }
+
+    public IEnumerable<IEnumerable<MapPosition>> GetMapLayers()
     {
         for (int layer = 0; layer < LayerCount; layer++)
+            yield return GetMapLayer(layer);
+    }
+
+    public IEnumerable<MapEdge> GetMapEdges(MapPosition mapPosition)
+    {
+        foreach (MapEdge edge in _edges[mapPosition])
+            Console.WriteLine(edge);
+        return _edges[mapPosition];
+    }
+
+    public IEnumerable<MapEdge> GetAllMapEdges()
+    {
+        foreach (IEnumerable<MapPosition> layer in GetMapLayers())
         {
-            foreach (int indexInLayer in _map[layer])
+            foreach (MapPosition position in layer)
             {
-                yield return new MapPosition(layer, indexInLayer);
+                foreach (MapEdge edgesFromPosition in GetMapEdges(position))
+                    yield return edgesFromPosition;
             }
         }
     }
 
-    public IEnumerable<MapEdge> GetEdges(MapPosition mapPosition)
+    private Dictionary<MapPosition, List<MapEdge>> GenerateEdges(int[][] map)
     {
-        return _edges[mapPosition];
-    }
-
-    private static Dictionary<MapPosition, HashSet<MapEdge>> GenerateEdges(int[][] map)
-    {
-        Dictionary<MapPosition, HashSet<MapEdge>> allEdges = new();
+        Dictionary<MapPosition, List<MapEdge>> allEdges = new();
         
         // Populate with empty lists.
         for (int layer = 0; layer < LayerCount; layer++)
@@ -42,7 +64,7 @@ public class Map
             foreach (int indexInLayer in map[layer])
             {
                 MapPosition mapPosition = new MapPosition(layer, indexInLayer);
-                allEdges.Add(mapPosition, new HashSet<MapEdge>());
+                allEdges.Add(mapPosition, new List<MapEdge>());
             }
         }
 
@@ -66,23 +88,23 @@ public class Map
 
         for (int layer = 1; layer < LayerCount - 2; layer++)
         {
-            int layerCount = map[layer].Length;
+            int layerSize = map[layer].Length;
             int[] layerIndicesShuffled = ((int[])map[layer].Clone()).Shuffle().ToArray();
 
-            int edgesToGenerate = Run.Random.Next(layerCount, layerCount * 2);
+            int edgesToGenerate = _rng.Next(layerSize, layerSize * 2);
 
             List<MapEdge> edgesCreated = [];
 
             for (int edgeNum = 0; edgeNum < edgesToGenerate; edgeNum++)
             {
                 int indexFrom = 0;
-                if (edgeNum < layerCount)
+                if (edgeNum < layerSize)
                     indexFrom = layerIndicesShuffled[edgeNum];
                 else
-                    indexFrom = layerIndicesShuffled[Run.Random.Next(layerCount)];
+                    indexFrom = layerIndicesShuffled[_rng.Next(layerSize)];
 
                 int nextLayerCount = map[layer + 1].Length;
-                int indexTo = map[layer + 1][Run.Random.Next(nextLayerCount)];
+                int indexTo = map[layer + 1][_rng.Next(nextLayerCount)];
                 
                 MapPosition toMapPosition = new(layer + 1, indexTo);
                 MapPosition fromMapPosition = new(layer, indexFrom);
@@ -104,9 +126,9 @@ public class Map
         return allEdges;
     }
     
-    private static int[][] GenerateMap()
+    private int[][] GenerateMap()
     {
-        int[][] map = new int[][16];
+        int[][] map = new int[16][];
 
         map[0] = new[] { LayerMaxWidth / 2 };
         map[LayerCount - 1] = new[] { LayerMaxWidth / 2 };
@@ -117,13 +139,13 @@ public class Map
         return map;
     }
 
-    private static int[] GenerateLayer()
+    private int[] GenerateLayer()
     {
         List<int> indices = new List<int>(LayerMaxWidth);
 
         for (int i = 0; i < LayerMaxWidth; i++)
         {
-            bool shouldAddIndex = Run.Random.NextDouble() > 0.4;
+            bool shouldAddIndex = _rng.NextDouble() > 0.4;
             if (!shouldAddIndex) 
                 continue;
             
@@ -169,6 +191,11 @@ public class Map
         {
             return HashCode.Combine(From, To);
         }
+
+        public override string ToString()
+        {
+            return $"{From} -> {To}";
+        }
     }
 
     public readonly struct MapPosition : IEquatable<MapPosition>
@@ -196,6 +223,11 @@ public class Map
         public override int GetHashCode()
         {
             return HashCode.Combine(Layer, Index);
+        }
+
+        public override string ToString()
+        {
+            return $"({Layer}, {Index})";
         }
     }
 }

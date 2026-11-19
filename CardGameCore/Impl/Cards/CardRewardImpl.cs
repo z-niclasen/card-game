@@ -1,5 +1,6 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework.Cards;
+using CardGameCore.Impl.Runs;
 
 namespace CardGameCore.Impl.Cards;
 
@@ -25,7 +26,7 @@ public class CardRewardImpl : ICardReward
     {
         for (int i = 0; i < CardCount; i++)
         {
-            Rarity cardRarity = Run.RarityDistribution.GetRarity(_roomNumber, _characterLuck);
+            Rarity cardRarity = Run.Instance.RarityDistribution.GetRarity(_roomNumber, _characterLuck);
             CardName cardName = _rewardPool.GetCard(cardRarity);
             yield return Library.Library.InstantiateCardByName(cardName);
         }

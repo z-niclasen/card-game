@@ -2,6 +2,7 @@ using CardGameCore.Exceptions;
 using CardGameCore.Framework;
 using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.CombatEncounter;
+using CardGameCore.Impl.Runs;
 using CardGameCore.Utility;
 
 namespace CardGameCore.Impl.CombatEncounter;
@@ -35,7 +36,7 @@ public class CombatCardCollectionImpl : ICombatCardCollectionMutable
     public CombatCardCollectionImpl(Deck deck, ShuffleStrategy shuffleStrategy)
     {
         _drawPile.AddRange(deck);
-        _drawPile = _drawPile.Shuffle(Run.Random).ToList();
+        _drawPile = _drawPile.Shuffle(Run.Instance.Random).ToList();
         _shuffleStrategy = shuffleStrategy;
     }
 
@@ -121,7 +122,7 @@ public class CombatCardCollectionImpl : ICombatCardCollectionMutable
         if (_shuffleStrategy == ShuffleStrategy.NoShuffle)
             return;
         
-        _drawPile = _drawPile.Shuffle(Run.Random).ToList();
+        _drawPile = _drawPile.Shuffle(Run.Instance.Random).ToList();
 
         InvokeOnShuffleIntoDrawPile();
     }

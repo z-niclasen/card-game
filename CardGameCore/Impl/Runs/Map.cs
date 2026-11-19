@@ -2,8 +2,9 @@ using System.Reflection.Metadata.Ecma335;
 using CardGameCore.Exceptions;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
-using CardGameCore.Framework.Run;
+using CardGameCore.Framework.Runs;
 using CardGameCore.Impl.CombatEncounter;
+using CardGameCore.Impl.Runs;
 using CardGameCore.Library.Enemies.Slime;
 
 namespace CardGameCore.Impl;

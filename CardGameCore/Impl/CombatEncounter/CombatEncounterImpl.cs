@@ -5,7 +5,7 @@ using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Framework.Effects;
-using CardGameCore.Framework.Run;
+using CardGameCore.Framework.Runs;
 
 namespace CardGameCore.Impl.CombatEncounter;
 

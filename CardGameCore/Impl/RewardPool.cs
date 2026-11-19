@@ -1,4 +1,5 @@
 using CardGameCore.Constants;
+using CardGameCore.Impl.Runs;
 using CardGameCore.Library;
 
 namespace CardGameCore.Impl;
@@ -44,7 +45,7 @@ public class RewardPool
 
     private static T Get<T>(Rarity rarity, Dictionary<Rarity,  List<T>> pool)
     {
-        Random rng = Run.Random;
+        Random rng = Run.Instance.Random;
         
         while (true)
         {

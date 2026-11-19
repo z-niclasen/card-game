@@ -1,4 +1,5 @@
 using CardGameCore.Constants;
+using CardGameCore.Impl.Runs;
 
 namespace CardGameCore.Impl;
 
@@ -33,14 +34,14 @@ public class RarityDistribution
 
         Rarity rarity = GetRandomRarity(uncommonClamped, rareClamped, superChance);
         
-        float roll = (float)Run.Random.NextDouble() * 100;
+        float roll = (float)Run.Instance.Random.NextDouble() * 100;
         while (roll <= luck)
         {
             Rarity rarityReroll = GetRandomRarity(uncommonClamped, rareClamped, superChance);
             if (rarityReroll > rarity)
                 rarity = rarityReroll;
             
-            roll = (float)Run.Random.NextDouble() * 100;
+            roll = (float)Run.Instance.Random.NextDouble() * 100;
         }
 
         return rarity;
@@ -50,7 +51,7 @@ public class RarityDistribution
     {
         Rarity highest = Rarity.Common;
 
-        float roll = (float)Run.Random.NextDouble() * 100;
+        float roll = (float)Run.Instance.Random.NextDouble() * 100;
 
         if (roll <= uncommonChance)
             highest = Rarity.Uncommon;
