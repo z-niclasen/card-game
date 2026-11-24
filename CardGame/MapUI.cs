@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CardGameCore.Impl;
 using CardGameCore.Impl.Runs;
 using Godot;
@@ -11,6 +12,8 @@ public partial class MapUI : MarginContainer
 	private readonly Map _map = Run.Instance.Map;
 	private readonly Dictionary<Map.MapPosition, TextureButton> _positionToButton = new();
 
+	private List<HBoxContainer> layerContainers = new();
+
 	private VBoxContainer _vbox;
 	private MarginContainer _vboxParent;
 
@@ -18,52 +21,73 @@ public partial class MapUI : MarginContainer
 	{
 		_vbox = GetNode<VBoxContainer>("%VBox");
 		_vboxParent = GetNode<MarginContainer>("%MarginContainer");
+		layerContainers = InitializeContainers();
 		DrawMap();
 		DrawEdges();
 	}
 
-	private void DrawMap()
+	private List<HBoxContainer> InitializeContainers()
 	{
-		foreach (IEnumerable<Map.MapPosition> layer in _map.GetMapLayers())
+		List<HBoxContainer> containers = [];
+		for (int layer = 0; layer < _map.LayerCount; layer++)
 		{
 			HBoxContainer layerContainer = new();
 			layerContainer.AddThemeConstantOverride("separation", 200);
 			_vbox.AddChild(layerContainer);
 			_vbox.MoveChild(layerContainer, 0);
+			
+			containers.Add(layerContainer);
+		}
 
+		return containers;
+	}
+
+	private void DrawMap()
+	{
+		IEnumerable<IEnumerable<Map.MapPosition>> layers = _map.PositionsByLayer;
+
+		foreach (IEnumerable<Map.MapPosition> layer in layers)
+		{
 			int currentIndex = 0;
+			
 			foreach (Map.MapPosition position in layer)
 			{
+				HBoxContainer layerContainer = layerContainers[position.Layer];
+				
 				while (currentIndex < position.Index)
 				{
-					TextureButton empty = new();
-					empty.CustomMinimumSize = new Vector2(64, 64);
-					empty.Disabled = true;
-					layerContainer.AddChild(empty);
+					layerContainer.AddChild(EmptyButton());
 					currentIndex++;
 				}
 				
 				TextureButton button = new();
 				button.TextureNormal = ResourceUtil.GetEncounterTypeTexture(EncounterType.Combat);
 				button.ZIndex = 10;
-				layerContainer.AddChild(button);
-				
-				_positionToButton.Add(position, button);
-				GD.Print($"-------- {position}");
-				foreach (Map.MapEdge edge in _map.GetMapEdges(position))
-					GD.Print(edge);
-				GD.Print();
 
+				
+				layerContainer.AddChild(button);
+				_positionToButton.Add(position, button);
+				
 				currentIndex++;
 			}
 		}
+		
+		
 	}
 
+	private TextureButton EmptyButton()
+	{
+		TextureButton empty = new();
+		empty.CustomMinimumSize = new Vector2(64, 64);
+		empty.Disabled = true; 
+		return empty;
+	}
+	
 	private async void DrawEdges()
 	{
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		
-		foreach (Map.MapEdge edge in _map.GetAllMapEdges())
+		foreach (Map.MapEdge edge in _map.Edges)
 		{
 			//GD.Print($"({edge.From.Layer}, {edge.From.Index}) - ({edge.To.Layer}, {edge.To.Index})");
 			TextureButton fromButton = _positionToButton[edge.From];

@@ -1,3 +1,5 @@
+using System.Security.Principal;
+using CardGameCore.Framework.Runs;
 using CardGameCore.Impl;
 using CardGameCore.Impl.Runs;
 
@@ -5,157 +7,135 @@ namespace CardGameCore;
 
 public class Map
 {
-    private const int LayerCount = 16;
-    private const int LayerMaxWidth = 5;
+    public int LayerCount { get; } = 16;
+
+    public const int LayerMaxWidth = 5;
 
     private Random _rng;
     
-    private int[][] _map;
-    private Dictionary<MapPosition, List<MapEdge>> _edges;
+    public IEnumerable<MapEdge> Edges { get; }
+    
+    public IEnumerable<MapPosition> Positions { get; }
+    
+    public IEnumerable<IEnumerable<MapPosition>> PositionsByLayer { get; }
     
     public Map(Random rng)
     {
         _rng = rng;
-        _map = GenerateMap();
-        _edges = GenerateEdges(_map);
-    }
-
-    public IEnumerable<MapPosition> GetMapLayer(int layer)
-    {
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(layer, LayerCount);
-        ArgumentOutOfRangeException.ThrowIfNegative(layer);
+        Edges = GenerateMap();
         
-        foreach (int layerIndex in _map[layer])
-            yield return new MapPosition(layer, layerIndex);
-    }
+        HashSet<MapPosition> positions = new HashSet<MapPosition>();
 
-    public IEnumerable<IEnumerable<MapPosition>> GetMapLayers()
-    {
-        for (int layer = 0; layer < LayerCount; layer++)
-            yield return GetMapLayer(layer);
-    }
-
-    public IEnumerable<MapEdge> GetMapEdges(MapPosition mapPosition)
-    {
-        foreach (MapEdge edge in _edges[mapPosition])
-            Console.WriteLine(edge);
-        return _edges[mapPosition];
-    }
-
-    public IEnumerable<MapEdge> GetAllMapEdges()
-    {
-        foreach (IEnumerable<MapPosition> layer in GetMapLayers())
+        foreach (MapEdge edge in Edges)
         {
-            foreach (MapPosition position in layer)
-            {
-                foreach (MapEdge edgesFromPosition in GetMapEdges(position))
-                    yield return edgesFromPosition;
-            }
-        }
-    }
-
-    private Dictionary<MapPosition, List<MapEdge>> GenerateEdges(int[][] map)
-    {
-        Dictionary<MapPosition, List<MapEdge>> allEdges = new();
-        
-        // Populate with empty lists.
-        for (int layer = 0; layer < LayerCount; layer++)
-        {
-            foreach (int indexInLayer in map[layer])
-            {
-                MapPosition mapPosition = new MapPosition(layer, indexInLayer);
-                allEdges.Add(mapPosition, new List<MapEdge>());
-            }
-        }
-
-        // Edges from bottom to all in second layer.
-        MapPosition bottom = new(0, LayerMaxWidth / 2);
-        foreach (int indexInSecondLayer in map[1])
-        {
-            MapPosition mapPositionInSecondRow = new(1, indexInSecondLayer);
-            MapEdge mapEdgeToAdd = new MapEdge(bottom, mapPositionInSecondRow);
-            allEdges[bottom].Add(mapEdgeToAdd);
+            positions.Add(edge.To);
+            positions.Add(edge.From);
         }
         
-        // Edges from penultimate layer to top.
-        MapPosition top = new(LayerCount - 1, LayerMaxWidth / 2);
-        foreach (int indexInPenultimateLayer in map[LayerCount - 2])
+        //positions.UnionWith(Edges.Select(x => x.From));
+        //positions.UnionWith(Edges.Select(x => x.To));
+        
+        Positions  = positions;
+        
+        Console.WriteLine(positions.Count);
+        
+        PositionsByLayer = GeneratePositionsByLayer();
+
+    }
+
+    private List<MapEdge> GenerateMap()
+    {
+        List<MapEdge> edges = [];
+
+        MapPosition bottom = new MapPosition(0, 2);
+        MapPosition top = new MapPosition(LayerCount-1, 2);
+
+        HashSet<MapPosition> previousLayer = [bottom];
+
+        for (int layerIndex = 1; layerIndex < LayerCount - 1; layerIndex++)
         {
-            MapPosition mapPositionInPenultimateLayer = new(LayerCount - 2, indexInPenultimateLayer);
-            MapEdge mapEdgeToAdd = new MapEdge(mapPositionInPenultimateLayer, top);
-            allEdges[top].Add(mapEdgeToAdd);
+            List<MapEdge> layer = GenerateLayer(previousLayer);
+            
+            edges.AddRange(layer);
+            previousLayer = new HashSet<MapPosition>(layer.Select(x => x.To));
+            
         }
 
-        for (int layer = 1; layer < LayerCount - 2; layer++)
+        foreach (MapPosition position in previousLayer)
         {
-            int layerSize = map[layer].Length;
-            int[] layerIndicesShuffled = ((int[])map[layer].Clone()).Shuffle().ToArray();
+            edges.Add(new MapEdge(position, top));
+        }
 
-            int edgesToGenerate = _rng.Next(layerSize, layerSize * 2);
+        return edges;
+    }
 
-            List<MapEdge> edgesCreated = [];
+    private List<MapEdge> GenerateLayer(HashSet<MapPosition> previousLayer)
+    {
+        List<MapEdge> layerEdges = [];
+            
+        List<MapPosition> shuffledPreviousLayer = previousLayer.Shuffle().ToList();
+        
+        int clampedToAdd = Math.Max(shuffledPreviousLayer.Count, 3);
+            
+        int amountOfEdgesToAdd =  _rng.Next(clampedToAdd, clampedToAdd * 2);
 
-            for (int edgeNum = 0; edgeNum < edgesToGenerate; edgeNum++)
+        for (int edgeNumber = 0; edgeNumber < amountOfEdgesToAdd; edgeNumber++)
+        {
+            MapPosition from;
+
+            if (edgeNumber < shuffledPreviousLayer.Count)
             {
-                int indexFrom = 0;
-                if (edgeNum < layerSize)
-                    indexFrom = layerIndicesShuffled[edgeNum];
-                else
-                    indexFrom = layerIndicesShuffled[_rng.Next(layerSize)];
-
-                int nextLayerCount = map[layer + 1].Length;
-                int indexTo = map[layer + 1][_rng.Next(nextLayerCount)];
-                
-                MapPosition toMapPosition = new(layer + 1, indexTo);
-                MapPosition fromMapPosition = new(layer, indexFrom);
-                MapEdge mapEdgeToAdd = new(fromMapPosition, toMapPosition);
-
-                foreach (var otherEdge in edgesCreated)
-                {
-                    if (!mapEdgeToAdd.ConflictsWith(otherEdge)) continue;
-
-                    MapEdge nudgedMapEdge = new(fromMapPosition, otherEdge.To);
-                    mapEdgeToAdd = nudgedMapEdge;
-                }
-                
-                edgesCreated.Add(mapEdgeToAdd);
-                allEdges[fromMapPosition].Add(mapEdgeToAdd);
+                from = shuffledPreviousLayer[edgeNumber];
             }
-        }
+            else
+            {
+                from = shuffledPreviousLayer[_rng.Next(shuffledPreviousLayer.Count)];
+            }
+            
+            MapPosition to = new MapPosition(from.Layer + 1, _rng.Next(LayerMaxWidth) );
+            
+            MapEdge edge = new MapEdge(from, to);
 
-        return allEdges;
+            edge = Nudge(edge, layerEdges);
+            
+            layerEdges.Add(edge);
+        }
+        
+        return layerEdges;
+    }
+
+    private MapEdge Nudge(MapEdge edgeToNudge, IEnumerable<MapEdge> edges)
+    {
+        foreach (MapEdge edge in edges)
+        {
+            if (!edgeToNudge.ConflictsWith(edge)) continue;
+
+            edgeToNudge = new MapEdge(edgeToNudge.From, edge.To);
+        }
+        
+        return edgeToNudge;
     }
     
-    private int[][] GenerateMap()
+    public IEnumerable<IEnumerable<MapPosition>> GeneratePositionsByLayer()
     {
-        int[][] map = new int[16][];
-
-        map[0] = new[] { LayerMaxWidth / 2 };
-        map[LayerCount - 1] = new[] { LayerMaxWidth / 2 };
-
-        for (int layer = 1; layer < LayerCount - 1; layer++)
-            map[layer] = GenerateLayer();
-
-        return map;
-    }
-
-    private int[] GenerateLayer()
-    {
-        List<int> indices = new List<int>(LayerMaxWidth);
-
-        for (int i = 0; i < LayerMaxWidth; i++)
+        List<List<MapPosition>> layers = [];
+		
+        for (int index =  0; index < LayerCount; index++)
         {
-            bool shouldAddIndex = _rng.NextDouble() > 0.4;
-            if (!shouldAddIndex) 
-                continue;
-            
-            indices.Add(i);
+            layers.Add([]);
         }
-        
-        if (indices.Count == 0)
-            indices.Add(LayerMaxWidth / 2);
 
-        return indices.ToArray();
+        foreach (MapPosition position in Positions)
+        {
+            layers[position.Layer].Add(position);
+        }
+
+        foreach (List<MapPosition> layer in layers)
+        {
+            layer.Sort((x, y) => x.Index - y.Index);
+        }
+
+        return layers;
     }
 
     public readonly struct MapEdge : IEquatable<MapEdge>
@@ -230,4 +210,6 @@ public class Map
             return $"({Layer}, {Index})";
         }
     }
+
+
 }
