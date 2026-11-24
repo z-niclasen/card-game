@@ -38,8 +38,6 @@ public partial class RunUI : Node
         if (Run.Instance.CurrentEncounter is ICombatEncounter combatEncounter)
         {
             GoToScene(_combatEncounterUIScene);
-            CombatEncounterUI combatEncounterUI = (CombatEncounterUI)CurrentScene;
-            combatEncounterUI.SetEncounter(combatEncounter);
         }
         
         Run.Instance.CurrentEncounter.OnRewardsSelected += OnRewardsSelected;
@@ -65,6 +63,11 @@ public partial class RunUI : Node
         if (CurrentScene is MapUI mapUI)
         {
             mapUI.OnEncounterButtonPressed += OnEncounterButtonPressed;
+        }
+
+        if (CurrentScene is CombatEncounterUI combatEncounterUI)
+        {
+            combatEncounterUI.SetEncounter((ICombatEncounter)Run.Instance.CurrentEncounter);
         }
     }
 }
