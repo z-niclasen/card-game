@@ -17,7 +17,11 @@ public class Map
     
     public IEnumerable<MapPosition> Positions { get; }
     
+    public MapPosition RootPosition { get; private set; }
+    
     public IEnumerable<IEnumerable<MapPosition>> PositionsByLayer { get; }
+
+    private Dictionary<MapPosition, List<MapPosition>> _validMovesByPositions;
     
     public Map(Random rng)
     {
@@ -32,25 +36,32 @@ public class Map
             positions.Add(edge.From);
         }
         
-        //positions.UnionWith(Edges.Select(x => x.From));
-        //positions.UnionWith(Edges.Select(x => x.To));
-        
         Positions  = positions;
         
         Console.WriteLine(positions.Count);
         
-        PositionsByLayer = GeneratePositionsByLayer();
+        PositionsByLayer = GeneratePositionsByLayer(Positions);
+        _validMovesByPositions = GenerateValidMovesByPositions(Edges);
+    }
 
+    public IEnumerable<MapPosition> GetValidMoves(MapPosition from)
+    {
+        return _validMovesByPositions[from];
+    }
+
+    public bool CanMoveTo(MapPosition from, MapPosition to)
+    {
+        return GetValidMoves(from).Contains(to);
     }
 
     private List<MapEdge> GenerateMap()
     {
         List<MapEdge> edges = [];
 
-        MapPosition bottom = new MapPosition(0, 2);
+        RootPosition = new MapPosition(0, 2);
         MapPosition top = new MapPosition(LayerCount-1, 2);
 
-        HashSet<MapPosition> previousLayer = [bottom];
+        HashSet<MapPosition> previousLayer = [RootPosition];
 
         for (int layerIndex = 1; layerIndex < LayerCount - 1; layerIndex++)
         {
@@ -116,7 +127,7 @@ public class Map
         return edgeToNudge;
     }
     
-    public IEnumerable<IEnumerable<MapPosition>> GeneratePositionsByLayer()
+    private IEnumerable<IEnumerable<MapPosition>> GeneratePositionsByLayer(IEnumerable<MapPosition> positions)
     {
         List<List<MapPosition>> layers = [];
 		
@@ -125,7 +136,7 @@ public class Map
             layers.Add([]);
         }
 
-        foreach (MapPosition position in Positions)
+        foreach (MapPosition position in positions)
         {
             layers[position.Layer].Add(position);
         }
@@ -136,6 +147,21 @@ public class Map
         }
 
         return layers;
+    }
+
+    private Dictionary<MapPosition, List<MapPosition>> GenerateValidMovesByPositions(IEnumerable<MapEdge> edges)
+    {
+        Dictionary<MapPosition, List<MapPosition>> edgesByPositions = new();
+
+        foreach (MapEdge edge in edges)
+        {
+            if (!edgesByPositions.ContainsKey(edge.From))
+                edgesByPositions.Add(edge.From, new List<MapPosition>());
+            
+            edgesByPositions[edge.From].Add(edge.To);
+        }
+
+        return edgesByPositions;
     }
 
     public readonly struct MapEdge : IEquatable<MapEdge>

@@ -7,8 +7,12 @@ using Map = CardGameCore.Map;
 
 namespace CardGame;
 
+public delegate void EncounterButtonPressedDelegate(Map.MapPosition position);
+
 public partial class MapUI : MarginContainer
 {
+	public event EncounterButtonPressedDelegate OnEncounterButtonPressed;
+	
 	private readonly Map _map = Run.Instance.Map;
 	private readonly Dictionary<Map.MapPosition, TextureButton> _positionToButton = new();
 
@@ -59,20 +63,33 @@ public partial class MapUI : MarginContainer
 					layerContainer.AddChild(EmptyButton());
 					currentIndex++;
 				}
-				
-				TextureButton button = new();
-				button.TextureNormal = ResourceUtil.GetEncounterTypeTexture(EncounterType.Combat);
-				button.ZIndex = 10;
 
-				
-				layerContainer.AddChild(button);
-				_positionToButton.Add(position, button);
+				TextureButton encounterButton = EncounterButton();
+				layerContainer.AddChild(encounterButton);
+				_positionToButton.Add(position, encounterButton);
+				AttachEventToButton(encounterButton, position);
 				
 				currentIndex++;
 			}
 		}
 		
 		
+	}
+
+	private void AttachEventToButton(TextureButton button, Map.MapPosition buttonPosition)
+	{
+		button.Pressed += () =>
+		{
+			OnEncounterButtonPressed?.Invoke(buttonPosition);
+		};
+	}
+
+	private TextureButton EncounterButton()
+	{
+		TextureButton button = new();
+		button.TextureNormal = ResourceUtil.GetEncounterTypeTexture(EncounterType.Combat);
+		button.ZIndex = 10;
+		return button;
 	}
 
 	private TextureButton EmptyButton()

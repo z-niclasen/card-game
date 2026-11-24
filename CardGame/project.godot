@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="CardGame"
-run/main_scene="uid://bn2v8jntpuame"
+run/main_scene="uid://cjq5ulw7iks7b"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+RunUi="*uid://dpkk3i2s4g27i"
 
 [display]
 

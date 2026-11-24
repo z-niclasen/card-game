@@ -29,17 +29,22 @@ public partial class CombatEncounterUI : Node2D
 	private Button _playCardButton;
 
 	private ICard _selectedCard;
-	
-	public override void _Ready()
-	{
-		ICharacterClass steveClass = new SteveClass();
-		_steve = new CharacterImpl(steveClass);
-		_steve.IncreaseResource(ResourceType.Armor, 1);
-		
-		IAiCharacterClass cleverGreenSlimeClass = new TestingSlime(AiStrategy.PlayZero);
-		_slime = new AiCharacterImpl(cleverGreenSlimeClass);
 
-		_encounter = new CombatEncounterImpl(_steve, _slime);
+	public void SetEncounter(ICombatEncounter encounter)
+	{
+		_encounter = encounter;
+		Initialize();
+	}
+
+	private async void Initialize()
+	{
+		if (!IsNodeReady())
+			await ToSignal(this, Node.SignalName.Ready);
+		
+		_steve = _encounter.Player;
+		_steve.IncreaseResource(ResourceType.Armor, 1); // TODO: Remove;
+
+		_slime = _encounter.Opponent;
 		
 		_steveUI = GetNode<CharacterUI>("%PlayerCharacter");
 		_slimeUI = GetNode<CharacterUI>("%EnemyCharacter");
