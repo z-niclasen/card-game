@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CardGameCore.Impl;
 using CardGameCore.Impl.Runs;
 using Godot;
@@ -16,7 +17,7 @@ public partial class MapUI : MarginContainer
 	private readonly Map _map = Run.Instance.Map;
 	private readonly Dictionary<Map.MapPosition, TextureButton> _positionToButton = new();
 
-	private List<HBoxContainer> layerContainers = new();
+	private List<HBoxContainer> _layerContainers = [];
 
 	private VBoxContainer _vbox;
 	private MarginContainer _vboxParent;
@@ -25,9 +26,23 @@ public partial class MapUI : MarginContainer
 	{
 		_vbox = GetNode<VBoxContainer>("%VBox");
 		_vboxParent = GetNode<MarginContainer>("%MarginContainer");
-		layerContainers = InitializeContainers();
-		DrawMap();
+		_layerContainers = InitializeContainers();
+		DrawNodes();
+		_ = HighlightValidMoves();
 		DrawEdges();
+	}
+
+	private async Task HighlightValidMoves()
+	{
+		List<Map.MapPosition> validMoves = _map.GetValidMoves(Run.Instance.CurrentMapPosition).ToList();
+
+		foreach (Map.MapPosition position in validMoves)
+		{
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			TextureButton button = _positionToButton[position];
+			button.StretchMode = TextureButton.StretchModeEnum.Scale;
+			button.Scale = new Vector2(1.5f, 1.5f);
+		}
 	}
 
 	private List<HBoxContainer> InitializeContainers()
@@ -46,7 +61,7 @@ public partial class MapUI : MarginContainer
 		return containers;
 	}
 
-	private void DrawMap()
+	private void DrawNodes()
 	{
 		IEnumerable<IEnumerable<Map.MapPosition>> layers = _map.PositionsByLayer;
 
@@ -56,7 +71,7 @@ public partial class MapUI : MarginContainer
 			
 			foreach (Map.MapPosition position in layer)
 			{
-				HBoxContainer layerContainer = layerContainers[position.Layer];
+				HBoxContainer layerContainer = _layerContainers[position.Layer];
 				
 				while (currentIndex < position.Index)
 				{
@@ -103,12 +118,13 @@ public partial class MapUI : MarginContainer
 	private async void DrawEdges()
 	{
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		await HighlightValidMoves();
 		
 		foreach (Map.MapEdge edge in _map.Edges)
 		{
 			//GD.Print($"({edge.From.Layer}, {edge.From.Index}) - ({edge.To.Layer}, {edge.To.Index})");
 			TextureButton fromButton = _positionToButton[edge.From];
-			float centerOffset = fromButton.Size.X / 2;
+			float centerOffset = (fromButton.Size.X * fromButton.Scale.X) / 2;
 			
 			Vector2 globalFrom = fromButton.GetGlobalPosition();
 			globalFrom = new Vector2(globalFrom.X + centerOffset, globalFrom.Y + centerOffset);
@@ -116,7 +132,12 @@ public partial class MapUI : MarginContainer
 			
 			TextureButton toButton = _positionToButton[edge.To];
 			Vector2 globalTo = toButton.GetGlobalPosition();
-			globalTo = new Vector2(globalTo.X + centerOffset, globalTo.Y + centerOffset);
+			
+			float toCenterOffset = (toButton.Size.X * toButton.Scale.X) / 2;
+			
+			GD.Print("Scale of toButton is ", toButton.Scale);
+			
+			globalTo = new Vector2(globalTo.X + toCenterOffset, globalTo.Y + toCenterOffset);
 			Vector2 localTo = _vboxParent.GetGlobalTransform().AffineInverse() * globalTo;
 
 			Line2D line = new();
