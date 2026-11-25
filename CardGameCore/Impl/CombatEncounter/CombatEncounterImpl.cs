@@ -9,12 +9,14 @@ using CardGameCore.Framework.Runs;
 
 namespace CardGameCore.Impl.CombatEncounter;
 
-public class CombatEncounterImpl : ICombatEncounter, IEncounter
+public class CombatEncounterImpl : ICombatEncounter
 {
     public event EndTurnDelegate? OnEndTurn;
     public event PlayCardDelegate? OnPlayCard;
-    public event EncounterFinishedDelegate? OnEncounterFinished;
+
+    public event RewardAcquiredDelegate? OnRewardAcquired;
     public event CharacterResourceChangeDelegate? OnCharacterResourceChange;
+    public event RewardsAvailableDelegate? OnRewardsAvailable;
 
     public ICharacter Player { get; }
     
@@ -24,13 +26,22 @@ public class CombatEncounterImpl : ICombatEncounter, IEncounter
 
     public bool IsFinished { get; private set; } = false;
     
+    public IEnumerable<Reward> Rewards { get; }
+
     private Dictionary<ICharacter, ICombatCardCollectionMutable> CardsMap { get; }
 
-    public CombatEncounterImpl(ICharacter player, IAiCharacter opponent)
+    public CombatEncounterImpl(ICharacter player, IAiCharacter opponent) : this(player, opponent, [])
+    {
+        // TODO: Remove placeholder constructor.
+    }
+
+    public CombatEncounterImpl(ICharacter player, IAiCharacter opponent, IEnumerable<Reward> rewards)
     {
         Player = player;
         Opponent = opponent;
         InTurn = Player;
+
+        Rewards = rewards;
 
         CardsMap = new Dictionary<ICharacter, ICombatCardCollectionMutable>
         {
@@ -170,13 +181,21 @@ public class CombatEncounterImpl : ICombatEncounter, IEncounter
             return;
         
         IsFinished = true;
-        OnEncounterFinished?.Invoke(this);
+        OnRewardsAvailable?.Invoke();
+
+        foreach (Reward reward in Rewards)
+        {
+            reward.OnRewardSelected += OnRewardSelected;
+        }
     }
-    
+
+    private void OnRewardSelected(IRewardPrimitive reward)
+    {
+        OnRewardAcquired?.Invoke(reward);
+    }
+
     private ICharacter GetNextPlayer()
     {
         return Player == InTurn ? Opponent : Player;
     }
-
-    public event OnRewardsSelected? OnRewardsSelected;
 }

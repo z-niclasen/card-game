@@ -17,10 +17,10 @@ public class CombatEncounterSpy
 
         _encounter.OnEndTurn += EncounterOnEndTurn;
         _encounter.OnPlayCard += EncounterOnOnPlayCard;
-        _encounter.OnEncounterFinished += EncounterOnOnEncounterFinished;
+        _encounter.OnRewardAcquired += EncounterOnOnRewardAcquired;
     }
 
-    private void EncounterOnOnEncounterFinished(ICombatEncounter encounter)
+    private void EncounterOnOnRewardAcquired(IRewardPrimitive reward)
     {
         _messages.Add("OnEncounterFinished");
     }

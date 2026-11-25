@@ -1,30 +1,31 @@
 using CardGameCore.Constants;
 using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
+using CardGameCore.Framework.Runs;
 using CardGameCore.Impl.CombatEncounter;
 
 namespace CardGameCore.Framework.CombatEncounter;
 
 public delegate void EndTurnDelegate(ICombatEncounter encounter);
 public delegate void PlayCardDelegate(ICombatEncounter encounter, ICard playedCard, CombatTargetingContext ctx);
-public delegate void EncounterFinishedDelegate(ICombatEncounter encounter);
 public delegate void CharacterResourceChangeDelegate(ICombatEncounter encounter, ICharacter character, ResourceType type);
 
-public interface ICombatEncounter
+public delegate void RewardsAvailableDelegate();
+
+public interface ICombatEncounter : IEncounter
 {
     public event EndTurnDelegate? OnEndTurn;
     public event PlayCardDelegate? OnPlayCard;
-    public event EncounterFinishedDelegate? OnEncounterFinished;
     
     public event CharacterResourceChangeDelegate? OnCharacterResourceChange;
+    
+    public event RewardsAvailableDelegate? OnRewardsAvailable;
     
     public ICharacter Player { get; }
     
     public IAiCharacter Opponent { get; }
     
     public ICharacter InTurn { get; }
-    
-    public bool IsFinished { get; }
     
     public ICombatCardCollection GetCombatCardCollectionOfCharacter(ICharacter character);
     

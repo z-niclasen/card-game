@@ -1,3 +1,4 @@
+using CardGameCore.Framework;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.Runs;
 using CardGameCore.Impl.CombatEncounter;
@@ -27,7 +28,7 @@ public class Run
     
     public CardGameCore.Map.MapPosition CurrentMapPosition { get; private set; }
     
-    public IEncounter CurrentEncounter { get; private set; }
+    public IEncounter? CurrentEncounter { get; private set; }
 
     private Run()
     {
@@ -40,7 +41,10 @@ public class Run
 
     public bool CanMoveTo(CardGameCore.Map.MapPosition newPosition)
     {
-        return Map.CanMoveTo(CurrentMapPosition, newPosition);
+        if (CurrentEncounter == null)
+            return Map.CanMoveTo(CurrentMapPosition, newPosition);
+        
+        return CurrentEncounter.IsFinished && Map.CanMoveTo(CurrentMapPosition, newPosition);
     }
 
     public void MoveTo(CardGameCore.Map.MapPosition newPosition)
@@ -48,21 +52,21 @@ public class Run
         if (!CanMoveTo(newPosition))
             throw new ArgumentException($"Cannot move to {newPosition}");
         
-        CurrentMapPosition = newPosition;
-
+        // Clean up old encounter
+        CurrentEncounter?.OnRewardAcquired -= OnRewardAcquired;
+        
+        // Generate new encounter
         CombatEncounterImpl encounter = new(new CharacterImpl(new SteveClass()), new AiCharacterImpl(new SlimeClass()));
+        
+        // Move to new
+        CurrentMapPosition = newPosition;
         CurrentEncounter = encounter;
-        encounter.OnRewardsSelected += ApplyRewards;
+        encounter.OnRewardAcquired += OnRewardAcquired;
     }
     
-    private void ApplyRewards(IEnumerable<IReward> rewards)
+    private void OnRewardAcquired(IRewardPrimitive reward)
     {
-        foreach (var reward in rewards)
-        {
-            reward.Apply(this);
-        }
-
-        CurrentEncounter.OnRewardsSelected -= ApplyRewards;
+        reward.Apply(this);
     }
 }
 

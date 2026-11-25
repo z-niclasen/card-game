@@ -1,19 +1,16 @@
 using System;
 using CardGameCore.Constants;
-using CardGameCore.Framework;
 using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
-using CardGameCore.Impl;
-using CardGameCore.Impl.CombatEncounter;
-using CardGameCore.Library.Characters.PlayerCharacters;
-using CardGameCore.Test.Library;
 using Godot;
 
 namespace CardGame;
 
-public partial class CombatEncounterUI : Node2D
+public partial class CombatEncounterUI : EncounterUI
 {
+	public override event ProceedDelegate OnProceed;
+	
 	private ICharacter _steve;
 	private IAiCharacter _slime;
 	private ICombatEncounter _encounter;
@@ -29,6 +26,8 @@ public partial class CombatEncounterUI : Node2D
 	private Button _playCardButton;
 
 	private ICard _selectedCard;
+	
+	private Button _proceedButton;
 
 	public void SetEncounter(ICombatEncounter encounter)
 	{
@@ -68,8 +67,21 @@ public partial class CombatEncounterUI : Node2D
 		_relicDisplay = GetNode<RelicDisplay>("%RelicDisplay");
 		
 		_relicDisplay.RelicCollection = _steve.RelicCollection;
+
+		_encounter.OnRewardsAvailable += OnRewardsAvailable;
+		
+		_proceedButton = GetNode<Button>("%ProceedButton");
+		_proceedButton.Disabled = true;
+		_proceedButton.Visible = false;
+		_proceedButton.Pressed += () => OnProceed?.Invoke();
 		
 		AddObservers();
+	}
+
+	private void OnRewardsAvailable()
+	{
+		_proceedButton.Visible = true;
+		_proceedButton.Disabled = false;
 	}
 
 	private void OnCharacterPressed(ICharacter character)

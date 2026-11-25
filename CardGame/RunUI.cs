@@ -1,10 +1,11 @@
 using System.Collections.Generic;
-using CardGameCore;
 using CardGameCore.Framework.CombatEncounter;
 using CardGameCore.Framework.Runs;
+using CardGameCore.Impl;
 using CardGameCore.Impl.CombatEncounter;
 using CardGameCore.Impl.Runs;
 using Godot;
+using Map = CardGameCore.Map;
 
 namespace CardGame;
 
@@ -16,6 +17,7 @@ public partial class RunUI : Node
 
     private PackedScene _mapUIScene;
     private PackedScene _combatEncounterUIScene;
+
 
     public override void _Ready()
     {
@@ -29,7 +31,6 @@ public partial class RunUI : Node
 
     private void OnEncounterButtonPressed(Map.MapPosition position)
     {
-        GD.Print(position);
         if (!Run.Instance.CanMoveTo(position))
             return;
         
@@ -39,13 +40,6 @@ public partial class RunUI : Node
         {
             GoToScene(_combatEncounterUIScene);
         }
-        
-        Run.Instance.CurrentEncounter.OnRewardsSelected += OnRewardsSelected;
-    }
-
-    private void OnRewardsSelected(List<IReward> rewards)
-    {
-        GoToScene(_mapUIScene);
     }
 
     private void GoToScene(PackedScene scene)
@@ -55,19 +49,49 @@ public partial class RunUI : Node
 
     private void DeferredGoToScene(PackedScene scene)
     {
+        RemoveObserversFromCurrentScene();
+        
         CurrentScene?.Free();
 
         CurrentScene = scene.Instantiate();
         GetTree().Root.AddChild(CurrentScene);
 
-        if (CurrentScene is MapUI mapUI)
-        {
-            mapUI.OnEncounterButtonPressed += OnEncounterButtonPressed;
-        }
+        AddObserversToCurrentScene();
 
         if (CurrentScene is CombatEncounterUI combatEncounterUI)
         {
             combatEncounterUI.SetEncounter((ICombatEncounter)Run.Instance.CurrentEncounter);
         }
+    }
+
+    private void RemoveObserversFromCurrentScene()
+    {
+        switch (CurrentScene)
+        {
+            case MapUI mapUI:
+                mapUI.OnEncounterButtonPressed -= OnEncounterButtonPressed;
+                return;
+            case EncounterUI encounterUI:
+                encounterUI.OnProceed -= OnProceed;
+                return;
+        }
+    }
+    
+    private void AddObserversToCurrentScene()
+    {
+        switch (CurrentScene)
+        {
+            case MapUI mapUI:
+                mapUI.OnEncounterButtonPressed += OnEncounterButtonPressed;
+                return;
+            case EncounterUI encounterUI:
+                encounterUI.OnProceed += OnProceed;
+                return;
+        }
+    }
+
+    private void OnProceed()
+    {
+        GoToScene(_mapUIScene);
     }
 }
