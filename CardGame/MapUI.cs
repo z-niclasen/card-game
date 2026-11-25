@@ -135,8 +135,6 @@ public partial class MapUI : MarginContainer
 			
 			float toCenterOffset = (toButton.Size.X * toButton.Scale.X) / 2;
 			
-			GD.Print("Scale of toButton is ", toButton.Scale);
-			
 			globalTo = new Vector2(globalTo.X + toCenterOffset, globalTo.Y + toCenterOffset);
 			Vector2 localTo = _vboxParent.GetGlobalTransform().AffineInverse() * globalTo;
 
