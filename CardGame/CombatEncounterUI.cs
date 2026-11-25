@@ -3,6 +3,9 @@ using CardGameCore.Constants;
 using CardGameCore.Framework.Cards;
 using CardGameCore.Framework.Characters;
 using CardGameCore.Framework.CombatEncounter;
+using CardGameCore.Impl;
+using CardGameCore.Impl.Cards;
+using CardGameCore.Impl.Runs;
 using Godot;
 
 namespace CardGame;
@@ -82,6 +85,11 @@ public partial class CombatEncounterUI : EncounterUI
 	{
 		_proceedButton.Visible = true;
 		_proceedButton.Disabled = false;
+
+		// TODO: Fix.
+		CardRewardImpl foo = new CardRewardImpl(new RewardPool(CharacterName.Steve), 1, 1);
+		CardRewardUI cardRewardUI = CardRewardUI.InstantiateCardRewardUI(foo);
+		GetTree().Root.AddChild(cardRewardUI);
 	}
 
 	private void OnCharacterPressed(ICharacter character)

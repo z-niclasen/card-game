@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" uid="uid://2no2vmsg2sfk" path="res://CardUI.cs" id="1_huidv"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_huidv"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yf8w3"]
 bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 12
@@ -17,49 +15,39 @@ shadow_offset = Vector2(2, 2)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fpnx5"]
 size = Vector2(150, 120)
 
-[node name="CardUI" type="Node2D" unique_id=1500116467]
-script = ExtResource("1_huidv")
-
-[node name="TopContainer" type="PanelContainer" parent="." unique_id=1825734981]
-unique_name_in_owner = true
+[node name="CardUI" type="PanelContainer" unique_id=1210189138]
 custom_minimum_size = Vector2(150, 240)
 custom_maximum_size = Vector2(150, 240)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
 offset_left = -75.0
 offset_top = -120.0
 offset_right = 75.0
 offset_bottom = 120.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_huidv")
+script = ExtResource("1_huidv")
+metadata/_edit_use_anchors_ = true
 
-[node name="Panel" type="Panel" parent="TopContainer" unique_id=1267228265]
+[node name="Panel" type="Panel" parent="." unique_id=1267228265]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_yf8w3")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer" unique_id=213348638]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=213348638]
 custom_minimum_size = Vector2(-1, -1)
 layout_mode = 2
 
-[node name="MarginContainerTop" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=501588847]
+[node name="MarginContainerTop" type="MarginContainer" parent="VBoxContainer" unique_id=501588847]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/MarginContainerTop" unique_id=971672109]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainerTop" unique_id=971672109]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=2046008611]
+[node name="NameLabel" type="Label" parent="VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=2046008611]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "NoName"
 
-[node name="CostLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=1287517698]
+[node name="CostLabel" type="Label" parent="VBoxContainer/MarginContainerTop/HBoxContainer" unique_id=1287517698]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -67,19 +55,19 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "4"
 horizontal_alignment = 2
 
-[node name="TextureRect" type="TextureRect" parent="TopContainer/VBoxContainer" unique_id=864383981]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=864383981]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 texture = SubResource("PlaceholderTexture2D_fpnx5")
 
-[node name="MarginContainerDescription" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=525721124]
+[node name="MarginContainerDescription" type="MarginContainer" parent="VBoxContainer" unique_id=525721124]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="DescriptionLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerDescription" unique_id=408803432]
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer/MarginContainerDescription" unique_id=408803432]
 unique_name_in_owner = true
 custom_maximum_size = Vector2(120, -1)
 layout_mode = 2
@@ -89,12 +77,12 @@ text = "Er datalog"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="MarginContainerRarity" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=245751752]
+[node name="MarginContainerRarity" type="MarginContainer" parent="VBoxContainer" unique_id=245751752]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="RarityLabel" type="Label" parent="TopContainer/VBoxContainer/MarginContainerRarity" unique_id=1303197893]
+[node name="RarityLabel" type="Label" parent="VBoxContainer/MarginContainerRarity" unique_id=1303197893]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)

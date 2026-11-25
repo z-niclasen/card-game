@@ -8,25 +8,26 @@ namespace CardGame;
 public delegate void CardSelectedDelegate(CardUI cardUI);
 
 [Tool]
-public partial class CardUI : Node2D
+public partial class CardUI : Control
 {
-	public event  CardSelectedDelegate OnCardSelected;
+	private const string SceneUID = "uid://byss7fge32s1p";
 	
+	public event  CardSelectedDelegate OnCardSelected;
+
 	public ICard Card
 	{
-		get => _card;
+		get;
 		set
 		{
-			_card = value;
+			field = value;
 			SetLabelsToCardValues();
 			UpdateLabels();
-		} 
+		}
 	}
-	private ICard _card;
+
+	public int Width => (int)Size.X;
 	
-	public int Width => (int)_topContainer.CustomMinimumSize.X;
-	
-	public int Height => (int)_topContainer.CustomMinimumSize.Y;
+	public int Height => (int)Size.Y;
 	
 	[Export]
 	private CardName CardName
@@ -88,7 +89,17 @@ public partial class CardUI : Node2D
 
 	private Label _rarityLabel;
 
-	private PanelContainer _topContainer;
+	public static PackedScene LoadScene()
+	{
+		return ResourceLoader.Load<PackedScene>(SceneUID);
+	}
+
+	public static CardUI InstantiateCard(ICard card)
+	{
+		var cardUI = LoadScene().Instantiate<CardUI>();
+		cardUI.Card = card;
+		return cardUI;
+	}
 
 	public override void _Ready()
 	{
@@ -96,15 +107,14 @@ public partial class CardUI : Node2D
 		_costLabel = GetNode<Label>("%CostLabel");
 		_descriptionLabel = GetNode<Label>("%DescriptionLabel");
 		_rarityLabel = GetNode<Label>("%RarityLabel");
-		_topContainer = GetNode<PanelContainer>("%TopContainer");
 		_textureRect = GetNode<TextureRect>("%TextureRect");
 		
 		SetLabelsToCardValues();
 		UpdateLabels();
 		
-		_topContainer.GuiInput += TopContainerOnGuiInput;
-		_topContainer.MouseEntered += TopContainerOnMouseEntered;
-		_topContainer.MouseExited += TopContainerOnMouseExited;
+		GuiInput += OnGuiInput;
+		MouseEntered += OnMouseEntered;
+		MouseExited += OnMouseExited;
 	}
 
 	public void Move(Vector2 newPosition)
@@ -113,17 +123,17 @@ public partial class CardUI : Node2D
 		tween.TweenProperty(this, "position", newPosition, 0.1f);
 	}
 
-	private void TopContainerOnMouseExited()
+	private void OnMouseExited()
 	{
 		_mouseOver = false;
 	}
 
-	private void TopContainerOnMouseEntered()
+	private void OnMouseEntered()
 	{
 		_mouseOver = true;
 	}
 
-	private void TopContainerOnGuiInput(InputEvent @event)
+	private void OnGuiInput(InputEvent @event)
 	{
 		if (@event is not InputEventMouseButton mouseEvent) 
 			return;
@@ -136,9 +146,9 @@ public partial class CardUI : Node2D
 
 	public override void _ExitTree()
 	{
-		_topContainer.GuiInput -= TopContainerOnGuiInput;
-		_topContainer.MouseEntered -= TopContainerOnMouseEntered;
-		_topContainer.MouseExited -= TopContainerOnMouseExited;
+		GuiInput -= OnGuiInput;
+		MouseEntered -= OnMouseEntered;
+		MouseExited -= OnMouseExited;
 		base._ExitTree();
 	}
 

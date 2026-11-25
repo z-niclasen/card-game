@@ -56,7 +56,7 @@ public class Run
         CurrentEncounter?.OnRewardAcquired -= OnRewardAcquired;
         
         // Generate new encounter
-        CombatEncounterImpl encounter = new(new CharacterImpl(new SteveClass()), new AiCharacterImpl(new SlimeClass()));
+        CombatEncounterImpl encounter = new(Player, new AiCharacterImpl(new SlimeClass()));
         
         // Move to new
         CurrentMapPosition = newPosition;
